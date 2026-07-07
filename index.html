@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+
+<head>
+    <meta charset="UTF-8">
+    <script>
+        // Theme initialization to prevent flicker
+        (function () {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'system') {
+                document.documentElement.removeAttribute('data-theme');
+            } else {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+        })();
+    </script>
+    <meta name="google" content="notranslate">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <!-- Primary SEO Metadata -->
+    <title>Filename Maker | Standardized Filename Builder & Renamer</title>
+    <meta name="description"
+        content="Design custom file naming templates and rename files in batch entirely in your browser. No sign-ups, no data storage, fully private.">
+    <meta name="keywords"
+        content="filename builder, file renamer, bulk file renamer, standardize filenames, document organization, productivity tool, no-database, local-first">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://filenamemaker.ryanmarch.me/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Filename Maker">
+    <meta property="og:url" content="https://filenamemaker.ryanmarch.me/">
+    <meta property="og:title" content="Filename Maker | Standardized Filename Builder & Renamer">
+    <meta property="og:description"
+        content="Design custom file naming templates and rename files in batch entirely in your browser. No sign-ups, no data storage, fully private.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-binary">
+                    <rect x="14" y="14" width="4" height="6" rx="2" />
+                    <rect x="6" y="4" width="4" height="6" rx="2" />
+                    <path d="M6 20h4" />
+                    <path d="M14 10h4" />
+                    <path d="M8 14v6" />
+                    <path d="M16 4v6" />
+                </svg>
+                <h1>Filename Maker</h1>
+            </div>
+            <nav class="header-actions">
+                <button id="theme-toggle" class="btn-icon" aria-label="Toggle theme">
+                    <!-- Sun icon -->
+                    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4"/>
+                        <path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M6.34 17.66l-1.41 1.41"/><path d="M19.07 4.93l-1.41 1.41"/>
+                    </svg>
+                    <!-- Moon icon -->
+                    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                    </svg>
+                </button>
+            </nav>
+        </header>
+
+        <main class="app-main">
+            <div class="workspace-grid">
+                <!-- Template Builder Panel -->
+                <section class="panel template-builder">
+                    <h2>1. Build Template</h2>
+                    <p class="panel-desc">Define naming rules and component ordering.</p>
+                    <div id="template-editor-root">
+                        <!-- Custom dynamic forms will render here -->
+                    </div>
+                </section>
+
+                <!-- Dynamic Preview & File Renamer -->
+                <section class="panel filename-previewer">
+                    <h2>2. Preview & Rename</h2>
+                    <p class="panel-desc">Fill in parameters and rename your files.</p>
+                    <div id="preview-editor-root">
+                        <!-- Live text preview and file drag/drop here -->
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/app.js" type="module"></script>
+</body>
+
+</html>
