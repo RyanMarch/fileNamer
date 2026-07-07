@@ -1,0 +1,199 @@
+/**
+ * TemplateStore - Manages saving, loading, importing, exporting, and sharing of filename templates.
+ */
+
+export const DEFAULT_TEMPLATES = [
+    {
+        id: 'tpl-media',
+        name: 'Media Asset Naming',
+        separator: '_',
+        case: 'none',
+        fields: [
+            { id: 'f-date', type: 'date', label: 'Date Created', format: 'YYYYMMDD' },
+            { id: 'f-proj', type: 'text', label: 'Project Code', placeholder: 'PRJ101' },
+            { id: 'f-desc', type: 'text', label: 'Description', placeholder: 'PromoShot' },
+            { id: 'f-count', type: 'counter', label: 'Index Counter', digits: 2 }
+        ]
+    },
+    {
+        id: 'tpl-academic',
+        name: 'Academic Papers',
+        separator: '_',
+        case: 'none',
+        fields: [
+            { id: 'f-author', type: 'text', label: 'Author Surname', placeholder: 'Smith' },
+            { id: 'f-year', type: 'text', label: 'Year', placeholder: '2026' },
+            { id: 'f-title', type: 'text', label: 'Paper Title', placeholder: 'NeuralNetworks' }
+        ]
+    },
+    {
+        id: 'tpl-invoice',
+        name: 'Invoices / Receipts',
+        separator: '-',
+        case: 'none',
+        fields: [
+            { id: 'f-inv-date', type: 'date', label: 'Date', format: 'YYYY-MM-DD' },
+            { id: 'f-vendor', type: 'text', label: 'Vendor', placeholder: 'Google' },
+            { id: 'f-inv-num', type: 'text', label: 'Invoice Number', placeholder: 'INV-98765' }
+        ]
+    }
+];
+
+export class TemplateStore {
+    constructor() {
+        this.templates = [];
+        this.activeTemplateId = null;
+        this.loadFromStorage();
+    }
+
+    loadFromStorage() {
+        try {
+            const stored = localStorage.getItem('fn_templates');
+            const activeId = localStorage.getItem('fn_active_template_id');
+            
+            if (stored) {
+                this.templates = JSON.parse(stored);
+            } else {
+                this.templates = JSON.parse(JSON.stringify(DEFAULT_TEMPLATES));
+                this.saveToStorage();
+            }
+
+            if (activeId && this.templates.some(t => t.id === activeId)) {
+                this.activeTemplateId = activeId;
+            } else if (this.templates.length > 0) {
+                this.activeTemplateId = this.templates[0].id;
+            }
+        } catch (e) {
+            console.error('Failed to load templates from localStorage:', e);
+            this.templates = JSON.parse(JSON.stringify(DEFAULT_TEMPLATES));
+            this.activeTemplateId = this.templates[0].id;
+        }
+    }
+
+    saveToStorage() {
+        try {
+            localStorage.setItem('fn_templates', JSON.stringify(this.templates));
+            if (this.activeTemplateId) {
+                localStorage.setItem('fn_active_template_id', this.activeTemplateId);
+            }
+        } catch (e) {
+            console.error('Failed to save templates to localStorage:', e);
+        }
+    }
+
+    getTemplates() {
+        return this.templates;
+    }
+
+    getActiveTemplate() {
+        return this.templates.find(t => t.id === this.activeTemplateId) || null;
+    }
+
+    setActiveTemplate(id) {
+        this.activeTemplateId = id;
+        this.saveToStorage();
+    }
+
+    addTemplate(template) {
+        const newTpl = {
+            id: 'tpl-' + Date.now(),
+            name: template.name || 'Untitled Template',
+            separator: template.separator || '_',
+            case: template.case || 'none',
+            fields: template.fields || []
+        };
+        this.templates.push(newTpl);
+        this.activeTemplateId = newTpl.id;
+        this.saveToStorage();
+        return newTpl;
+    }
+
+    updateTemplate(id, updatedFields) {
+        const idx = this.templates.findIndex(t => t.id === id);
+        if (idx !== -1) {
+            this.templates[idx] = { ...this.templates[idx], ...updatedFields };
+            this.saveToStorage();
+            return this.templates[idx];
+        }
+        return null;
+    }
+
+    deleteTemplate(id) {
+        this.templates = this.templates.filter(t => t.id !== id);
+        if (this.activeTemplateId === id) {
+            this.activeTemplateId = this.templates.length > 0 ? this.templates[0].id : null;
+        }
+        this.saveToStorage();
+    }
+
+    resetToDefault() {
+        this.templates = JSON.parse(JSON.stringify(DEFAULT_TEMPLATES));
+        this.activeTemplateId = this.templates[0].id;
+        this.saveToStorage();
+    }
+
+    /**
+     * Share template via URL hash base64 encoding.
+     */
+    serializeTemplate(template) {
+        const minimalConfig = {
+            n: template.name,
+            s: template.separator,
+            c: template.case,
+            f: template.fields.map(f => {
+                const minimalField = { i: f.id, t: f.type, l: f.label };
+                if (f.placeholder) minimalField.p = f.placeholder;
+                if (f.options) minimalField.o = f.options;
+                if (f.format) minimalField.f = f.format;
+                if (f.digits) minimalField.d = f.digits;
+                return minimalField;
+            })
+        };
+        const jsonStr = JSON.stringify(minimalConfig);
+        return this.encodeBase64(jsonStr);
+    }
+
+    /**
+     * Parse template from URL hash.
+     */
+    deserializeTemplate(hashStr) {
+        try {
+            const jsonStr = this.decodeBase64(hashStr);
+            const data = JSON.parse(jsonStr);
+            if (!data.n || !data.f) return null;
+
+            return {
+                id: 'shared-' + Date.now(),
+                name: data.n,
+                separator: data.s || '_',
+                case: data.c || 'none',
+                fields: data.f.map(f => {
+                    const field = { id: f.i || ('f-' + Math.random().toString(36).substr(2, 5)), type: f.t, label: f.l };
+                    if (f.p) field.placeholder = f.p;
+                    if (f.o) field.options = f.o;
+                    if (f.f) field.format = f.f;
+                    if (f.d) field.digits = f.d;
+                    return field;
+                })
+            };
+        } catch (e) {
+            console.error('Failed to deserialize shared template:', e);
+            return null;
+        }
+    }
+
+    encodeBase64(str) {
+        return btoa(unescape(encodeURIComponent(str)))
+            .replace(/\+/g, '-')
+            .replace(/\//g, '_')
+            .replace(/=+$/, '');
+    }
+
+    decodeBase64(str) {
+        let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+        while (base64.length % 4) {
+            base64 += '=';
+        }
+        return decodeURIComponent(escape(atob(base64)));
+    }
+}

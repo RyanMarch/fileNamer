@@ -1,0 +1,3 @@
+# Robots.txt for Filename Maker
+User-agent: *
+Allow: /
