@@ -195,9 +195,17 @@ export class TemplateBuilder {
             case 'select':
                 typeBadge = `<span class="badge badge-select">DRP</span>`;
                 configHtml = /*html*/ `
-                    <div class="control-item" style="width: 100%; display: flex; flex-direction: column; gap: 0.375rem;">
-                        <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Dropdown Options (comma-separated)</label>
-                        <input type="text" class="form-input field-options" data-index="${index}" placeholder="Option 1, Option 2, Option 3..." value="${escapeHtml((field.options || []).join(', '))}" title="Comma-separated dropdown options">
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+                        <div class="control-item" style="width: 100%; display: flex; flex-direction: column; gap: 0.375rem;">
+                            <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Dropdown Options (comma-separated)</label>
+                            <input type="text" class="form-input field-options" data-index="${index}" placeholder="Option 1, Option 2, Option 3..." value="${escapeHtml((field.options || []).join(', '))}" title="Comma-separated dropdown options">
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem;">
+                            <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); cursor: pointer;">
+                                <input type="checkbox" class="field-sort-alphabetically" data-index="${index}" ${field.sortAlphabetically ? 'checked' : ''}>
+                                Sort Alphabetically
+                            </label>
+                        </div>
                     </div>
                 `;
                 break;
@@ -275,6 +283,20 @@ export class TemplateBuilder {
                 break;
         }
 
+        const descriptionHtml = /*html*/ `
+            <details class="field-description-panel" style="width: 100%; padding-top: 0.5rem; margin-top: 0.25rem;">
+                <summary style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted); cursor: pointer; user-select: none; list-style: none; display: flex; align-items: center; gap: 0.35rem;">
+                    <svg class="restrictions-chevron" xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.18s;"><path d="m6 9 6 6 6-6"/></svg>
+                    Description
+                </summary>
+                <div style="margin-top: 0.5rem; padding: 0.625rem; background: var(--surface-secondary, rgba(0,0,0,0.04)); border-radius: 6px; border: 1px solid var(--border-color, rgba(0,0,0,0.08));">
+                    <div class="control-item" style="display: flex; flex-direction: column; gap: 0.3rem;">
+                        <input type="text" class="form-input field-description" data-index="${index}" placeholder="Describe this segment's purpose..." value="${escapeHtml(field.description || '')}" style="font-size: 0.75rem;">
+                    </div>
+                </div>
+            </details>
+        `;
+
         return  /*html*/`
             <div class="field-item field-item-${field.type}" data-index="${index}">
                 <div class="field-item-top">
@@ -301,6 +323,7 @@ export class TemplateBuilder {
                 <div class="field-item-bottom">
                     ${configHtml}
                 </div>
+                ${descriptionHtml}
                 ${restrictionsHtml}
             </div>
         `;
@@ -539,7 +562,19 @@ export class TemplateBuilder {
                     const idx = parseInt(e.target.dataset.index);
                     const fields = [...activeTpl.fields];
                     const val = parseInt(e.target.value);
-                    fields[idx].minLength = isNaN(val) || val <= 0 ? '' : val;
+                    const minLen = isNaN(val) || val <= 0 ? '' : val;
+                    fields[idx].minLength = minLen;
+
+                    // Enforce max length >= min length if max length is set
+                    if (minLen !== '' && fields[idx].maxLength !== undefined && fields[idx].maxLength !== '' && fields[idx].maxLength < minLen) {
+                        fields[idx].maxLength = minLen;
+                        const fieldItem = e.target.closest('.field-item');
+                        const maxInput = fieldItem ? fieldItem.querySelector('.field-max-length') : null;
+                        if (maxInput) {
+                            maxInput.value = minLen;
+                        }
+                    }
+
                     this.store.updateTemplate(activeTpl.id, { fields });
                     this.onTemplateChange();
                 }
@@ -548,7 +583,23 @@ export class TemplateBuilder {
                     const idx = parseInt(e.target.dataset.index);
                     const fields = [...activeTpl.fields];
                     const val = parseInt(e.target.value);
-                    fields[idx].maxLength = isNaN(val) || val <= 0 ? '' : val;
+                    let maxLen = isNaN(val) || val <= 0 ? '' : val;
+
+                    // Enforce max length >= min length if min length is set
+                    if (maxLen !== '' && fields[idx].minLength !== undefined && fields[idx].minLength !== '' && maxLen < fields[idx].minLength) {
+                        maxLen = fields[idx].minLength;
+                        e.target.value = maxLen;
+                    }
+
+                    fields[idx].maxLength = maxLen;
+                    this.store.updateTemplate(activeTpl.id, { fields });
+                    this.onTemplateChange();
+                }
+
+                if (e.target.classList.contains('field-description')) {
+                    const idx = parseInt(e.target.dataset.index);
+                    const fields = [...activeTpl.fields];
+                    fields[idx].description = e.target.value;
                     this.store.updateTemplate(activeTpl.id, { fields });
                     this.onTemplateChange();
                 }
@@ -635,6 +686,14 @@ export class TemplateBuilder {
                     this.store.updateTemplate(activeTpl.id, { fields });
                     this.onTemplateChange();
                 }
+
+                if (e.target.classList.contains('field-sort-alphabetically')) {
+                    const idx = parseInt(e.target.dataset.index);
+                    const fields = [...activeTpl.fields];
+                    fields[idx].sortAlphabetically = e.target.checked;
+                    this.store.updateTemplate(activeTpl.id, { fields });
+                    this.onTemplateChange();
+                }
             });
 
             // Field Button Actions (Move Up, Move Down, Remove)
@@ -678,7 +737,8 @@ export class TemplateBuilder {
                 let newField = {
                     id: 'f-' + Math.random().toString(36).substr(2, 5),
                     type,
-                    label: type.charAt(0).toUpperCase() + type.slice(1)
+                    label: type.charAt(0).toUpperCase() + type.slice(1),
+                    description: ''
                 };
 
                 // Add default type configurations
@@ -687,6 +747,7 @@ export class TemplateBuilder {
                     newField.placeholder = '';
                 } else if (type === 'select') {
                     newField.options = ['ENG', 'DESIGN', 'PM'];
+                    newField.sortAlphabetically = false;
                 } else if (type === 'date') {
                     newField.format = 'YYYYMMDD';
                     newField.customFormat = 'YYYY-MM-DD';

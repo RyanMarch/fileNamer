@@ -510,12 +510,25 @@ body {
 }
 
 /* Progressive disclosure: restrictions panel chevron */
-.field-restrictions-panel[open] .restrictions-chevron {
+.field-restrictions-panel[open] .restrictions-chevron,
+.field-description-panel[open] .restrictions-chevron,
+.namer-field-desc-details[open] .restrictions-chevron {
     transform: rotate(180deg);
 }
 
-.field-restrictions-panel summary::-webkit-details-marker {
+.field-restrictions-panel summary::-webkit-details-marker,
+.field-description-panel summary::-webkit-details-marker,
+.namer-field-desc-details summary::-webkit-details-marker {
     display: none;
+}
+
+/* Namer Form Description Details display mode */
+.namer-field-desc-details {
+    display: none;
+}
+
+.workspace-grid.fullwidth-mode .namer-field-desc-details {
+    display: block;
 }
 
 .divider {
@@ -739,7 +752,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    max-height: 380px;
+    max-height: 500px;
     overflow-y: auto;
     padding-right: 0.25rem;
 }
