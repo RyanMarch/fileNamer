@@ -145,13 +145,19 @@ export class TemplateStore {
             c: template.case,
             f: template.fields.map(f => {
                 const minimalField = { i: f.id, t: f.type, l: f.label };
-                if (f.placeholder) minimalField.p = f.placeholder;
-                if (f.options) minimalField.o = f.options;
-                if (f.format) minimalField.f = f.format;
-                if (f.digits) minimalField.d = f.digits;
+                if (f.placeholder)  minimalField.p  = f.placeholder;
+                if (f.options)      minimalField.o  = f.options;
+                if (f.format)       minimalField.f  = f.format;
+                if (f.digits)       minimalField.d  = f.digits;
                 if (f.extensionMode) minimalField.em = f.extensionMode;
                 if (f.customExtension) minimalField.ce = f.customExtension;
                 if (f.includeExtInPreview !== undefined) minimalField.iep = f.includeExtInPreview;
+                // Restriction fields
+                if (f.noSpaces)     minimalField.ns  = f.noSpaces;
+                if (f.noUnderscores) minimalField.nu = f.noUnderscores;
+                if (f.charType && f.charType !== 'any') minimalField.ct = f.charType;
+                if (f.minLength !== undefined && f.minLength !== '') minimalField.mn = f.minLength;
+                if (f.maxLength !== undefined && f.maxLength !== '') minimalField.mx = f.maxLength;
                 return minimalField;
             })
         };
@@ -175,13 +181,19 @@ export class TemplateStore {
                 case: data.c || 'none',
                 fields: data.f.map(f => {
                     const field = { id: f.i || ('f-' + Math.random().toString(36).substr(2, 5)), type: f.t, label: f.l };
-                    if (f.p) field.placeholder = f.p;
-                    if (f.o) field.options = f.o;
-                    if (f.f) field.format = f.f;
-                    if (f.d) field.digits = f.d;
-                    if (f.em) field.extensionMode = f.em;
-                    if (f.ce) field.customExtension = f.ce;
+                    if (f.p)   field.placeholder = f.p;
+                    if (f.o)   field.options = f.o;
+                    if (f.f)   field.format = f.f;
+                    if (f.d)   field.digits = f.d;
+                    if (f.em)  field.extensionMode = f.em;
+                    if (f.ce)  field.customExtension = f.ce;
                     if (f.iep !== undefined) field.includeExtInPreview = f.iep;
+                    // Restriction fields
+                    if (f.ns)  field.noSpaces = f.ns;
+                    if (f.nu)  field.noUnderscores = f.nu;
+                    if (f.ct)  field.charType = f.ct;
+                    if (f.mn !== undefined) field.minLength = f.mn;
+                    if (f.mx !== undefined) field.maxLength = f.mx;
                     return field;
                 })
             };

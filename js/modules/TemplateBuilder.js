@@ -132,6 +132,7 @@ export class TemplateBuilder {
     renderFieldItem(field, index, totalFields) {
         let typeBadge = '';
         let configHtml = '';
+        let restrictionsHtml = '';
 
         switch (field.type) {
             case 'text':
@@ -150,6 +151,45 @@ export class TemplateBuilder {
                             </select>
                         </div>
                     </div>
+                `;
+                restrictionsHtml = /*html*/ `
+                    <details class="field-restrictions-panel" style="width: 100%; border-top: 1px solid var(--panel-border); padding-top: 0.5rem; margin-top: 0.25rem;">
+                        <summary style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted); cursor: pointer; user-select: none; list-style: none; display: flex; align-items: center; gap: 0.35rem;">
+                            <svg class="restrictions-chevron" xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.18s;"><path d="m6 9 6 6 6-6"/></svg>
+                            Restrictions
+                        </summary>
+                        <div style="display: flex; flex-direction: column; gap: 0.625rem; margin-top: 0.5rem; padding: 0.625rem; background: var(--surface-secondary, rgba(0,0,0,0.04)); border-radius: 6px; border: 1px solid var(--border-color, rgba(0,0,0,0.08));">
+                            <div style="display: flex; gap: 1.25rem; flex-wrap: wrap;">
+                                <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); cursor: pointer;">
+                                    <input type="checkbox" class="field-no-spaces" data-index="${index}" ${field.noSpaces ? 'checked' : ''}>
+                                    Block spaces
+                                </label>
+                                <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); cursor: pointer;">
+                                    <input type="checkbox" class="field-no-underscores" data-index="${index}" ${field.noUnderscores ? 'checked' : ''}>
+                                    Block underscores
+                                </label>
+                            </div>
+                            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: flex-end;">
+                                <div class="control-item" style="flex: 1 1 120px; display: flex; flex-direction: column; gap: 0.3rem;">
+                                    <label style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Character Type</label>
+                                    <select class="form-select field-char-type" data-index="${index}" style="font-size: 0.78rem;">
+                                        <option value="any" ${(field.charType || 'any') === 'any' ? 'selected' : ''}>Any</option>
+                                        <option value="alpha" ${field.charType === 'alpha' ? 'selected' : ''}>Letters only</option>
+                                        <option value="numeric" ${field.charType === 'numeric' ? 'selected' : ''}>Numbers only</option>
+                                        <option value="alphanumeric" ${field.charType === 'alphanumeric' ? 'selected' : ''}>Alphanumeric</option>
+                                    </select>
+                                </div>
+                                <div class="control-item" style="flex: 0 0 70px; display: flex; flex-direction: column; gap: 0.3rem;">
+                                    <label style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Min Length</label>
+                                    <input type="number" class="form-input field-min-length" data-index="${index}" min="0" value="${field.minLength !== undefined && field.minLength !== '' ? field.minLength : ''}" placeholder="—" style="font-size: 0.78rem;">
+                                </div>
+                                <div class="control-item" style="flex: 0 0 70px; display: flex; flex-direction: column; gap: 0.3rem;">
+                                    <label style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted);">Max Length</label>
+                                    <input type="number" class="form-input field-max-length" data-index="${index}" min="1" value="${field.maxLength !== undefined && field.maxLength !== '' ? field.maxLength : ''}" placeholder="—" style="font-size: 0.78rem;">
+                                </div>
+                            </div>
+                        </div>
+                    </details>
                 `;
                 break;
             case 'select':
@@ -261,6 +301,7 @@ export class TemplateBuilder {
                 <div class="field-item-bottom">
                     ${configHtml}
                 </div>
+                ${restrictionsHtml}
             </div>
         `;
     }
@@ -493,6 +534,24 @@ export class TemplateBuilder {
                     this.store.updateTemplate(activeTpl.id, { fields });
                     this.onTemplateChange();
                 }
+
+                if (e.target.classList.contains('field-min-length')) {
+                    const idx = parseInt(e.target.dataset.index);
+                    const fields = [...activeTpl.fields];
+                    const val = parseInt(e.target.value);
+                    fields[idx].minLength = isNaN(val) || val <= 0 ? '' : val;
+                    this.store.updateTemplate(activeTpl.id, { fields });
+                    this.onTemplateChange();
+                }
+
+                if (e.target.classList.contains('field-max-length')) {
+                    const idx = parseInt(e.target.dataset.index);
+                    const fields = [...activeTpl.fields];
+                    const val = parseInt(e.target.value);
+                    fields[idx].maxLength = isNaN(val) || val <= 0 ? '' : val;
+                    this.store.updateTemplate(activeTpl.id, { fields });
+                    this.onTemplateChange();
+                }
             });
 
             // Field Select/Dropdown formats change
@@ -527,6 +586,30 @@ export class TemplateBuilder {
                     const idx = parseInt(e.target.dataset.index);
                     const fields = [...activeTpl.fields];
                     fields[idx].behavior = e.target.value;
+                    this.store.updateTemplate(activeTpl.id, { fields });
+                    this.onTemplateChange();
+                }
+
+                if (e.target.classList.contains('field-no-spaces')) {
+                    const idx = parseInt(e.target.dataset.index);
+                    const fields = [...activeTpl.fields];
+                    fields[idx].noSpaces = e.target.checked;
+                    this.store.updateTemplate(activeTpl.id, { fields });
+                    this.onTemplateChange();
+                }
+
+                if (e.target.classList.contains('field-no-underscores')) {
+                    const idx = parseInt(e.target.dataset.index);
+                    const fields = [...activeTpl.fields];
+                    fields[idx].noUnderscores = e.target.checked;
+                    this.store.updateTemplate(activeTpl.id, { fields });
+                    this.onTemplateChange();
+                }
+
+                if (e.target.classList.contains('field-char-type')) {
+                    const idx = parseInt(e.target.dataset.index);
+                    const fields = [...activeTpl.fields];
+                    fields[idx].charType = e.target.value;
                     this.store.updateTemplate(activeTpl.id, { fields });
                     this.onTemplateChange();
                 }
