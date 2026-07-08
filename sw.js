@@ -1,14 +1,18 @@
 /**
- * Filename Maker Service Worker
+ * FileNamer Service Worker
  * Placeholder for offline support / caching.
  */
 
 const CACHE_NAME = 'fn-maker-cache-v1';
 const ASSETS = [
-    '/',
-    '/index.html',
+    '/app/',
+    '/app/index.html',
     '/css/style.css',
-    '/js/app.js'
+    '/js/app.js',
+    '/docs/',
+    '/docs/index.html',
+    '/docs/style.css',
+    '/docs/header.js'
 ];
 
 self.addEventListener('install', (e) => {

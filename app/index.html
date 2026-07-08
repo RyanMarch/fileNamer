@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" translate="no" data-theme-style="tech">
+
+<head>
+    <meta charset="UTF-8">
+    <script>
+        // Theme initialization to prevent flicker
+        (function () {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'system') {
+                const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme-mode', 'system');
+            } else {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                document.documentElement.removeAttribute('data-theme-mode');
+            }
+        })();
+    </script>
+    <meta name="google" content="notranslate">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <!-- Primary SEO Metadata -->
+    <title>FileNamer | Standardized Filename Builder & Renamer</title>
+    <meta name="description"
+        content="Design custom file naming templates and rename files in batch entirely in your browser. No sign-ups, no data storage, fully private.">
+    <meta name="keywords"
+        content="filename builder, file renamer, bulk file renamer, standardize filenames, document organization, productivity tool, no-database, local-first">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://filenamer.ryanmarch.me/app/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="FileNamer">
+    <meta property="og:url" content="https://filenamer.ryanmarch.me/app/">
+    <meta property="og:title" content="FileNamer | Standardized Filename Builder & Renamer">
+    <meta property="og:description"
+        content="Design custom file naming templates and rename files in batch entirely in your browser. No sign-ups, no data storage, fully private.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <a href="/" class="header-logo" style="text-decoration: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="lucide lucide-binary">
+                    <rect x="14" y="14" width="4" height="6" rx="2" />
+                    <rect x="6" y="4" width="4" height="6" rx="2" />
+                    <path d="M6 20h4" />
+                    <path d="M14 10h4" />
+                    <path d="M8 14v6" />
+                    <path d="M16 4v6" />
+                </svg>
+                <h1>FileNamer</h1>
+            </a>
+            <nav class="header-actions">
+                <div class="header-nav" aria-label="Main Navigation">
+                    <a href="index.html" class="nav-link active">App</a>
+                    <a href="../docs/index.html" class="nav-link">Docs</a>
+                </div>
+            </nav>
+        </header>
+
+        <main class="app-main">
+            <div class="workspace-grid">
+                <!-- Template Builder Panel -->
+                <section class="panel template-builder">
+                    <h2>1. Template Picker</h2>
+                    <p class="panel-desc">Choose a template, or define naming rules and component ordering.</p>
+                    <div id="template-editor-root">
+                        <!-- Custom dynamic forms will render here -->
+                    </div>
+                </section>
+
+                <!-- Dynamic Preview & File Renamer -->
+                <section class="panel filename-previewer">
+                    <button id="toggle-fullwidth-btn" class="btn btn-secondary btn-fullwidth-toggle" type="button">
+                        Go Fullwidth
+                    </button>
+                    <h2>2. Preview & Rename</h2>
+                    <p class="panel-desc">Fill in the parameters below to see live filename preview. Drop files into the
+                        dropzone to rename them.</p>
+                    <div id="preview-editor-root">
+                        <!-- Live text preview and file drag/drop here -->
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="page-footer">
+            <div class="footer-container">
+                <p class="footer-copyright">&copy; 2026 FileNamer</p>
+                <div class="footer-links">
+                    <a href="index.html" class="footer-link">App</a>
+                    <a href="../docs/index.html" class="footer-link">Docs</a>
+                    <a href="../terms/index.html" class="footer-link footer-terms">Terms</a>
+                    <a href="../terms/index.html#privacy-policy" class="footer-link">Privacy</a>
+                </div>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="system-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                    <span id="theme-status" class="theme-status"></span>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
+    <script src="../js/app.js" type="module"></script>
+</body>
+
+</html>

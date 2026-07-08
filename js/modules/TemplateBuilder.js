@@ -26,7 +26,7 @@ export class TemplateBuilder {
         }
 
         // Render template builder container
-        this.container.innerHTML = `
+        this.container.innerHTML =  /*html*/`
             <div class="template-builder-controls">
                 <div class="template-controls-row">
                     <div class="control-item template-select-group">
@@ -52,7 +52,38 @@ export class TemplateBuilder {
                         </div>
                     </div>
                 </div>
+                <div class="divider"></div>
 
+                <h3>Field Builder</h3>
+                <p>Add and configure fields for your filenames below. You can drag and drop fields to reorder them.</p>
+                <!-- Field Builder List -->
+                <div id="fields-list" class="fields-list">
+                    ${activeTpl.fields.map((f, idx) => this.renderFieldItem(f, idx, activeTpl.fields.length)).join('')}
+                </div>
+
+                <!-- Add Field Actions -->
+                <div class="add-field-actions">
+                    <span class="label-tiny">Add new field:</span>
+                    <div class="btn-group-segments">
+                        <button class="btn btn-small add-field-btn" data-type="text">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg> Text
+                        </button>
+                        <button class="btn btn-small add-field-btn" data-type="select">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg> Dropdown
+                        </button>
+                        <button class="btn btn-small add-field-btn" data-type="date">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Date
+                        </button>
+                        <button class="btn btn-small add-field-btn" data-type="index">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg> Index
+                        </button>
+                        <button class="btn btn-small add-field-btn" data-type="extension">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Extension
+                        </button>
+                    </div>
+                </div>
+
+                <h3>Format Settings</h3>
                 <div class="template-rules-row">
                     <div class="control-item template-separator-group">
                         <label for="template-separator">Separator</label>
@@ -72,33 +103,6 @@ export class TemplateBuilder {
                             <option value="snake" ${activeTpl.case === 'snake' ? 'selected' : ''}>snake_case</option>
                             <option value="camel" ${activeTpl.case === 'camel' ? 'selected' : ''}>camelCase</option>
                         </select>
-                    </div>
-                </div>
-
-                <div class="divider"></div>
-
-                <h3>Field Builder</h3>
-                <!-- Field Builder List -->
-                <div id="fields-list" class="fields-list">
-                    ${activeTpl.fields.map((f, idx) => this.renderFieldItem(f, idx, activeTpl.fields.length)).join('')}
-                </div>
-
-                <!-- Add Field Actions -->
-                <div class="add-field-actions">
-                    <span class="label-tiny">Add new segment:</span>
-                    <div class="btn-group-segments">
-                        <button class="btn btn-small add-field-btn" data-type="text">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg> Text
-                        </button>
-                        <button class="btn btn-small add-field-btn" data-type="select">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg> Dropdown
-                        </button>
-                        <button class="btn btn-small add-field-btn" data-type="date">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Date
-                        </button>
-                        <button class="btn btn-small add-field-btn" data-type="index">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg> Index
-                        </button>
                     </div>
                 </div>
 
@@ -130,31 +134,61 @@ export class TemplateBuilder {
         switch (field.type) {
             case 'text':
                 typeBadge = `<span class="badge badge-text">TXT</span>`;
-                configHtml = `
-                    <input type="text" class="form-input field-placeholder" data-index="${index}" placeholder="Field placeholder..." value="${field.placeholder || ''}" title="Field Placeholder">
+                configHtml = /*html*/ `
+                    <div style="display: flex; gap: 0.75rem; width: 100%; align-items: flex-end; flex-wrap: wrap;">
+                        <div class="control-item" style="flex: 1 1 calc(60% - 0.375rem); display: flex; flex-direction: column; gap: 0.375rem;">
+                            <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Default / Placeholder Text</label>
+                            <input type="text" class="form-input field-placeholder" data-index="${index}" placeholder="e.g. PRJ101" value="${field.placeholder || ''}" title="Default / Placeholder Text">
+                        </div>
+                        <div class="control-item" style="flex: 1 1 calc(40% - 0.375rem); display: flex; flex-direction: column; gap: 0.375rem;">
+                            <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Behavior</label>
+                            <select class="form-select field-behavior" data-index="${index}" title="Input Behavior">
+                                <option value="default" ${field.behavior !== 'placeholder' ? 'selected' : ''}>Default Value</option>
+                                <option value="placeholder" ${field.behavior === 'placeholder' ? 'selected' : ''}>Placeholder</option>
+                            </select>
+                        </div>
+                    </div>
                 `;
                 break;
             case 'select':
                 typeBadge = `<span class="badge badge-select">DRP</span>`;
-                configHtml = `
-                    <input type="text" class="form-input field-options" data-index="${index}" placeholder="Option 1, Option 2, Option 3..." value="${(field.options || []).join(', ')}" title="Comma-separated dropdown options">
+                configHtml = /*html*/ `
+                    <div class="control-item" style="width: 100%; display: flex; flex-direction: column; gap: 0.375rem;">
+                        <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Dropdown Options (comma-separated)</label>
+                        <input type="text" class="form-input field-options" data-index="${index}" placeholder="Option 1, Option 2, Option 3..." value="${(field.options || []).join(', ')}" title="Comma-separated dropdown options">
+                    </div>
                 `;
                 break;
             case 'date':
                 typeBadge = `<span class="badge badge-date">DAT</span>`;
-                configHtml = `
-                    <select class="form-select field-format" data-index="${index}" title="Date Format">
-                        <option value="YYYYMMDD" ${field.format === 'YYYYMMDD' ? 'selected' : ''}>YYYYMMDD (e.g. 20260707)</option>
-                        <option value="YYYY-MM-DD" ${field.format === 'YYYY-MM-DD' ? 'selected' : ''}>YYYY-MM-DD (e.g. 2026-07-07)</option>
-                        <option value="YYYY" ${field.format === 'YYYY' ? 'selected' : ''}>YYYY (e.g. 2026)</option>
-                        <option value="MM-DD" ${field.format === 'MM-DD' ? 'selected' : ''}>MM-DD (e.g. 07-07)</option>
-                        <option value="HHMMSS" ${field.format === 'HHMMSS' ? 'selected' : ''}>HHMMSS (e.g. 154812)</option>
-                    </select>
+                configHtml =  /*html*/ `
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+                        <div style="display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap; width: 100%;">
+                            <div class="control-item" style="flex: 1 1 calc(50% - 0.375rem); display: flex; flex-direction: column; gap: 0.375rem;">
+                                <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Date Format</label>
+                                <select class="form-select field-format" data-index="${index}" title="Date Format">
+                                    <option value="YYYYMMDD" ${field.format === 'YYYYMMDD' ? 'selected' : ''}>YYYYMMDD (e.g. 20260707)</option>
+                                    <option value="YYYY-MM-DD" ${field.format === 'YYYY-MM-DD' ? 'selected' : ''}>YYYY-MM-DD (e.g. 2026-07-07)</option>
+                                    <option value="YYYY" ${field.format === 'YYYY' ? 'selected' : ''}>YYYY (e.g. 2026)</option>
+                                    <option value="MM-DD" ${field.format === 'MM-DD' ? 'selected' : ''}>MM-DD (e.g. 07-07)</option>
+                                    <option value="HHMMSS" ${field.format === 'HHMMSS' ? 'selected' : ''}>HHMMSS (e.g. 154812)</option>
+                                    <option value="custom" ${field.format === 'custom' ? 'selected' : ''}>Custom Format</option>
+                                </select>
+                            </div>
+                            <div class="control-item field-custom-format-container" data-index="${index}" style="flex: 1 1 calc(40% - 0.375rem); display: ${field.format === 'custom' ? 'flex' : 'none'}; flex-direction: column; gap: 0.375rem;">
+                                <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Custom Format</label>
+                                <input type="text" class="form-input field-custom-format" data-index="${index}" placeholder="e.g. YYYY_MM_DD" value="${field.customFormat || ''}" title="Custom Date Format">
+                            </div>
+                        </div>
+                        <div class="field-custom-format-help" data-index="${index}" style="display: ${field.format === 'custom' ? 'block' : 'none'}; font-size: 0.7rem; color: var(--text-muted); line-height: 1.3;">
+                            Tokens: <strong>YYYY</strong>/<strong>YY</strong> (Year), <strong>MM</strong>/<strong>M</strong> (Month), <strong>DD</strong>/<strong>D</strong> (Day), <strong>HH</strong>/<strong>H</strong> (24h Hr), <strong>hh</strong>/<strong>h</strong> (12h Hr), <strong>mm</strong>/<strong>m</strong> (Min), <strong>ss</strong>/<strong>s</strong> (Sec), <strong>A</strong>/<strong>a</strong> (AM/PM)
+                        </div>
+                    </div>
                 `;
                 break;
             case 'index':
                 typeBadge = `<span class="badge badge-index">IDX</span>`;
-                configHtml = `
+                configHtml =  /*html*/ `
                     <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--text-muted);">
                         <span>Digits:</span>
                         <input type="number" 
@@ -168,9 +202,38 @@ export class TemplateBuilder {
                     </div>
                 `;
                 break;
+            case 'extension':
+                typeBadge = `<span class="badge badge-extension">EXT</span>`;
+                configHtml =  /*html*/ `
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem; width: 100%;">
+                        <div class="template-rules-row" style="display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap;">
+                            <div class="control-item" style="flex: 1 1 calc(50% - 0.375rem); display: flex; flex-direction: column; gap: 0.375rem;">
+                                <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Extension Option</label>
+                                <select class="form-select field-extension-mode" data-index="${index}">
+                                    <option value="keep" ${field.extensionMode === 'keep' ? 'selected' : ''}>Keep Original</option>
+                                    <option value="lowercase" ${field.extensionMode === 'lowercase' ? 'selected' : ''}>Force lowercase</option>
+                                    <option value="uppercase" ${field.extensionMode === 'uppercase' ? 'selected' : ''}>Force UPPERCASE</option>
+                                    <option value="custom" ${field.extensionMode === 'custom' ? 'selected' : ''}>Custom Extension</option>
+                                    <option value="none" ${field.extensionMode === 'none' ? 'selected' : ''}>Remove Extension</option>
+                                </select>
+                            </div>
+                            <div class="control-item field-custom-extension-container" data-index="${index}" style="flex: 1 1 calc(30% - 0.375rem); display: ${field.extensionMode === 'custom' ? 'flex' : 'none'}; flex-direction: column; gap: 0.375rem;">
+                                <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Custom Ext</label>
+                                <input type="text" class="form-input field-custom-extension" data-index="${index}" placeholder="e.g. pdf" value="${field.customExtension || ''}">
+                            </div>
+                        </div>
+                        <div class="checkbox-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem;">
+                            <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.625rem; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); cursor: pointer;">
+                                <input type="checkbox" class="field-include-ext-preview" data-index="${index}" ${field.includeExtInPreview !== false ? 'checked' : ''}>
+                                Include extension in preview copy
+                            </label>
+                        </div>
+                    </div>
+                `;
+                break;
         }
 
-        return `
+        return  /*html*/`
             <div class="field-item field-item-${field.type}" data-index="${index}">
                 <div class="field-item-top">
                     <div class="field-drag-handle" title="Drag/Reorder (use arrows on right)">
@@ -285,6 +348,8 @@ export class TemplateBuilder {
             });
         }
 
+
+
         // Field modifications
         const fieldsList = document.getElementById('fields-list');
         if (fieldsList) {
@@ -352,6 +417,27 @@ export class TemplateBuilder {
             });
 
             // Field Label Input Change
+            fieldsList.addEventListener('keydown', (e) => {
+                if (e.target.classList.contains('field-digits')) {
+                    const allowed = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'];
+                    if (allowed.includes(e.key) || e.ctrlKey || e.metaKey || e.altKey) {
+                        return;
+                    }
+                    if (!/^\d$/.test(e.key)) {
+                        e.preventDefault();
+                    }
+                }
+            });
+
+            fieldsList.addEventListener('paste', (e) => {
+                if (e.target.classList.contains('field-digits')) {
+                    const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+                    if (!/^\d+$/.test(pasteData)) {
+                        e.preventDefault();
+                    }
+                }
+            });
+
             fieldsList.addEventListener('input', (e) => {
                 if (e.target.classList.contains('field-label')) {
                     const idx = parseInt(e.target.dataset.index);
@@ -385,6 +471,26 @@ export class TemplateBuilder {
                     this.store.updateTemplate(activeTpl.id, { fields });
                     this.onTemplateChange();
                 }
+
+                if (e.target.classList.contains('field-custom-extension')) {
+                    const idx = parseInt(e.target.dataset.index);
+                    const fields = [...activeTpl.fields];
+                    fields[idx].customExtension = e.target.value.trim();
+                    this.store.updateTemplate(activeTpl.id, { fields });
+                    this.onTemplateChange();
+                }
+
+                if (e.target.classList.contains('field-custom-format')) {
+                    const idx = parseInt(e.target.dataset.index);
+                    const fields = [...activeTpl.fields];
+                    let sanitizedValue = e.target.value.replace(/[^YyMdDhHmsSaA\-_.:/\\, ()[\]]/g, '');
+                    if (e.target.value !== sanitizedValue) {
+                        e.target.value = sanitizedValue;
+                    }
+                    fields[idx].customFormat = sanitizedValue;
+                    this.store.updateTemplate(activeTpl.id, { fields });
+                    this.onTemplateChange();
+                }
             });
 
             // Field Select/Dropdown formats change
@@ -395,6 +501,15 @@ export class TemplateBuilder {
                     fields[idx].format = e.target.value;
                     this.store.updateTemplate(activeTpl.id, { fields });
                     this.onTemplateChange();
+
+                    const customContainer = fieldsList.querySelector(`.field-custom-format-container[data-index="${idx}"]`);
+                    if (customContainer) {
+                        customContainer.style.display = e.target.value === 'custom' ? 'flex' : 'none';
+                    }
+                    const customHelp = fieldsList.querySelector(`.field-custom-format-help[data-index="${idx}"]`);
+                    if (customHelp) {
+                        customHelp.style.display = e.target.value === 'custom' ? 'block' : 'none';
+                    }
                 }
 
                 if (e.target.classList.contains('field-digits')) {
@@ -402,6 +517,36 @@ export class TemplateBuilder {
                     const fields = [...activeTpl.fields];
                     const val = parseInt(e.target.value);
                     fields[idx].digits = isNaN(val) || val <= 0 ? 0 : val;
+                    this.store.updateTemplate(activeTpl.id, { fields });
+                    this.onTemplateChange();
+                }
+
+                if (e.target.classList.contains('field-behavior')) {
+                    const idx = parseInt(e.target.dataset.index);
+                    const fields = [...activeTpl.fields];
+                    fields[idx].behavior = e.target.value;
+                    this.store.updateTemplate(activeTpl.id, { fields });
+                    this.onTemplateChange();
+                }
+
+                if (e.target.classList.contains('field-extension-mode')) {
+                    const idx = parseInt(e.target.dataset.index);
+                    const fields = [...activeTpl.fields];
+                    const mode = e.target.value;
+                    fields[idx].extensionMode = mode;
+                    this.store.updateTemplate(activeTpl.id, { fields });
+                    this.onTemplateChange();
+                    // Toggle custom ext container visibility
+                    const customContainer = fieldsList.querySelector(`.field-custom-extension-container[data-index="${idx}"]`);
+                    if (customContainer) {
+                        customContainer.style.display = mode === 'custom' ? 'flex' : 'none';
+                    }
+                }
+
+                if (e.target.classList.contains('field-include-ext-preview')) {
+                    const idx = parseInt(e.target.dataset.index);
+                    const fields = [...activeTpl.fields];
+                    fields[idx].includeExtInPreview = e.target.checked;
                     this.store.updateTemplate(activeTpl.id, { fields });
                     this.onTemplateChange();
                 }
@@ -452,12 +597,20 @@ export class TemplateBuilder {
                 };
 
                 // Add default type configurations
-                if (type === 'select') {
+                if (type === 'text') {
+                    newField.behavior = 'default';
+                    newField.placeholder = '';
+                } else if (type === 'select') {
                     newField.options = ['ENG', 'DESIGN', 'PM'];
                 } else if (type === 'date') {
                     newField.format = 'YYYYMMDD';
+                    newField.customFormat = 'YYYY-MM-DD';
                 } else if (type === 'index') {
                     newField.digits = 0;
+                } else if (type === 'extension') {
+                    newField.extensionMode = 'keep';
+                    newField.customExtension = '';
+                    newField.includeExtInPreview = true;
                 }
 
                 fields.push(newField);
@@ -471,7 +624,7 @@ export class TemplateBuilder {
         const resetBtn = document.getElementById('reset-defaults-btn');
         if (resetBtn) {
             resetBtn.addEventListener('click', () => {
-                if (confirm('Are you sure you want to reset all templates to default presets? This will lose custom templates.')) {
+                if (confirm('Are you sure you want to reset all templates to default presets? This will permanently delete all custom templates.')) {
                     this.store.resetToDefault();
                     this.render();
                     this.onTemplateChange();

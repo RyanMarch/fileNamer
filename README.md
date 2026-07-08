@@ -1,4 +1,4 @@
-# Filename Maker
+# FileNamer
 
 A lightweight, local-first web utility for designing standardized naming templates and batch renaming files directly in the browser.
 

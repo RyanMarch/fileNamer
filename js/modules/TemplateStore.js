@@ -12,7 +12,8 @@ export const DEFAULT_TEMPLATES = [
             { id: 'f-date', type: 'date', label: 'Date Created', format: 'YYYYMMDD' },
             { id: 'f-proj', type: 'text', label: 'Project Code', placeholder: 'PRJ101' },
             { id: 'f-desc', type: 'text', label: 'Description', placeholder: 'PromoShot' },
-            { id: 'f-index', type: 'index', label: 'Index', digits: 2 }
+            { id: 'f-index', type: 'index', label: 'Index', digits: 2 },
+            { id: 'f-ext', type: 'extension', label: 'Extension', extensionMode: 'keep', customExtension: '', includeExtInPreview: true }
         ]
     },
     {
@@ -23,7 +24,8 @@ export const DEFAULT_TEMPLATES = [
         fields: [
             { id: 'f-author', type: 'text', label: 'Author Surname', placeholder: 'Smith' },
             { id: 'f-year', type: 'text', label: 'Year', placeholder: '2026' },
-            { id: 'f-title', type: 'text', label: 'Paper Title', placeholder: 'NeuralNetworks' }
+            { id: 'f-title', type: 'text', label: 'Paper Title', placeholder: 'NeuralNetworks' },
+            { id: 'f-ext', type: 'extension', label: 'Extension', extensionMode: 'keep', customExtension: '', includeExtInPreview: true }
         ]
     },
     {
@@ -34,7 +36,8 @@ export const DEFAULT_TEMPLATES = [
         fields: [
             { id: 'f-inv-date', type: 'date', label: 'Date', format: 'YYYY-MM-DD' },
             { id: 'f-vendor', type: 'text', label: 'Vendor', placeholder: 'Google' },
-            { id: 'f-inv-num', type: 'text', label: 'Invoice Number', placeholder: 'INV-98765' }
+            { id: 'f-inv-num', type: 'text', label: 'Invoice Number', placeholder: 'INV-98765' },
+            { id: 'f-ext', type: 'extension', label: 'Extension', extensionMode: 'keep', customExtension: '', includeExtInPreview: true }
         ]
     }
 ];
@@ -146,6 +149,9 @@ export class TemplateStore {
                 if (f.options) minimalField.o = f.options;
                 if (f.format) minimalField.f = f.format;
                 if (f.digits) minimalField.d = f.digits;
+                if (f.extensionMode) minimalField.em = f.extensionMode;
+                if (f.customExtension) minimalField.ce = f.customExtension;
+                if (f.includeExtInPreview !== undefined) minimalField.iep = f.includeExtInPreview;
                 return minimalField;
             })
         };
@@ -173,6 +179,9 @@ export class TemplateStore {
                     if (f.o) field.options = f.o;
                     if (f.f) field.format = f.f;
                     if (f.d) field.digits = f.d;
+                    if (f.em) field.extensionMode = f.em;
+                    if (f.ce) field.customExtension = f.ce;
+                    if (f.iep !== undefined) field.includeExtInPreview = f.iep;
                     return field;
                 })
             };

@@ -4,7 +4,7 @@
   "description": "Standardized filename builder and batch file renamer",
   "main": "js/app.js",
   "scripts": {
-    "build": "mkdir -p dist && cp index.html sw.js robots.txt dist/ && cp -r assets dist/ && esbuild js/app.js --bundle --minify --outfile=dist/js/app.js && esbuild css/style.css --minify --outfile=dist/css/style.css",
+    "build": "mkdir -p dist/app && cp index.html sw.js robots.txt dist/ && cp app/index.html dist/app/ && cp -r assets docs terms dist/ && esbuild js/app.js --bundle --minify --outfile=dist/js/app.js && esbuild css/style.css --minify --outfile=dist/css/style.css",
     "dev": "wrangler pages dev ."
   },
   "devDependencies": {

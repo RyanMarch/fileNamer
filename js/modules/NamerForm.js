@@ -7,9 +7,10 @@ export class NamerForm {
         this.container = document.getElementById(containerId);
         this.store = store;
         this.onFormChange = onFormChange;
-        
+
         // Cache field values to preserve them across builder edits where possible
         this.valuesCache = {};
+        this.lastPlaceholders = {};
         this.startIndexVal = 1;
 
         this.init();
@@ -22,7 +23,7 @@ export class NamerForm {
     }
 
     renderStructure() {
-        this.container.innerHTML = `
+        this.container.innerHTML =  /*html*/`
             <div class="preview-workspace">
                 <form id="namer-form" class="namer-form">
                     <!-- Dynamic fields will render here -->
@@ -31,6 +32,10 @@ export class NamerForm {
                 <div class="live-preview-box">
                     <div class="preview-header">
                         <span class="preview-label">Filename Preview</span>
+                        <label class="checkbox-label" style="margin-left: auto; margin-right: 1rem;">
+                            <input type="checkbox" id="show-structure-chk">
+                            <span>Show Structure</span>
+                        </label>
                         <button id="copy-preview-btn" class="btn btn-secondary btn-small" type="button" title="Copy Preview to Clipboard">
                             Copy
                         </button>
@@ -43,13 +48,35 @@ export class NamerForm {
                 <div id="dropzone-root"></div>
             </div>
         `;
-        
+
         this.formElement = this.container.querySelector('#namer-form');
         this.previewElement = this.container.querySelector('#filename-preview');
         this.copyBtn = this.container.querySelector('#copy-preview-btn');
+        this.showStructureCheckbox = this.container.querySelector('#show-structure-chk');
     }
 
     setupEvents() {
+        this.formElement.addEventListener('keydown', (e) => {
+            if (e.target.id === 'start-index-input') {
+                const allowed = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'];
+                if (allowed.includes(e.key) || e.ctrlKey || e.metaKey || e.altKey) {
+                    return;
+                }
+                if (!/^\d$/.test(e.key)) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        this.formElement.addEventListener('paste', (e) => {
+            if (e.target.id === 'start-index-input') {
+                const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+                if (!/^\d+$/.test(pasteData)) {
+                    e.preventDefault();
+                }
+            }
+        });
+
         this.formElement.addEventListener('input', (e) => {
             const fieldId = e.target.dataset.fieldId;
             if (fieldId) {
@@ -73,6 +100,12 @@ export class NamerForm {
                 if (this.onFormChange) this.onFormChange();
             }
         });
+
+        if (this.showStructureCheckbox) {
+            this.showStructureCheckbox.addEventListener('change', () => {
+                this.updatePreview();
+            });
+        }
 
         if (this.copyBtn) {
             this.copyBtn.addEventListener('click', () => {
@@ -101,8 +134,31 @@ export class NamerForm {
         let hasIndex = false;
 
         activeTpl.fields.forEach(field => {
+            if (field.type === 'extension') {
+                return; // Skip rendering in form
+            }
+
+            const isPlaceholderMode = field.behavior === 'placeholder';
+            const currentPlaceholder = field.placeholder || '';
+            const lastPlaceholder = this.lastPlaceholders[field.id] || '';
+
+            if (isPlaceholderMode) {
+                // If we switched to placeholder mode, clear the default value from cache if it has not been custom edited
+                if (this.valuesCache[field.id] === lastPlaceholder) {
+                    this.valuesCache[field.id] = '';
+                }
+            } else {
+                // Default value mode
+                // If never initialized, or if it matched the old default value and the default value changed in the builder
+                if (this.valuesCache[field.id] === undefined || this.valuesCache[field.id] === lastPlaceholder) {
+                    this.valuesCache[field.id] = currentPlaceholder;
+                }
+            }
+
+            this.lastPlaceholders[field.id] = currentPlaceholder;
+
             const cachedVal = this.valuesCache[field.id] !== undefined ? this.valuesCache[field.id] : '';
-            
+
             let inputHtml = '';
             switch (field.type) {
                 case 'text':
@@ -111,21 +167,25 @@ export class NamerForm {
                                id="input-${field.id}" 
                                data-field-id="${field.id}" 
                                class="form-input" 
-                               value="${cachedVal || ''}" 
-                               placeholder="${field.placeholder || 'Enter text...'}"
+                               value="${cachedVal}" 
+                               placeholder="${isPlaceholderMode ? (field.placeholder || 'Enter text...') : 'Enter text...'}"
                                required>
                     `;
                     break;
                 case 'select':
                     const options = field.options || [];
                     inputHtml = `
-                        <select id="input-${field.id}" 
-                                data-field-id="${field.id}" 
-                                class="form-select" 
-                                required>
-                            <option value="" disabled ${!cachedVal ? 'selected' : ''}>Select option...</option>
-                            ${options.map(opt => `<option value="${opt}" ${cachedVal === opt ? 'selected' : ''}>${opt}</option>`).join('')}
-                        </select>
+                        <input type="text"
+                               id="input-${field.id}"
+                               data-field-id="${field.id}"
+                               class="form-select"
+                               value="${cachedVal}"
+                               placeholder="Select or type..."
+                               list="list-${field.id}"
+                               required>
+                        <datalist id="list-${field.id}">
+                            ${options.map(opt => `<option value="${opt}"></option>`).join('')}
+                        </datalist>
                     `;
                     break;
                 case 'date':
@@ -195,7 +255,7 @@ export class NamerForm {
         return this.startIndexVal;
     }
 
-    generateFilename(indexOffset = 0, csvRow = null) {
+    generateFilename(indexOffset = 0, csvRow = null, showStructure = false) {
         const activeTpl = this.store.getActiveTemplate();
         if (!activeTpl) return '';
 
@@ -204,17 +264,25 @@ export class NamerForm {
         const segments = [];
 
         activeTpl.fields.forEach(field => {
+            if (field.type === 'extension') {
+                return; // Skip extension field from base name segments
+            }
             let val = '';
-            if (field.type === 'index') {
+            if (showStructure) {
+                val = field.label || '';
+            } else if (field.type === 'index') {
                 const countVal = this.startIndexVal + indexOffset;
                 const padDigits = parseInt(field.digits);
                 val = isNaN(padDigits) || padDigits <= 1 ? String(countVal) : String(countVal).padStart(padDigits, '0');
             } else if (field.type === 'date') {
                 const rawDate = (csvRow && csvRow[field.id] !== undefined) ? csvRow[field.id] : this.valuesCache[field.id];
-                val = this.formatDateString(rawDate, field.format);
+                val = this.formatDateString(rawDate, field.format, field.customFormat);
             } else {
                 val = (csvRow && csvRow[field.id] !== undefined) ? csvRow[field.id] : (this.valuesCache[field.id] || '');
                 val = this.applyCaseStyle(val, caseStyle);
+                if (separator) {
+                    val = val.replace(/\s+/g, separator);
+                }
             }
 
             if (val !== '') {
@@ -226,18 +294,102 @@ export class NamerForm {
     }
 
     updatePreview() {
-        const baseName = this.generateFilename(0);
-        this.previewElement.textContent = baseName ? `${baseName}.ext` : '[Fill in parameters]';
+        const activeTpl = this.store.getActiveTemplate();
+        if (!activeTpl) {
+            this.previewElement.textContent = '[Fill in parameters]';
+            return;
+        }
+
+        const showStructure = this.showStructureCheckbox ? this.showStructureCheckbox.checked : false;
+        const baseName = this.generateFilename(0, null, showStructure);
+        if (!baseName) {
+            this.previewElement.textContent = '[Fill in parameters]';
+            return;
+        }
+
+        const extField = activeTpl.fields.find(f => f.type === 'extension');
+        if (!extField || extField.includeExtInPreview === false) {
+            this.previewElement.textContent = baseName;
+            return;
+        }
+
+        const extMode = extField.extensionMode || 'keep';
+        let previewExt = '.ext';
+
+        if (extMode === 'lowercase') {
+            previewExt = '.ext';
+        } else if (extMode === 'uppercase') {
+            previewExt = '.EXT';
+        } else if (extMode === 'custom') {
+            const custom = (extField.customExtension || '').trim();
+            previewExt = custom ? (custom.startsWith('.') ? custom : `.${custom}`) : '';
+        } else if (extMode === 'none') {
+            previewExt = '';
+        }
+
+        this.previewElement.textContent = `${baseName}${previewExt}`;
     }
 
-    formatDateString(dateVal, format) {
+    formatDateString(dateVal, format, customFormat = '') {
         if (!dateVal) return '';
         const date = new Date(dateVal + 'T00:00:00');
         if (isNaN(date.getTime())) return '';
 
         const yyyy = date.getFullYear();
-        const mm = String(date.getMonth() + 1).padStart(2, '0');
-        const dd = String(date.getDate()).padStart(2, '0');
+        const yy = String(yyyy).slice(-2);
+        const monthNum = date.getMonth() + 1;
+        const mm = String(monthNum).padStart(2, '0');
+        const m = String(monthNum);
+        const dayNum = date.getDate();
+        const dd = String(dayNum).padStart(2, '0');
+        const d = String(dayNum);
+
+        const now = new Date();
+        const hours24 = now.getHours();
+        const hours12 = hours24 % 12 || 12;
+        const HH = String(hours24).padStart(2, '0');
+        const H = String(hours24);
+        const hh = String(hours12).padStart(2, '0');
+        const h = String(hours12);
+        const minutesNum = now.getMinutes();
+        const minPad = String(minutesNum).padStart(2, '0');
+        const minSingle = String(minutesNum);
+        const secondsNum = now.getSeconds();
+        const ss = String(secondsNum).padStart(2, '0');
+        const s = String(secondsNum);
+        const ampmUpper = hours24 >= 12 ? 'PM' : 'AM';
+        const ampmLower = hours24 >= 12 ? 'pm' : 'am';
+
+        if (format === 'custom') {
+            let result = customFormat || '';
+            const replacements = [
+                { token: 'YYYY', value: yyyy },
+                { token: 'yyyy', value: yyyy },
+                { token: 'YY', value: yy },
+                { token: 'yy', value: yy },
+                { token: 'MM', value: mm },
+                { token: 'M', value: m },
+                { token: 'DD', value: dd },
+                { token: 'dd', value: dd },
+                { token: 'D', value: d },
+                { token: 'd', value: d },
+                { token: 'HH', value: HH },
+                { token: 'H', value: H },
+                { token: 'hh', value: hh },
+                { token: 'h', value: h },
+                { token: 'mm', value: minPad },
+                { token: 'm', value: minSingle },
+                { token: 'ss', value: ss },
+                { token: 's', value: s },
+                { token: 'A', value: ampmUpper },
+                { token: 'a', value: ampmLower }
+            ];
+
+            for (const { token, value } of replacements) {
+                result = result.split(token).join(value);
+            }
+            return result;
+        }
 
         switch (format) {
             case 'YYYYMMDD':
@@ -249,11 +401,7 @@ export class NamerForm {
             case 'MM-DD':
                 return `${mm}-${dd}`;
             case 'HHMMSS':
-                const now = new Date();
-                const hh = String(now.getHours()).padStart(2, '0');
-                const min = String(now.getMinutes()).padStart(2, '0');
-                const ss = String(now.getSeconds()).padStart(2, '0');
-                return `${hh}${min}${ss}`;
+                return `${HH}${minPad}${ss}`;
             default:
                 return `${yyyy}${mm}${dd}`;
         }

@@ -18,7 +18,7 @@ export class FileRenamer {
     }
 
     render() {
-        this.container.innerHTML = `
+        this.container.innerHTML = /*html*/ `
             <div class="renamer-section">
                 <h3>Files to Rename</h3>
                 
@@ -43,16 +43,23 @@ export class FileRenamer {
                     </div>
                     
                     <div class="rename-actions">
-                        <button id="import-csv-btn" class="btn btn-secondary" type="button">
-                            Import CSV Data
-                        </button>
-                        <button id="export-csv-btn" class="btn btn-secondary" type="button">
-                            Export Log (CSV)
-                        </button>
-                        <button id="clear-files-btn" class="btn btn-secondary" type="button">Clear All</button>
-                        <button id="rename-execute-btn" class="btn btn-primary" type="button">
-                            Rename & Download
-                        </button>
+                        <div class="csv-actions-group">
+                            <button id="get-csv-tpl-btn" class="btn btn-secondary" type="button">
+                                Get CSV Template
+                            </button>
+                            <button id="import-csv-btn" class="btn btn-secondary" type="button">
+                                Import CSV Data
+                            </button>
+                            <button id="export-csv-btn" class="btn btn-secondary" type="button">
+                                Export Log (CSV)
+                            </button>
+                        </div>
+                        <div class="file-actions-group">
+                            <button id="clear-files-btn" class="btn btn-secondary" type="button">Clear All</button>
+                            <button id="rename-execute-btn" class="btn btn-primary" type="button">
+                                Rename & Download
+                            </button>
+                        </div>
                         <input type="file" id="csv-input" class="visually-hidden" accept=".csv">
                     </div>
                 </div>
@@ -68,6 +75,7 @@ export class FileRenamer {
         this.csvInput = this.container.querySelector('#csv-input');
         this.importCsvBtn = this.container.querySelector('#import-csv-btn');
         this.exportCsvBtn = this.container.querySelector('#export-csv-btn');
+        this.getCsvTplBtn = this.container.querySelector('#get-csv-tpl-btn');
     }
 
     setupEvents() {
@@ -114,6 +122,10 @@ export class FileRenamer {
         });
 
         // CSV actions
+        this.getCsvTplBtn.addEventListener('click', () => {
+            this.handleCSVTemplateDownload();
+        });
+
         this.importCsvBtn.addEventListener('click', () => {
             this.csvInput.click();
         });
@@ -125,6 +137,39 @@ export class FileRenamer {
         this.exportCsvBtn.addEventListener('click', () => {
             this.handleCSVExport();
         });
+    }
+
+    handleCSVTemplateDownload() {
+        const activeTpl = this.namerForm.store.getActiveTemplate();
+        if (!activeTpl) {
+            alert('Please select or create a template first.');
+            return;
+        }
+
+        const fieldsToMap = activeTpl.fields.filter(f => f.type !== 'extension');
+        if (fieldsToMap.length === 0) {
+            alert('The active template has no fields to map.');
+            return;
+        }
+
+        const headers = fieldsToMap.map(field => field.label || field.id);
+        
+        const sampleRow = fieldsToMap.map(field => {
+            if (field.type === 'text') return 'Sample Text';
+            if (field.type === 'dropdown') {
+                const options = field.options || [];
+                return options[0] || 'Option 1';
+            }
+            if (field.type === 'date') return '2026-07-08';
+            if (field.type === 'index') return '1';
+            return 'Sample Value';
+        });
+
+        const csvContent = this.convertToCSV(headers, [sampleRow]);
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const csvName = `${activeTpl.name.replace(/\s+/g, '_')}_template.csv`;
+
+        this.triggerDownload(blob, csvName);
     }
 
     handleCSVImport(e) {
@@ -190,9 +235,9 @@ export class FileRenamer {
         if (this.files.length === 0) return;
 
         const headers = ['Original Filename', 'Target Filename', 'Size (Bytes)'];
+        const activeTpl = this.namerForm.store.getActiveTemplate();
         const rows = this.files.map((file, idx) => {
-            const dotIdx = file.name.lastIndexOf('.');
-            const ext = dotIdx !== -1 ? file.name.slice(dotIdx) : '';
+            const ext = this.getAppliedExtension(file.name, activeTpl);
             const csvRow = this.csvData && this.csvData[idx] ? this.csvData[idx] : null;
             const baseName = this.namerForm.generateFilename(idx, csvRow);
             const targetName = baseName ? `${baseName}${ext}` : file.name;
@@ -201,8 +246,7 @@ export class FileRenamer {
 
         const csvContent = this.convertToCSV(headers, rows);
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        
-        const activeTpl = this.namerForm.store.getActiveTemplate();
+
         const csvName = activeTpl ? `${activeTpl.name.replace(/\s+/g, '_')}_renaming_log.csv` : 'renaming_log.csv';
 
         this.triggerDownload(blob, csvName);
@@ -212,11 +256,11 @@ export class FileRenamer {
         const lines = [];
         let row = [""];
         let inQuotes = false;
-        
+
         for (let i = 0; i < text.length; i++) {
             const char = text[i];
             const nextChar = text[i + 1];
-            
+
             if (char === '"') {
                 if (inQuotes && nextChar === '"') {
                     row[row.length - 1] += '"';
@@ -278,12 +322,12 @@ export class FileRenamer {
         }
 
         this.filesListContainer.style.display = 'flex';
+        const activeTpl = this.namerForm.store.getActiveTemplate();
         this.filesList.innerHTML = this.files.map((file, idx) => {
-            const dotIdx = file.name.lastIndexOf('.');
-            const ext = dotIdx !== -1 ? file.name.slice(dotIdx) : '';
+            const ext = this.getAppliedExtension(file.name, activeTpl);
             const csvRow = this.csvData && this.csvData[idx] ? this.csvData[idx] : null;
             const baseName = this.namerForm.generateFilename(idx, csvRow);
-            
+
             // Format size for user
             let sizeStr = '';
             if (file.size < 1024) sizeStr = `${file.size} B`;
@@ -308,7 +352,7 @@ export class FileRenamer {
                         <span class="file-name-target" title="${targetName}">${targetName}</span>
                     </div>
                     <button class="btn-file-remove" data-index="${idx}" title="Remove file" aria-label="Remove file">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
                     </button>
                 </div>
             `;
@@ -326,10 +370,9 @@ export class FileRenamer {
     async executeRename() {
         if (this.files.length === 0) return;
 
-        // Build array of new filenames
+        const activeTpl = this.namerForm.store.getActiveTemplate();
         const renames = this.files.map((file, idx) => {
-            const dotIdx = file.name.lastIndexOf('.');
-            const ext = dotIdx !== -1 ? file.name.slice(dotIdx) : '';
+            const ext = this.getAppliedExtension(file.name, activeTpl);
             const csvRow = this.csvData && this.csvData[idx] ? this.csvData[idx] : null;
             const baseName = this.namerForm.generateFilename(idx, csvRow);
             return {
@@ -349,7 +392,7 @@ export class FileRenamer {
     async downloadSequentially(renames) {
         const total = renames.length;
         const confirmMsg = `This will trigger ${total} individual file download(s). Your browser may prompt you to allow multiple downloads. Do you want to continue?`;
-        
+
         if (total > 1 && !confirm(confirmMsg)) {
             return;
         }
@@ -384,7 +427,7 @@ export class FileRenamer {
             });
 
             const content = await zip.generateAsync({ type: 'blob' });
-            
+
             // Format zip name based on template or project name
             const activeTpl = this.namerForm.store.getActiveTemplate();
             const zipName = activeTpl ? `${activeTpl.name.replace(/\s+/g, '_')}_renamed.zip` : 'renamed_files.zip';
@@ -402,6 +445,40 @@ export class FileRenamer {
                 this.executeBtn.disabled = false;
             }, 2000);
         }
+    }
+
+    getAppliedExtension(fileName, activeTpl) {
+        if (!activeTpl) {
+            const dotIdx = fileName.lastIndexOf('.');
+            return dotIdx !== -1 ? fileName.slice(dotIdx) : '';
+        }
+
+        const extField = activeTpl.fields.find(f => f.type === 'extension');
+        if (!extField) {
+            return '';
+        }
+
+        const extMode = extField.extensionMode || 'keep';
+        if (extMode === 'none') {
+            return '';
+        }
+
+        if (extMode === 'custom') {
+            const custom = (extField.customExtension || '').trim();
+            if (!custom) return '';
+            return custom.startsWith('.') ? custom : `.${custom}`;
+        }
+
+        const dotIdx = fileName.lastIndexOf('.');
+        let ext = dotIdx !== -1 ? fileName.slice(dotIdx) : '';
+
+        if (extMode === 'lowercase') {
+            return ext.toLowerCase();
+        } else if (extMode === 'uppercase') {
+            return ext.toUpperCase();
+        }
+
+        return ext;
     }
 
     triggerDownload(blob, filename) {

@@ -1,5 +1,5 @@
 /**
- * Filename Maker - Main Entry Point
+ * FileNamer - Main Entry Point
  */
 
 import { TemplateStore } from './modules/TemplateStore.js';
@@ -94,4 +94,14 @@ function initApp() {
 
     // FileRenamer takes container id and the namerForm instance
     renamer = new FileRenamer('dropzone-root', form);
+
+    // Fullwidth Toggle
+    const fullwidthBtn = document.getElementById('toggle-fullwidth-btn');
+    const workspaceGrid = document.querySelector('.workspace-grid');
+    if (fullwidthBtn && workspaceGrid) {
+        fullwidthBtn.addEventListener('click', () => {
+            const isFull = workspaceGrid.classList.toggle('fullwidth-mode');
+            fullwidthBtn.textContent = isFull ? 'Exit Fullwidth' : 'Go Fullwidth';
+        });
+    }
 }
