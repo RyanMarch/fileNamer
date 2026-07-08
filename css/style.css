@@ -604,7 +604,7 @@ body {
     font-weight: 700;
 }
 
-.badge-counter {
+.badge-index {
     color: #f59e0b;
     background: rgba(245, 158, 11, 0.2);
     border: 1px solid rgba(245, 158, 11, 0.4);
@@ -768,13 +768,13 @@ body {
     border-color: rgba(16, 185, 129, 0.65) rgba(16, 185, 129, 0.65) rgba(16, 185, 129, 0.65) #10b981;
 }
 
-/* Counter fields: Soft Amber */
-.field-item-counter {
+/* Index fields: Soft Amber */
+.field-item-index {
     border-left-color: #f59e0b;
     background: rgba(245, 158, 11, 0.12);
     border-color: rgba(245, 158, 11, 0.35) rgba(245, 158, 11, 0.35) rgba(245, 158, 11, 0.35) #f59e0b;
 }
-.field-item-counter:hover {
+.field-item-index:hover {
     background: rgba(245, 158, 11, 0.22);
     border-color: rgba(245, 158, 11, 0.65) rgba(245, 158, 11, 0.65) rgba(245, 158, 11, 0.65) #f59e0b;
 }
@@ -898,11 +898,11 @@ body {
     color: #10b981;
 }
 
-.btn-group-segments .add-field-btn[data-type="counter"] {
+.btn-group-segments .add-field-btn[data-type="index"] {
     border-color: rgba(245, 158, 11, 0.3);
     background: rgba(245, 158, 11, 0.04);
 }
-.btn-group-segments .add-field-btn[data-type="counter"]:hover {
+.btn-group-segments .add-field-btn[data-type="index"]:hover {
     border-color: #f59e0b;
     background: rgba(245, 158, 11, 0.12);
     color: #f59e0b;

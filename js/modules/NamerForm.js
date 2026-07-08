@@ -10,7 +10,7 @@ export class NamerForm {
         
         // Cache field values to preserve them across builder edits where possible
         this.valuesCache = {};
-        this.startCounterVal = 1;
+        this.startIndexVal = 1;
 
         this.init();
     }
@@ -58,8 +58,8 @@ export class NamerForm {
                 if (this.onFormChange) this.onFormChange();
             }
 
-            if (e.target.id === 'start-counter-input') {
-                this.startCounterVal = parseInt(e.target.value) || 1;
+            if (e.target.id === 'start-index-input') {
+                this.startIndexVal = parseInt(e.target.value) || 1;
                 this.updatePreview();
                 if (this.onFormChange) this.onFormChange();
             }
@@ -98,7 +98,7 @@ export class NamerForm {
         }
 
         let fieldsHtml = '';
-        let hasCounter = false;
+        let hasIndex = false;
 
         activeTpl.fields.forEach(field => {
             const cachedVal = this.valuesCache[field.id] !== undefined ? this.valuesCache[field.id] : '';
@@ -143,22 +143,27 @@ export class NamerForm {
                                required>
                     `;
                     break;
-                case 'counter':
-                    hasCounter = true;
-                    const exampleVal = '1'.padStart(field.digits, '0');
+                case 'index':
+                    hasIndex = true;
+                    const digitCount = parseInt(field.digits);
+                    const isNone = isNaN(digitCount) || digitCount <= 1;
+                    const exampleVal = isNone ? '1' : '1'.padStart(digitCount, '0');
+                    const helperMsg = isNone
+                        ? 'No digit padding.'
+                        : `Padded to ${digitCount} digits (e.g. ${exampleVal}).`;
                     inputHtml = `
                         <input type="number" 
-                               id="start-counter-input" 
-                               class="form-input start-counter-input" 
+                               id="start-index-input" 
+                               class="form-input start-index-input" 
                                min="0" 
-                               value="${this.startCounterVal}" 
+                               value="${this.startIndexVal}" 
                                placeholder="1">
-                        <span class="field-helper-text">Padded to ${field.digits} digits (e.g. ${exampleVal}). Increments automatically per file.</span>
+                        <span class="field-helper-text">${helperMsg}</span>
                     `;
                     break;
             }
 
-            const labelFor = field.type === 'counter' ? 'start-counter-input' : `input-${field.id}`;
+            const labelFor = field.type === 'index' ? 'start-index-input' : `input-${field.id}`;
             fieldsHtml += `
                 <div class="form-group namer-field-group">
                     <label for="${labelFor}">${field.label}</label>
@@ -177,8 +182,8 @@ export class NamerForm {
 
         const values = {};
         activeTpl.fields.forEach(field => {
-            if (field.type === 'counter') {
-                values[field.id] = { type: 'counter', digits: field.digits };
+            if (field.type === 'index') {
+                values[field.id] = { type: 'index', digits: field.digits };
             } else {
                 values[field.id] = this.valuesCache[field.id] || '';
             }
@@ -186,8 +191,8 @@ export class NamerForm {
         return values;
     }
 
-    getStartCounter() {
-        return this.startCounterVal;
+    getStartIndex() {
+        return this.startIndexVal;
     }
 
     generateFilename(indexOffset = 0, csvRow = null) {
@@ -200,9 +205,10 @@ export class NamerForm {
 
         activeTpl.fields.forEach(field => {
             let val = '';
-            if (field.type === 'counter') {
-                const countVal = this.startCounterVal + indexOffset;
-                val = String(countVal).padStart(field.digits, '0');
+            if (field.type === 'index') {
+                const countVal = this.startIndexVal + indexOffset;
+                const padDigits = parseInt(field.digits);
+                val = isNaN(padDigits) || padDigits <= 1 ? String(countVal) : String(countVal).padStart(padDigits, '0');
             } else if (field.type === 'date') {
                 const rawDate = (csvRow && csvRow[field.id] !== undefined) ? csvRow[field.id] : this.valuesCache[field.id];
                 val = this.formatDateString(rawDate, field.format);

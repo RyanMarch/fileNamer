@@ -12,7 +12,7 @@ export const DEFAULT_TEMPLATES = [
             { id: 'f-date', type: 'date', label: 'Date Created', format: 'YYYYMMDD' },
             { id: 'f-proj', type: 'text', label: 'Project Code', placeholder: 'PRJ101' },
             { id: 'f-desc', type: 'text', label: 'Description', placeholder: 'PromoShot' },
-            { id: 'f-count', type: 'counter', label: 'Index Counter', digits: 2 }
+            { id: 'f-index', type: 'index', label: 'Index', digits: 2 }
         ]
     },
     {

@@ -77,7 +77,7 @@ export class TemplateBuilder {
 
                 <div class="divider"></div>
 
-                <h3>Fields Outline</h3>
+                <h3>Field Builder</h3>
                 <!-- Field Builder List -->
                 <div id="fields-list" class="fields-list">
                     ${activeTpl.fields.map((f, idx) => this.renderFieldItem(f, idx, activeTpl.fields.length)).join('')}
@@ -96,8 +96,8 @@ export class TemplateBuilder {
                         <button class="btn btn-small add-field-btn" data-type="date">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Date
                         </button>
-                        <button class="btn btn-small add-field-btn" data-type="counter">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg> Counter
+                        <button class="btn btn-small add-field-btn" data-type="index">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg> Index
                         </button>
                     </div>
                 </div>
@@ -152,15 +152,20 @@ export class TemplateBuilder {
                     </select>
                 `;
                 break;
-            case 'counter':
-                typeBadge = `<span class="badge badge-counter">CNT</span>`;
+            case 'index':
+                typeBadge = `<span class="badge badge-index">IDX</span>`;
                 configHtml = `
-                    <select class="form-select field-digits" data-index="${index}" title="Digits Padding">
-                        <option value="1" ${field.digits === 1 ? 'selected' : ''}>1 Digit (e.g. 1)</option>
-                        <option value="2" ${field.digits === 2 ? 'selected' : ''}>2 Digits (e.g. 01)</option>
-                        <option value="3" ${field.digits === 3 ? 'selected' : ''}>3 Digits (e.g. 001)</option>
-                        <option value="4" ${field.digits === 4 ? 'selected' : ''}>4 Digits (e.g. 0001)</option>
-                    </select>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--text-muted);">
+                        <span>Digits:</span>
+                        <input type="number" 
+                               class="form-input field-digits" 
+                               data-index="${index}" 
+                               min="1" 
+                               value="${field.digits !== undefined && field.digits !== 'none' ? field.digits : 0}" 
+                               title="Padding digits"
+                               style="width: 70px;">
+                        <span style="margin-left: 0.5rem;">Increments automatically per file.</span>
+                    </div>
                 `;
                 break;
         }
@@ -327,7 +332,7 @@ export class TemplateBuilder {
 
                 const rect = targetItem.getBoundingClientRect();
                 const next = (e.clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
-                
+
                 fieldsList.insertBefore(draggedItem, next ? targetItem.nextSibling : targetItem);
             });
 
@@ -371,6 +376,15 @@ export class TemplateBuilder {
                     this.store.updateTemplate(activeTpl.id, { fields });
                     this.onTemplateChange();
                 }
+
+                if (e.target.classList.contains('field-digits')) {
+                    const idx = parseInt(e.target.dataset.index);
+                    const fields = [...activeTpl.fields];
+                    const val = parseInt(e.target.value);
+                    fields[idx].digits = isNaN(val) || val <= 0 ? 0 : val;
+                    this.store.updateTemplate(activeTpl.id, { fields });
+                    this.onTemplateChange();
+                }
             });
 
             // Field Select/Dropdown formats change
@@ -386,7 +400,8 @@ export class TemplateBuilder {
                 if (e.target.classList.contains('field-digits')) {
                     const idx = parseInt(e.target.dataset.index);
                     const fields = [...activeTpl.fields];
-                    fields[idx].digits = parseInt(e.target.value);
+                    const val = parseInt(e.target.value);
+                    fields[idx].digits = isNaN(val) || val <= 0 ? 0 : val;
                     this.store.updateTemplate(activeTpl.id, { fields });
                     this.onTemplateChange();
                 }
@@ -441,8 +456,8 @@ export class TemplateBuilder {
                     newField.options = ['ENG', 'DESIGN', 'PM'];
                 } else if (type === 'date') {
                     newField.format = 'YYYYMMDD';
-                } else if (type === 'counter') {
-                    newField.digits = 2;
+                } else if (type === 'index') {
+                    newField.digits = 0;
                 }
 
                 fields.push(newField);
