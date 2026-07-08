@@ -177,6 +177,12 @@ body {
     letter-spacing: -0.025em;
 }
 
+.header-logo svg {
+    width: 1.85rem;
+    height: 1.85rem;
+    flex-shrink: 0;
+}
+
 .header-actions {
     display: flex;
     align-items: center;
@@ -997,7 +1003,7 @@ body {
 .namer-form {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 0 1rem;
     background: rgba(0, 0, 0, 0.1);
     padding: 1.25rem;
     border-radius: var(--radius-md);
