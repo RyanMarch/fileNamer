@@ -36,7 +36,7 @@ export class NamerForm {
                     <div class="preview-header">
                         <span class="preview-label">Filename Preview</span>
                         <button id="advanced-toggle-btn" class="btn btn-secondary btn-small" type="button" style="margin-left: auto; margin-right: 1rem;" aria-pressed="false">
-                            Advanced
+                            Show Structure
                         </button>
                         <button id="copy-preview-btn" class="btn btn-primary btn-small" type="button" title="Copy Preview to Clipboard">
                             <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -57,10 +57,6 @@ export class NamerForm {
                             <span class="advanced-row-label">Structure</span>
                             <div id="structure-row-chips" class="advanced-row-chips"></div>
                         </div>
-                        <div class="advanced-row">
-                            <span class="advanced-row-label">Values</span>
-                            <div id="values-row-chips" class="advanced-row-chips"></div>
-                        </div>
                     </div>
                 </div>
 
@@ -74,7 +70,6 @@ export class NamerForm {
         this.advancedToggleBtn = this.container.querySelector('#advanced-toggle-btn');
         this.advancedInfoContainer = this.container.querySelector('#preview-advanced-info');
         this.structureChipsContainer = this.container.querySelector('#structure-row-chips');
-        this.valuesChipsContainer = this.container.querySelector('#values-row-chips');
     }
 
     setupEvents() {
@@ -453,66 +448,6 @@ export class NamerForm {
                 );
             }
 
-            // Values Chips
-            const valueSpans = [];
-            activeTpl.fields.forEach(field => {
-                let val = '';
-                if (field.type === 'index') {
-                    const countVal = this.startIndexVal;
-                    const padDigits = parseInt(field.digits);
-                    val = isNaN(padDigits) || padDigits <= 1 ? String(countVal) : String(countVal).padStart(padDigits, '0');
-                } else if (field.type === 'date') {
-                    const rawDate = this.valuesCache[field.id];
-                    if (rawDate) {
-                        val = this.formatDateString(rawDate, field.format, field.customFormat);
-                    } else {
-                        val = field.format === 'custom' ? (field.customFormat || 'YYYYMMDD') : field.format;
-                    }
-                } else if (field.type === 'select') {
-                    val = this.valuesCache[field.id] || '';
-                    if (!val) {
-                        val = 'Select';
-                    } else {
-                        val = this.applyCaseStyle(val, caseStyle);
-                        if (separator) {
-                            val = val.replace(/\s+/g, separator);
-                        }
-                    }
-                } else if (field.type === 'extension') {
-                    const extMode = field.extensionMode || 'keep';
-                    let previewExt = '.ext';
-                    if (extMode === 'lowercase') {
-                        previewExt = '.ext';
-                    } else if (extMode === 'uppercase') {
-                        previewExt = '.EXT';
-                    } else if (extMode === 'custom') {
-                        const custom = (field.customExtension || '').trim();
-                        previewExt = custom ? (custom.startsWith('.') ? custom : `.${custom}`) : '';
-                    } else if (extMode === 'none') {
-                        previewExt = '';
-                    }
-                    val = previewExt;
-                } else {
-                    val = this.valuesCache[field.id] || '';
-                    if (!val) {
-                        val = field.placeholder || 'Text';
-                    } else {
-                        val = this.applyCaseStyle(val, caseStyle);
-                        if (separator) {
-                            val = val.replace(/\s+/g, separator);
-                        }
-                    }
-                }
-
-                const typeClass = field.type === 'select' ? 'badge-select' : `badge-${field.type}`;
-                valueSpans.push(`<span class="preview-field-chip ${typeClass}" title="${escapeHtml(field.type)}">${escapeHtml(val)}</span>`);
-            });
-
-            if (this.valuesChipsContainer) {
-                this.valuesChipsContainer.innerHTML = valueSpans.join(
-                    separator ? `<span class="preview-separator">${escapeHtml(separator)}</span>` : ''
-                );
-            }
         } else {
             if (this.advancedInfoContainer) {
                 this.advancedInfoContainer.style.display = 'none';
