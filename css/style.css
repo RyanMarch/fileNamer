@@ -46,7 +46,7 @@
 [data-theme="light"] {
     --bg-color: #f3f4f6;
     --panel-bg: #ffffff;
-    --panel-border: #e5e7eb;
+    --panel-border: #adadad;
     --control-bg: #f9fafb;
     --control-bg-hover: #f3f4f6;
     --control-border: #e5e7eb;
@@ -503,6 +503,7 @@ body {
     border-color: var(--error);
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
 }
+
 .form-input.input-invalid:focus {
     border-color: var(--error);
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
@@ -512,7 +513,10 @@ body {
 .field-restrictions-panel[open] .restrictions-chevron {
     transform: rotate(180deg);
 }
-.field-restrictions-panel summary::-webkit-details-marker { display: none; }
+
+.field-restrictions-panel summary::-webkit-details-marker {
+    display: none;
+}
 
 .divider {
     height: 1px;
@@ -1089,10 +1093,6 @@ body {
 
 .preview-advanced-info {
     margin-top: 0.75rem;
-    padding: 0.75rem;
-    background: var(--control-bg);
-    border: 1px solid var(--panel-border);
-    border-radius: var(--radius-sm);
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -1116,28 +1116,37 @@ body {
 }
 
 .advanced-row-chips {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.375rem;
+    display: block;
+    line-height: 2.2;
 }
 
 .preview-field-chip {
+    display: inline-block;
     font-family: var(--font-mono);
     font-size: 0.8125rem;
     font-weight: 600;
-    padding: 0.25rem 0.625rem;
+    padding: 0.1rem 0.2rem;
+    line-height: 1.1rem;
     border-radius: var(--radius-sm);
     white-space: nowrap;
     letter-spacing: 0.01em;
+    vertical-align: middle;
 }
 
 .preview-separator {
+    display: inline-block;
     font-family: var(--font-mono);
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
     color: var(--text-muted);
-    opacity: 0.7;
-    user-select: none;
+    background: transparent;
+    border: 1px solid var(--panel-border);
+    padding: 0.1rem 0.2rem;
+    line-height: 1.1rem;
+    border-radius: var(--radius-sm);
+    opacity: 0.6;
+    margin: 0 0.125rem;
+    vertical-align: middle;
 }
 
 .preview-placeholder {
