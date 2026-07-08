@@ -142,7 +142,8 @@ describe('TemplateStore.deserializeTemplate', () => {
             separator: '-',
             case: 'lower',
             fields: [
-                { id: 'f-1', type: 'text', label: 'Project', placeholder: 'PRJ101' }
+                { id: 'f-1', type: 'text', label: 'Project', placeholder: 'PRJ101', description: 'This is a test description' },
+                { id: 'f-2', type: 'select', label: 'Department', options: ['ENG', 'PM'], sortAlphabetically: true }
             ]
         };
         const hash = ts.serializeTemplate(original);
@@ -151,8 +152,11 @@ describe('TemplateStore.deserializeTemplate', () => {
         expect(result.name).toBe('Test Template');
         expect(result.separator).toBe('-');
         expect(result.case).toBe('lower');
-        expect(result.fields).toHaveLength(1);
+        expect(result.fields).toHaveLength(2);
         expect(result.fields[0].label).toBe('Project');
         expect(result.fields[0].placeholder).toBe('PRJ101');
+        expect(result.fields[0].description).toBe('This is a test description');
+        expect(result.fields[1].label).toBe('Department');
+        expect(result.fields[1].sortAlphabetically).toBe(true);
     });
 });

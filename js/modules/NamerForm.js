@@ -274,7 +274,10 @@ export class NamerForm {
                     `;
                     break;
                 case 'select':
-                    const options = field.options || [];
+                    let options = field.options || [];
+                    if (field.sortAlphabetically) {
+                        options = [...options].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base', numeric: true }));
+                    }
                     inputHtml = `
                         <input type="text"
                                id="input-${field.id}"
@@ -325,10 +328,26 @@ export class NamerForm {
             }
 
             const labelFor = field.type === 'index' ? 'start-index-input' : `input-${field.id}`;
+            let descHtml = '';
+            if (field.description && field.description.trim()) {
+                descHtml = `
+                    <details class="namer-field-desc-details">
+                        <summary style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer; user-select: none; list-style: none; display: flex; align-items: center; gap: 0.25rem; margin-top: 0.25rem; width: fit-content;">
+                            <svg class="restrictions-chevron" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.18s;"><path d="m6 9 6 6 6-6"/></svg>
+                            Description
+                        </summary>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; margin-bottom: 0; font-style: italic; line-height: 1.3;">
+                            ${escapeHtml(field.description)}
+                        </p>
+                    </details>
+                `;
+            }
+
             fieldsHtml += `
                 <div class="form-group namer-field-group">
                     <label for="${labelFor}">${escapeHtml(field.label)}</label>
                     ${inputHtml}
+                    ${descHtml}
                 </div>
             `;
         });
