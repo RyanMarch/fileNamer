@@ -10,6 +10,12 @@ import { FileRenamer } from './modules/FileRenamer.js';
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initApp();
+
+    // Auto-update Copyright Year
+    const copyrightYearEl = document.getElementById('copyright-year');
+    if (copyrightYearEl) {
+        copyrightYearEl.textContent = new Date().getFullYear();
+    }
 });
 
 function initTheme() {

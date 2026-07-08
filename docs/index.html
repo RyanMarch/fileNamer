@@ -394,7 +394,8 @@
                             <div class="aside-badge">Advanced Mode</div>
                             <p>
                                 Toggle the "Advanced" button inside the preview box to display the literal
-                                naming schema structure and evaluated segment values directly below the live filename preview.
+                                naming schema structure and evaluated segment values directly below the live filename
+                                preview.
                                 This helps you validate your templates and inspect individual field outputs.
                             </p>
                         </div>
@@ -444,35 +445,36 @@
 
                     <!-- Renaming with CSV Data -->
                     <article id="batch-csv" class="doc-section" style="margin-bottom: 2rem;">
-                        <h3>Renaming with CSV Data</h3>
+                        <h3>Bulk Editing & CSV Data</h3>
                         <p>
-                            For advanced cataloging workflows, you can import external CSV spreadsheets to populate
-                            varying template fields automatically instead of typing them out manually for each file.
+                            For advanced cataloging workflows, FileNamer offers two ways to customize template fields
+                            for individual files in your queue, both featuring automatic defaulting:
                         </p>
                         <ul class="help-list" style="gap: 0.75rem; display: flex; flex-direction: column;">
-                            <li><strong>Prerequisite: Drag Files First.</strong> You must drag your actual files into
-                                the dropzone first. A CSV import only works when files are present, as the spreadsheet
-                                rows map directly to your file queue.</li>
-                            <li><strong>Row-to-File Mapping:</strong> Row 1 in your CSV applies to the first file in the
-                                list, Row 2 to the second, and so on. If you have more files than CSV rows, remaining
-                                files fall back to manual form entries.</li>
-                            <li><strong>Column-to-Field Mapping:</strong> Columns are mapped automatically to the active
-                                template:
+                            <li><strong>Bulk Edit Grid:</strong> Click the "Bulk Edit Grid" button above the file queue
+                                to open an interactive spreadsheet view inside the app. You can type or select values
+                                for individual files. Any cells left empty automatically inherit the default values set
+                                in the Template Picker form.</li>
+                            <li><strong>CSV File Import:</strong> You can download, edit, and import CSV files to
+                                populate varying fields:
                                 <ul style="margin-left: 1.25rem; margin-top: 0.25rem; list-style-type: circle;">
-                                    <li><em>By Label Match:</em> If your CSV headers match the exact names of your
-                                        template's field labels (e.g., <code>SKU</code>, <code>Product Name</code>),
-                                        those columns will map directly.</li>
-                                    <li><em>By Position (Fallback):</em> If headers don't match, column 1 maps to field
-                                        1, column 2 to field 2, etc.</li>
+                                    <li><em>Filename Matching:</em> If your CSV contains an
+                                        <code>Original Filename</code> column, the app matches rows to your files by
+                                        filename, regardless of order.
+                                    </li>
+                                    <li><em>Index Fallback:</em> If no filename column is found, the CSV rows map
+                                        sequentially (Row 1 to File 1, Row 2 to File 2, etc.).</li>
+                                    <li><em>Empty Value Defaulting:</em> Any empty CSV cell inherits the global template
+                                        default value.</li>
                                 </ul>
                             </li>
                             <li><strong>Get CSV Template:</strong> Download a pre-formatted CSV template tailored
-                                exactly to your active template's field labels, complete with a sample row to get you
-                                started.</li>
-                            <li><strong>Export Log (CSV):</strong> Export a complete translation sheet mapping original
-                                filenames to their renamed outputs and file sizes for database records or audit trails
-                                or other uses. Exported CSVs can be opened and edited in spreadsheet applications like
-                                Microsoft Excel, Apple Numbers, Google Sheets, and more.</li>
+                                exactly to your active template. If you have files queued, the CSV template includes the
+                                <code>Original Filename</code> column pre-populated with your current files list.
+                            </li>
+                            <li><strong>Export Log (CSV):</strong> Export a translation sheet mapping original filenames
+                                to their renamed outputs and file sizes for database records, audit trails, or other
+                                uses.</li>
                         </ul>
                     </article>
 
@@ -512,7 +514,8 @@
         <!-- Footer -->
         <footer class="page-footer">
             <div class="footer-container">
-                <p class="footer-copyright">&copy; 2026 FileNamer</p>
+                <p class="footer-copyright">&copy; <span id="copyright-year">2026</span> FileNamer • <a
+                        href="https://ryanmarch.me/">Ryan March</a></p>
                 <div class="footer-links">
                     <a href="../app/" class="footer-link">App</a>
                     <a href="index.html" class="footer-link">Docs</a>

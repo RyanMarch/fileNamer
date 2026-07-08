@@ -4,8 +4,8 @@
 
 export const DEFAULT_TEMPLATES = [
     {
-        id: 'tpl-media',
-        name: 'Media Asset Naming',
+        id: 'tpl-project-files',
+        name: 'Project Files',
         separator: '_',
         case: 'none',
         fields: [

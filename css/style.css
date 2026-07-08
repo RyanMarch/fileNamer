@@ -146,9 +146,9 @@ body {
 
 /* App Container Layout */
 .app-container {
-    max-width: 1280px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 1.25rem 1.5rem;
+    padding: 1.25rem 0.75rem;
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
@@ -345,9 +345,10 @@ body {
 
 .workspace-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1.5fr;
     gap: 2rem;
     width: 100%;
+    transition: grid-template-columns 0.4s cubic-bezier(0.4, 0, 0.2, 1), gap 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @media (max-width: 768px) {
@@ -380,11 +381,32 @@ body {
 }
 
 .workspace-grid.fullwidth-mode {
-    grid-template-columns: 1fr;
+    grid-template-columns: 0fr 1fr;
+    gap: 0;
+}
+
+@media (max-width: 768px) {
+    .workspace-grid.fullwidth-mode {
+        grid-template-columns: 1fr;
+    }
+}
+
+.template-builder {
+    transition: opacity 0.3s ease, visibility 0.3s ease, padding 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-width 0.4s ease, min-width 0.4s ease, height 0.4s cubic-bezier(0.4, 0, 0.2, 1), min-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+    visibility: visible;
+    overflow: hidden;
 }
 
 .workspace-grid.fullwidth-mode .template-builder {
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+    padding: 0 !important;
+    border-width: 0 !important;
+    min-width: 0;
+    height: 0;
+    min-height: 0;
+    pointer-events: none;
 }
 
 [data-theme-style="classic"] .panel {
@@ -499,12 +521,14 @@ body {
 }
 
 /* Invalid state for min-length restriction */
-.form-input.input-invalid {
+.form-input.input-invalid,
+.table-input.input-invalid {
     border-color: var(--error);
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
 }
 
-.form-input.input-invalid:focus {
+.form-input.input-invalid:focus,
+.table-input.input-invalid:focus {
     border-color: var(--error);
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
 }
@@ -1260,6 +1284,11 @@ body {
     overflow-y: auto;
 }
 
+.files-list.grid-view {
+    max-height: none;
+    overflow-y: visible;
+}
+
 /* Custom scrollbar for files list */
 .files-list::-webkit-scrollbar {
     width: 6px;
@@ -1537,6 +1566,18 @@ body {
     margin: 0;
 }
 
+.footer-copyright a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.footer-copyright a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+
 .footer-links {
     display: flex;
     gap: 1.5rem;
@@ -1560,4 +1601,127 @@ body {
         text-align: center;
         align-items: center;
     }
+}
+
+/* --- View Toggle & Bulk Edit Grid Styling --- */
+.renamer-view-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding: 0 0.25rem;
+}
+
+.renamer-view-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-main);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.toggle-buttons {
+    display: flex;
+    gap: 2px;
+    background: var(--control-bg-hover);
+    padding: 2px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--panel-border);
+}
+
+.btn-toggle {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    font-weight: 500;
+    border-radius: calc(var(--radius-sm) - 1px);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.btn-toggle:hover {
+    color: var(--text-main);
+}
+
+.btn-toggle.active {
+    background: var(--control-bg);
+    color: var(--accent);
+    box-shadow: var(--shadow-sm);
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    max-height: 450px;
+    overflow-y: auto;
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius-md);
+    background: var(--control-bg);
+}
+
+.bulk-edit-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+    text-align: left;
+}
+
+.bulk-edit-table th {
+    background: rgba(3, 5, 25, 0.75);
+    color: var(--text-inverse);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.6875rem;
+    letter-spacing: 0.05em;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--panel-border);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.bulk-edit-table td {
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    vertical-align: middle;
+}
+
+.bulk-edit-table tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.table-file-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    max-width: 160px;
+}
+
+.table-input {
+    background: var(--control-bg);
+    border: 1px solid var(--panel-border);
+    color: var(--text-main);
+    padding: 0.375rem 0.625rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    width: 100%;
+    min-width: 100px;
+    box-sizing: border-box;
+    transition: all var(--transition-fast);
+}
+
+.table-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: var(--control-bg-hover);
+    box-shadow: 0 0 0 2px var(--accent-light);
+}
+
+/* Make default values stand out as placeholders */
+.table-input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.65;
+    font-style: italic;
 }

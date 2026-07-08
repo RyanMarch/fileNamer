@@ -395,10 +395,10 @@ export class NamerForm {
                 const padDigits = parseInt(field.digits);
                 val = isNaN(padDigits) || padDigits <= 1 ? String(countVal) : String(countVal).padStart(padDigits, '0');
             } else if (field.type === 'date') {
-                const rawDate = (csvRow && csvRow[field.id] !== undefined) ? csvRow[field.id] : this.valuesCache[field.id];
+                const rawDate = (csvRow && csvRow[field.id]) ? csvRow[field.id] : this.valuesCache[field.id];
                 val = this.formatDateString(rawDate, field.format, field.customFormat);
             } else {
-                val = (csvRow && csvRow[field.id] !== undefined) ? csvRow[field.id] : (this.valuesCache[field.id] || '');
+                val = (csvRow && csvRow[field.id]) ? csvRow[field.id] : (this.valuesCache[field.id] || '');
                 val = this.applyCaseStyle(val, caseStyle);
                 if (separator) {
                     val = val.replace(/\s+/g, separator);
