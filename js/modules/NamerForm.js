@@ -14,6 +14,7 @@ export class NamerForm {
         this.valuesCache = {};
         this.lastPlaceholders = {};
         this.startIndexVal = 1;
+        this.showAdvanced = false;
 
         this.init();
     }
@@ -34,16 +35,32 @@ export class NamerForm {
                 <div class="live-preview-box">
                     <div class="preview-header">
                         <span class="preview-label">Filename Preview</span>
-                        <label class="checkbox-label" style="margin-left: auto; margin-right: 1rem;">
-                            <input type="checkbox" id="show-structure-chk">
-                            <span>Show Structure</span>
-                        </label>
-                        <button id="copy-preview-btn" class="btn btn-secondary btn-small" type="button" title="Copy Preview to Clipboard">
-                            Copy
+                        <button id="advanced-toggle-btn" class="btn btn-secondary btn-small" type="button" style="margin-left: auto; margin-right: 1rem;" aria-pressed="false">
+                            Advanced
+                        </button>
+                        <button id="copy-preview-btn" class="btn btn-primary btn-small" type="button" title="Copy Preview to Clipboard">
+                            <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span class="btn-text">Copy</span>
                         </button>
                     </div>
                     <div id="filename-preview" class="filename-preview">
                         [preview]
+                    </div>
+                    <div id="preview-advanced-info" class="preview-advanced-info" style="display: none;">
+                        <div class="advanced-row">
+                            <span class="advanced-row-label">Structure</span>
+                            <div id="structure-row-chips" class="advanced-row-chips"></div>
+                        </div>
+                        <div class="advanced-row">
+                            <span class="advanced-row-label">Values</span>
+                            <div id="values-row-chips" class="advanced-row-chips"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -54,7 +71,10 @@ export class NamerForm {
         this.formElement = this.container.querySelector('#namer-form');
         this.previewElement = this.container.querySelector('#filename-preview');
         this.copyBtn = this.container.querySelector('#copy-preview-btn');
-        this.showStructureCheckbox = this.container.querySelector('#show-structure-chk');
+        this.advancedToggleBtn = this.container.querySelector('#advanced-toggle-btn');
+        this.advancedInfoContainer = this.container.querySelector('#preview-advanced-info');
+        this.structureChipsContainer = this.container.querySelector('#structure-row-chips');
+        this.valuesChipsContainer = this.container.querySelector('#values-row-chips');
     }
 
     setupEvents() {
@@ -170,8 +190,11 @@ export class NamerForm {
             }
         });
 
-        if (this.showStructureCheckbox) {
-            this.showStructureCheckbox.addEventListener('change', () => {
+        if (this.advancedToggleBtn) {
+            this.advancedToggleBtn.addEventListener('click', () => {
+                this.showAdvanced = !this.showAdvanced;
+                this.advancedToggleBtn.setAttribute('aria-pressed', this.showAdvanced);
+                this.advancedToggleBtn.classList.toggle('active', this.showAdvanced);
                 this.updatePreview();
             });
         }
@@ -180,10 +203,18 @@ export class NamerForm {
             this.copyBtn.addEventListener('click', () => {
                 const text = this.previewElement.textContent.trim();
                 navigator.clipboard.writeText(text).then(() => {
-                    const originalText = this.copyBtn.textContent;
-                    this.copyBtn.textContent = 'Copied!';
+                    const btnText = this.copyBtn.querySelector('.btn-text');
+                    const copyIcon = this.copyBtn.querySelector('.copy-icon');
+                    const checkIcon = this.copyBtn.querySelector('.check-icon');
+                    
+                    if (btnText) btnText.textContent = 'Copied!';
+                    if (copyIcon) copyIcon.style.display = 'none';
+                    if (checkIcon) checkIcon.style.display = 'inline-block';
+                    
                     setTimeout(() => {
-                        this.copyBtn.textContent = originalText;
+                        if (btnText) btnText.textContent = 'Copy';
+                        if (copyIcon) copyIcon.style.display = 'inline-block';
+                        if (checkIcon) checkIcon.style.display = 'none';
                     }, 1500);
                 }).catch(err => {
                     console.error('Failed to copy preview:', err);
@@ -371,38 +402,122 @@ export class NamerForm {
     updatePreview() {
         const activeTpl = this.store.getActiveTemplate();
         if (!activeTpl) {
-            this.previewElement.textContent = '[Fill in parameters]';
+            this.previewElement.innerHTML = '<span class="preview-placeholder">[Fill in parameters]</span>';
+            if (this.advancedInfoContainer) {
+                this.advancedInfoContainer.style.display = 'none';
+            }
             return;
         }
 
-        const showStructure = this.showStructureCheckbox ? this.showStructureCheckbox.checked : false;
-        const baseName = this.generateFilename(0, null, showStructure);
+        const baseName = this.generateFilename(0, null, false);
         if (!baseName) {
-            this.previewElement.textContent = '[Fill in parameters]';
-            return;
+            this.previewElement.innerHTML = '<span class="preview-placeholder">[Fill in parameters]</span>';
+        } else {
+            const extField = activeTpl.fields.find(f => f.type === 'extension');
+            let previewExt = '.ext';
+            if (extField && extField.includeExtInPreview !== false) {
+                const extMode = extField.extensionMode || 'keep';
+                if (extMode === 'lowercase') {
+                    previewExt = '.ext';
+                } else if (extMode === 'uppercase') {
+                    previewExt = '.EXT';
+                } else if (extMode === 'custom') {
+                    const custom = (extField.customExtension || '').trim();
+                    previewExt = custom ? (custom.startsWith('.') ? custom : `.${custom}`) : '';
+                } else if (extMode === 'none') {
+                    previewExt = '';
+                }
+            } else if (extField && extField.includeExtInPreview === false) {
+                previewExt = '';
+            }
+            this.previewElement.textContent = `${baseName}${previewExt}`;
         }
 
-        const extField = activeTpl.fields.find(f => f.type === 'extension');
-        if (!extField || extField.includeExtInPreview === false) {
-            this.previewElement.textContent = baseName;
-            return;
+        if (this.showAdvanced) {
+            if (this.advancedInfoContainer) {
+                this.advancedInfoContainer.style.display = 'flex';
+            }
+            const separator = activeTpl.separator || '';
+            const caseStyle = activeTpl.case;
+
+            // Structure Chips
+            const structSpans = [];
+            activeTpl.fields.forEach(field => {
+                const label = escapeHtml(field.label || field.type);
+                const typeClass = field.type === 'select' ? 'badge-select' : `badge-${field.type}`;
+                structSpans.push(`<span class="preview-field-chip ${typeClass}" title="${escapeHtml(field.type)}">${label}</span>`);
+            });
+            if (this.structureChipsContainer) {
+                this.structureChipsContainer.innerHTML = structSpans.join(
+                    separator ? `<span class="preview-separator">${escapeHtml(separator)}</span>` : ''
+                );
+            }
+
+            // Values Chips
+            const valueSpans = [];
+            activeTpl.fields.forEach(field => {
+                let val = '';
+                if (field.type === 'index') {
+                    const countVal = this.startIndexVal;
+                    const padDigits = parseInt(field.digits);
+                    val = isNaN(padDigits) || padDigits <= 1 ? String(countVal) : String(countVal).padStart(padDigits, '0');
+                } else if (field.type === 'date') {
+                    const rawDate = this.valuesCache[field.id];
+                    if (rawDate) {
+                        val = this.formatDateString(rawDate, field.format, field.customFormat);
+                    } else {
+                        val = field.format === 'custom' ? (field.customFormat || 'YYYYMMDD') : field.format;
+                    }
+                } else if (field.type === 'select') {
+                    val = this.valuesCache[field.id] || '';
+                    if (!val) {
+                        val = 'Select';
+                    } else {
+                        val = this.applyCaseStyle(val, caseStyle);
+                        if (separator) {
+                            val = val.replace(/\s+/g, separator);
+                        }
+                    }
+                } else if (field.type === 'extension') {
+                    const extMode = field.extensionMode || 'keep';
+                    let previewExt = '.ext';
+                    if (extMode === 'lowercase') {
+                        previewExt = '.ext';
+                    } else if (extMode === 'uppercase') {
+                        previewExt = '.EXT';
+                    } else if (extMode === 'custom') {
+                        const custom = (field.customExtension || '').trim();
+                        previewExt = custom ? (custom.startsWith('.') ? custom : `.${custom}`) : '';
+                    } else if (extMode === 'none') {
+                        previewExt = '';
+                    }
+                    val = previewExt;
+                } else {
+                    val = this.valuesCache[field.id] || '';
+                    if (!val) {
+                        val = field.placeholder || 'Text';
+                    } else {
+                        val = this.applyCaseStyle(val, caseStyle);
+                        if (separator) {
+                            val = val.replace(/\s+/g, separator);
+                        }
+                    }
+                }
+
+                const typeClass = field.type === 'select' ? 'badge-select' : `badge-${field.type}`;
+                valueSpans.push(`<span class="preview-field-chip ${typeClass}" title="${escapeHtml(field.type)}">${escapeHtml(val)}</span>`);
+            });
+
+            if (this.valuesChipsContainer) {
+                this.valuesChipsContainer.innerHTML = valueSpans.join(
+                    separator ? `<span class="preview-separator">${escapeHtml(separator)}</span>` : ''
+                );
+            }
+        } else {
+            if (this.advancedInfoContainer) {
+                this.advancedInfoContainer.style.display = 'none';
+            }
         }
-
-        const extMode = extField.extensionMode || 'keep';
-        let previewExt = '.ext';
-
-        if (extMode === 'lowercase') {
-            previewExt = '.ext';
-        } else if (extMode === 'uppercase') {
-            previewExt = '.EXT';
-        } else if (extMode === 'custom') {
-            const custom = (extField.customExtension || '').trim();
-            previewExt = custom ? (custom.startsWith('.') ? custom : `.${custom}`) : '';
-        } else if (extMode === 'none') {
-            previewExt = '';
-        }
-
-        this.previewElement.textContent = `${baseName}${previewExt}`;
     }
 
     formatDateString(dateVal, format, customFormat = '') {
