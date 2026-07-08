@@ -59,6 +59,25 @@ export class NamerForm {
 
     setupEvents() {
         this.formElement.addEventListener('keydown', (e) => {
+            // Block spaces/underscores and char-type restrictions on text fields
+            if (e.target.dataset.fieldId) {
+                const noSpaces      = e.target.dataset.noSpaces === 'true';
+                const noUnderscores = e.target.dataset.noUnderscores === 'true';
+                const charType      = e.target.dataset.charType || 'any';
+
+                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter',
+                                     'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'];
+                if (allowedKeys.includes(e.key) || e.ctrlKey || e.metaKey || e.altKey) {
+                    // Allow navigation/control keys always
+                } else {
+                    if (noSpaces && e.key === ' ') { e.preventDefault(); return; }
+                    if (noUnderscores && e.key === '_') { e.preventDefault(); return; }
+                    if (charType === 'alpha' && !/^[a-zA-Z]$/.test(e.key)) { e.preventDefault(); return; }
+                    if (charType === 'numeric' && !/^\d$/.test(e.key)) { e.preventDefault(); return; }
+                    if (charType === 'alphanumeric' && !/^[a-zA-Z0-9]$/.test(e.key)) { e.preventDefault(); return; }
+                }
+            }
+
             if (e.target.id === 'start-index-input') {
                 const allowed = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'];
                 if (allowed.includes(e.key) || e.ctrlKey || e.metaKey || e.altKey) {
@@ -71,6 +90,42 @@ export class NamerForm {
         });
 
         this.formElement.addEventListener('paste', (e) => {
+            if (e.target.dataset.fieldId) {
+                const noSpaces      = e.target.dataset.noSpaces === 'true';
+                const noUnderscores = e.target.dataset.noUnderscores === 'true';
+                const charType      = e.target.dataset.charType || 'any';
+                const maxLen        = e.target.dataset.maxLength !== undefined ? parseInt(e.target.dataset.maxLength) : null;
+
+                const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+                let sanitized = pasteData;
+
+                if (charType === 'alpha')         sanitized = sanitized.replace(/[^a-zA-Z]/g, '');
+                else if (charType === 'numeric')   sanitized = sanitized.replace(/[^\d]/g, '');
+                else if (charType === 'alphanumeric') sanitized = sanitized.replace(/[^a-zA-Z0-9]/g, '');
+                if (noSpaces)      sanitized = sanitized.replace(/ /g, '');
+                if (noUnderscores) sanitized = sanitized.replace(/_/g, '');
+
+                // Trim to maxLength accounting for existing value
+                if (maxLen !== null) {
+                    const el = e.target;
+                    const start = el.selectionStart;
+                    const end   = el.selectionEnd;
+                    const currentVal = el.value;
+                    const remaining = maxLen - (currentVal.length - (end - start));
+                    sanitized = sanitized.slice(0, Math.max(0, remaining));
+                }
+
+                if (sanitized !== pasteData || (maxLen !== null && sanitized.length < pasteData.length)) {
+                    e.preventDefault();
+                    const el = e.target;
+                    const start = el.selectionStart;
+                    const end   = el.selectionEnd;
+                    el.value = el.value.slice(0, start) + sanitized + el.value.slice(end);
+                    el.selectionStart = el.selectionEnd = start + sanitized.length;
+                    el.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            }
+
             if (e.target.id === 'start-index-input') {
                 const pasteData = (e.clipboardData || window.clipboardData).getData('text');
                 if (!/^\d+$/.test(pasteData)) {
@@ -80,6 +135,18 @@ export class NamerForm {
         });
 
         this.formElement.addEventListener('input', (e) => {
+            // Min length invalid state
+            if (e.target.dataset.fieldId && e.target.dataset.minLength) {
+                const minLen = parseInt(e.target.dataset.minLength);
+                const val = e.target.value;
+                if (val.length > 0 && val.length < minLen) {
+                    e.target.classList.add('input-invalid');
+                    e.target.title = `Minimum ${minLen} character${minLen !== 1 ? 's' : ''} required`;
+                } else {
+                    e.target.classList.remove('input-invalid');
+                    e.target.title = '';
+                }
+            }
             const fieldId = e.target.dataset.fieldId;
             if (fieldId) {
                 this.valuesCache[fieldId] = e.target.value;
@@ -164,6 +231,11 @@ export class NamerForm {
             let inputHtml = '';
             switch (field.type) {
                 case 'text':
+                    const noSpacesAttr    = field.noSpaces      ? 'data-no-spaces="true"'      : '';
+                    const noUnderAttr     = field.noUnderscores  ? 'data-no-underscores="true"'  : '';
+                    const charTypeAttr    = field.charType && field.charType !== 'any' ? `data-char-type="${field.charType}"` : '';
+                    const minLenAttr      = field.minLength !== undefined && field.minLength !== '' ? `data-min-length="${field.minLength}"` : '';
+                    const maxLenAttr      = field.maxLength !== undefined && field.maxLength !== '' ? `data-max-length="${field.maxLength}" maxlength="${field.maxLength}"` : '';
                     inputHtml = `
                         <input type="text" 
                                id="input-${field.id}" 
@@ -171,6 +243,7 @@ export class NamerForm {
                                class="form-input" 
                                value="${escapeHtml(cachedVal)}" 
                                placeholder="${escapeHtml(isPlaceholderMode ? (field.placeholder || 'Enter text...') : 'Enter text...')}"
+                               ${noSpacesAttr} ${noUnderAttr} ${charTypeAttr} ${minLenAttr} ${maxLenAttr}
                                required>
                     `;
                     break;

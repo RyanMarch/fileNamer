@@ -498,6 +498,22 @@ body {
     opacity: 0.6;
 }
 
+/* Invalid state for min-length restriction */
+.form-input.input-invalid {
+    border-color: var(--error);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+.form-input.input-invalid:focus {
+    border-color: var(--error);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+/* Progressive disclosure: restrictions panel chevron */
+.field-restrictions-panel[open] .restrictions-chevron {
+    transform: rotate(180deg);
+}
+.field-restrictions-panel summary::-webkit-details-marker { display: none; }
+
 .divider {
     height: 1px;
     background: var(--panel-border);
