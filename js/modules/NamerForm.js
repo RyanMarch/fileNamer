@@ -2,6 +2,8 @@
  * NamerForm - Dynamically renders parameter input fields and generates real-time filename previews.
  */
 
+import { escapeHtml } from './utils.js';
+
 export class NamerForm {
     constructor(containerId, store, onFormChange) {
         this.container = document.getElementById(containerId);
@@ -167,8 +169,8 @@ export class NamerForm {
                                id="input-${field.id}" 
                                data-field-id="${field.id}" 
                                class="form-input" 
-                               value="${cachedVal}" 
-                               placeholder="${isPlaceholderMode ? (field.placeholder || 'Enter text...') : 'Enter text...'}"
+                               value="${escapeHtml(cachedVal)}" 
+                               placeholder="${escapeHtml(isPlaceholderMode ? (field.placeholder || 'Enter text...') : 'Enter text...')}"
                                required>
                     `;
                     break;
@@ -179,12 +181,12 @@ export class NamerForm {
                                id="input-${field.id}"
                                data-field-id="${field.id}"
                                class="form-select"
-                               value="${cachedVal}"
+                               value="${escapeHtml(cachedVal)}"
                                placeholder="Select or type..."
                                list="list-${field.id}"
                                required>
                         <datalist id="list-${field.id}">
-                            ${options.map(opt => `<option value="${opt}"></option>`).join('')}
+                            ${options.map(opt => `<option value="${escapeHtml(opt)}"></option>`).join('')}
                         </datalist>
                     `;
                     break;
@@ -226,7 +228,7 @@ export class NamerForm {
             const labelFor = field.type === 'index' ? 'start-index-input' : `input-${field.id}`;
             fieldsHtml += `
                 <div class="form-group namer-field-group">
-                    <label for="${labelFor}">${field.label}</label>
+                    <label for="${labelFor}">${escapeHtml(field.label)}</label>
                     ${inputHtml}
                 </div>
             `;

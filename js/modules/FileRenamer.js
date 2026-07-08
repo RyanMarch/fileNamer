@@ -2,6 +2,8 @@
  * FileRenamer - Manages file drag-and-drop, files tracking, and batch download logic.
  */
 
+import { escapeHtml } from './utils.js';
+
 export class FileRenamer {
     constructor(containerId, namerForm) {
         this.container = document.getElementById(containerId);
@@ -339,7 +341,7 @@ export class FileRenamer {
             return `
                 <div class="file-row">
                     <div class="file-info-col">
-                        <span class="file-name-original" title="${file.name}">${file.name}</span>
+                        <span class="file-name-original" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</span>
                         <span class="file-size-badge">${sizeStr}</span>
                     </div>
                     <div class="file-arrow-col">
@@ -349,7 +351,7 @@ export class FileRenamer {
                         </svg>
                     </div>
                     <div class="file-target-col">
-                        <span class="file-name-target" title="${targetName}">${targetName}</span>
+                        <span class="file-name-target" title="${escapeHtml(targetName)}">${escapeHtml(targetName)}</span>
                     </div>
                     <button class="btn-file-remove" data-index="${idx}" title="Remove file" aria-label="Remove file">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>

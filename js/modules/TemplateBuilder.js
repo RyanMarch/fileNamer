@@ -2,6 +2,8 @@
  * TemplateBuilder - Controls the template building UI.
  */
 
+import { escapeHtml } from './utils.js';
+
 export class TemplateBuilder {
     constructor(containerId, store, onTemplateChange) {
         this.container = document.getElementById(containerId);
@@ -33,7 +35,7 @@ export class TemplateBuilder {
                         <label for="template-select">Template Picker</label>
                         <div class="template-select-container">
                             <select id="template-select" class="form-select select-template">
-                                ${templates.map(t => `<option value="${t.id}" ${t.id === activeTpl.id ? 'selected' : ''}>${t.name}</option>`).join('')}
+                                ${templates.map(t => `<option value="${escapeHtml(t.id)}" ${t.id === activeTpl.id ? 'selected' : ''}>${escapeHtml(t.name)}</option>`).join('')}
                             </select>
                             <div class="button-actions">
                                 <button id="rename-tpl-btn" class="btn btn-secondary btn-icon-only" title="Rename Active Template" aria-label="Rename Active Template">
@@ -138,7 +140,7 @@ export class TemplateBuilder {
                     <div style="display: flex; gap: 0.75rem; width: 100%; align-items: flex-end; flex-wrap: wrap;">
                         <div class="control-item" style="flex: 1 1 calc(60% - 0.375rem); display: flex; flex-direction: column; gap: 0.375rem;">
                             <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Default / Placeholder Text</label>
-                            <input type="text" class="form-input field-placeholder" data-index="${index}" placeholder="e.g. PRJ101" value="${field.placeholder || ''}" title="Default / Placeholder Text">
+                            <input type="text" class="form-input field-placeholder" data-index="${index}" placeholder="e.g. PRJ101" value="${escapeHtml(field.placeholder || '')}" title="Default / Placeholder Text">
                         </div>
                         <div class="control-item" style="flex: 1 1 calc(40% - 0.375rem); display: flex; flex-direction: column; gap: 0.375rem;">
                             <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Behavior</label>
@@ -155,7 +157,7 @@ export class TemplateBuilder {
                 configHtml = /*html*/ `
                     <div class="control-item" style="width: 100%; display: flex; flex-direction: column; gap: 0.375rem;">
                         <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Dropdown Options (comma-separated)</label>
-                        <input type="text" class="form-input field-options" data-index="${index}" placeholder="Option 1, Option 2, Option 3..." value="${(field.options || []).join(', ')}" title="Comma-separated dropdown options">
+                        <input type="text" class="form-input field-options" data-index="${index}" placeholder="Option 1, Option 2, Option 3..." value="${escapeHtml((field.options || []).join(', '))}" title="Comma-separated dropdown options">
                     </div>
                 `;
                 break;
@@ -177,7 +179,7 @@ export class TemplateBuilder {
                             </div>
                             <div class="control-item field-custom-format-container" data-index="${index}" style="flex: 1 1 calc(40% - 0.375rem); display: ${field.format === 'custom' ? 'flex' : 'none'}; flex-direction: column; gap: 0.375rem;">
                                 <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Custom Format</label>
-                                <input type="text" class="form-input field-custom-format" data-index="${index}" placeholder="e.g. YYYY_MM_DD" value="${field.customFormat || ''}" title="Custom Date Format">
+                                <input type="text" class="form-input field-custom-format" data-index="${index}" placeholder="e.g. YYYY_MM_DD" value="${escapeHtml(field.customFormat || '')}" title="Custom Date Format">
                             </div>
                         </div>
                         <div class="field-custom-format-help" data-index="${index}" style="display: ${field.format === 'custom' ? 'block' : 'none'}; font-size: 0.7rem; color: var(--text-muted); line-height: 1.3;">
@@ -219,7 +221,7 @@ export class TemplateBuilder {
                             </div>
                             <div class="control-item field-custom-extension-container" data-index="${index}" style="flex: 1 1 calc(30% - 0.375rem); display: ${field.extensionMode === 'custom' ? 'flex' : 'none'}; flex-direction: column; gap: 0.375rem;">
                                 <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Custom Ext</label>
-                                <input type="text" class="form-input field-custom-extension" data-index="${index}" placeholder="e.g. pdf" value="${field.customExtension || ''}">
+                                <input type="text" class="form-input field-custom-extension" data-index="${index}" placeholder="e.g. pdf" value="${escapeHtml(field.customExtension || '')}">
                             </div>
                         </div>
                         <div class="checkbox-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem;">
@@ -243,7 +245,7 @@ export class TemplateBuilder {
                         </svg>
                     </div>
                     ${typeBadge}
-                    <input type="text" class="form-input field-label" data-index="${index}" value="${field.label}" placeholder="Segment Label..." title="Segment Label">
+                    <input type="text" class="form-input field-label" data-index="${index}" value="${escapeHtml(field.label)}" placeholder="Segment Label..." title="Segment Label">
                     <div class="field-actions">
                         <button class="btn-field-action move-up-btn" data-index="${index}" ${index === 0 ? 'disabled' : ''} title="Move Up">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
