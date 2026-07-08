@@ -3,12 +3,18 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="FileNamer" />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="google" content="notranslate">
     <script>
         // Theme initialization to prevent flicker
         (function () {
-            const savedTheme = localStorage.getItem('theme') || 'dark';
+            const savedTheme = localStorage.getItem('theme') || 'light';
             if (savedTheme === 'system') {
                 const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                 document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
@@ -51,13 +57,13 @@
             <nav class="page-sidebar" aria-label="Documentation sections">
                 <div class="sidebar-logo">
                     <a href="/" class="logo-link" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--accent); margin-bottom: 1.5rem;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px;">
-                            <rect x="14" y="14" width="4" height="6" rx="2" />
-                            <rect x="6" y="4" width="4" height="6" rx="2" />
-                            <path d="M6 20h4" />
-                            <path d="M14 10h4" />
-                            <path d="M8 14v6" />
-                            <path d="M16 4v6" />
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width: 1.85rem; height: 1.85rem; flex-shrink: 0;">
+                            <rect x="1.5" y="1" width="16" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
+                            <rect x="1.5" y="8.5" width="10" height="2.5" rx="1.25" fill="#3b82f6" />
+                            <rect x="1.5" y="15" width="7.5" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
+                            <line x1="13" y1="6.5" x2="22" y2="6.5" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" />
+                            <line x1="17.5" y1="6.5" x2="17.5" y2="17.5" stroke="#3b82f6" stroke-width="2.2" />
+                            <line x1="13" y1="17.5" x2="22" y2="17.5" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" />
                         </svg>
                         <span style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700; color: var(--text-main); letter-spacing: -0.025em;">FileNamer</span>
                     </a>
@@ -69,13 +75,13 @@
                 <div class="sidebar-footer">
                     <div class="cta-card">
                         <div class="cta-card-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="14" y="14" width="4" height="6" rx="2" />
-                                <rect x="6" y="4" width="4" height="6" rx="2" />
-                                <path d="M6 20h4" />
-                                <path d="M14 10h4" />
-                                <path d="M8 14v6" />
-                                <path d="M16 4v6" />
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <rect x="1.5" y="1" width="16" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
+                                <rect x="1.5" y="8.5" width="10" height="2.5" rx="1.25" fill="#3b82f6" />
+                                <rect x="1.5" y="15" width="7.5" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
+                                <line x1="13" y1="6.5" x2="22" y2="6.5" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" />
+                                <line x1="17.5" y1="6.5" x2="17.5" y2="17.5" stroke="#3b82f6" stroke-width="2.2" />
+                                <line x1="13" y1="17.5" x2="22" y2="17.5" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" />
                             </svg>
                         </div>
                         <h4 class="cta-card-title">FileNamer</h4>

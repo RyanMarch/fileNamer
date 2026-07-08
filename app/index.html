@@ -3,10 +3,16 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="FileNamer" />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
     <script>
         // Theme initialization to prevent flicker
         (function () {
-            const savedTheme = localStorage.getItem('theme') || 'dark';
+            const savedTheme = localStorage.getItem('theme') || 'light';
             if (savedTheme === 'system') {
                 const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                 document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
@@ -52,15 +58,16 @@
     <div class="app-container">
         <header class="app-header">
             <a href="/" class="header-logo" style="text-decoration: none;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                     class="lucide lucide-binary">
-                    <rect x="14" y="14" width="4" height="6" rx="2" />
-                    <rect x="6" y="4" width="4" height="6" rx="2" />
-                    <path d="M6 20h4" />
-                    <path d="M14 10h4" />
-                    <path d="M8 14v6" />
-                    <path d="M16 4v6" />
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <!-- Three text lines, left side -->
+                    <rect x="1.5" y="1" width="16" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
+                    <rect x="1.5" y="8.5" width="10" height="2.5" rx="1.25" fill="#3b82f6" />
+                    <rect x="1.5" y="15" width="7.5" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
+                    <!-- I-beam cursor: stroke-based for authentic text cursor shape -->
+                    <line x1="13" y1="6.5" x2="22" y2="6.5" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" />
+                    <line x1="17.5" y1="6.5" x2="17.5" y2="17.5" stroke="#3b82f6" stroke-width="2.2" />
+                    <line x1="13" y1="17.5" x2="22" y2="17.5" stroke="#3b82f6" stroke-width="2"
+                        stroke-linecap="round" />
                 </svg>
                 <h1>FileNamer</h1>
             </a>
@@ -110,7 +117,7 @@
                 </div>
                 <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
                     <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                         stroke-linecap="round" stroke-linejoin="round">
+                        stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="5"></circle>
                         <line x1="12" y1="1" x2="12" y2="3"></line>
                         <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -122,11 +129,11 @@
                         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                     </svg>
                     <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                         stroke-linecap="round" stroke-linejoin="round">
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                     </svg>
                     <svg class="system-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                         stroke-linecap="round" stroke-linejoin="round">
+                        stroke-linecap="round" stroke-linejoin="round">
                         <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
                         <line x1="8" y1="21" x2="16" y2="21"></line>
                         <line x1="12" y1="17" x2="12" y2="21"></line>
