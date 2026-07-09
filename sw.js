@@ -3,12 +3,13 @@
  * Placeholder for offline support / caching.
  */
 
-const CACHE_NAME = 'fn-maker-cache-v5';
+const CACHE_NAME = 'fn-maker-cache-v6';
 const ASSETS = [
     '/app/',
     '/app/index.html',
     '/css/style.css',
     '/js/app.js',
+    '/js/components.js',
     '/docs/',
     '/docs/index.html',
     '/docs/style.css',
