@@ -517,11 +517,62 @@
     visibility: visible;
 }
 
+.mobile-nav-toggle svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+.mobile-nav-item, .mobile-nav-divider {
+    display: none;
+}
+
+.sidebar-global-link {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+}
+
+.sidebar-global-link:hover, .sidebar-global-link.active {
+    color: var(--accent);
+    background: var(--accent-light);
+}
+
 @media (max-width: 1024px) {
     .page-container-sidebar {
         grid-template-columns: 1fr;
         gap: 0;
         min-height: auto;
+    }
+
+    .page-content {
+        padding: 0 1rem;
+    }
+
+    .app-header {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    .app-header .header-nav {
+        display: none;
+    }
+
+    .mobile-nav-item {
+        display: block;
+    }
+
+    .mobile-nav-divider {
+        display: block;
+        height: 1px;
+        background: var(--panel-border);
+        margin: 0.75rem 0;
     }
 
     .page-sidebar {
@@ -551,8 +602,7 @@
     }
 
     .heading-anchor {
-        left: auto;
-        right: -1.75rem;
+        display: none;
     }
 }
 
@@ -590,7 +640,12 @@
         height: 0;
         overflow: hidden;
     }
+
+    .app-header {
+        justify-content: flex-end;
+    }
 }
+
 
 /* Inline Documentation Button/Icon Styling */
 .doc-btn-inline {

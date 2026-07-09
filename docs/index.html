@@ -79,8 +79,12 @@
                     </a>
                 </div>
                 <ul>
+                    <li class="mobile-nav-item"><a href="../app/" class="sidebar-global-link">App</a></li>
+                    <li class="mobile-nav-item"><a href="index.html" class="sidebar-global-link active">Docs</a></li>
+                    <li class="mobile-nav-divider"></li>
                     <li><a href="#overview" class="sidebar-link active">Overview</a></li>
                     <li><a href="#template-picker" class="sidebar-link">Template Picker</a></li>
+                    <li><a href="#utm-templates" class="sidebar-link">UTM &amp; URL Templates</a></li>
                     <li><a href="#field-builder" class="sidebar-link">Field Builder</a></li>
                     <li><a href="#preview-rename" class="sidebar-link">Preview & Rename</a></li>
                     <li>
@@ -97,15 +101,17 @@
                 <div class="sidebar-footer">
                     <div class="cta-card">
                         <div class="cta-card-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <rect x="14" y="14" width="4" height="6" rx="2" />
-                                <rect x="6" y="4" width="4" height="6" rx="2" />
-                                <path d="M6 20h4" />
-                                <path d="M14 10h4" />
-                                <path d="M8 14v6" />
-                                <path d="M16 4v6" />
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <rect x="1.5" y="1" width="16" height="2.5" rx="1.25" fill="currentColor"
+                                    opacity="0.4" />
+                                <rect x="1.5" y="8.5" width="10" height="2.5" rx="1.25" fill="#3b82f6" />
+                                <rect x="1.5" y="15" width="7.5" height="2.5" rx="1.25" fill="currentColor"
+                                    opacity="0.4" />
+                                <line x1="13" y1="6.5" x2="22" y2="6.5" stroke="#3b82f6" stroke-width="2"
+                                    stroke-linecap="round" />
+                                <line x1="17.5" y1="6.5" x2="17.5" y2="17.5" stroke="#3b82f6" stroke-width="2.2" />
+                                <line x1="13" y1="17.5" x2="22" y2="17.5" stroke="#3b82f6" stroke-width="2"
+                                    stroke-linecap="round" />
                             </svg>
                         </div>
                         <h4 class="cta-card-title">FileNamer</h4>
@@ -125,7 +131,19 @@
 
             <!-- Right-side Content & Header Wrapper -->
             <div class="page-content-wrapper" style="width: 100%; display: flex; flex-direction: column; gap: 1.25rem;">
-                <header class="app-header" style="justify-content: flex-end; padding-top: 0.5rem;">
+                <header class="app-header">
+                    <a href="/" class="header-logo" style="text-decoration: none;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <rect x="1.5" y="1" width="16" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
+                            <rect x="1.5" y="8.5" width="10" height="2.5" rx="1.25" fill="#3b82f6" />
+                            <rect x="1.5" y="15" width="7.5" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
+                            <line x1="13" y1="6.5" x2="22" y2="6.5" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" />
+                            <line x1="17.5" y1="6.5" x2="17.5" y2="17.5" stroke="#3b82f6" stroke-width="2.2" />
+                            <line x1="13" y1="17.5" x2="22" y2="17.5" stroke="#3b82f6" stroke-width="2"
+                                stroke-linecap="round" />
+                        </svg>
+                        <h1>FileNamer</h1>
+                    </a>
                     <div class="header-actions">
                         <div class="header-nav" aria-label="Main Navigation">
                             <a href="../app/" class="nav-link">App</a>
@@ -183,8 +201,13 @@
                         <div class="toc-title">Table of Contents</div>
                         <ul class="toc-list">
                             <li><a href="#template-picker">Template Picker</a></li>
-                            <li><a href="#field-builder">Field Builder</a></li>
-                            <li><a href="#preview-rename">Preview & Rename</a></li>
+                            <li>
+                                <a href="#field-builder">Field Builder</a>
+                                <ul class="toc-sublist">
+                                    <li><a href="#utm-templates">UTM &amp; URL Templates</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#preview-rename">Preview &amp; Rename</a></li>
                             <li>
                                 <a href="#batch-renaming">Batch Renaming</a>
                                 <ul class="toc-sublist">
@@ -193,7 +216,7 @@
                                     <li><a href="#batch-csv">Renaming with CSV Data</a></li>
                                 </ul>
                             </li>
-                            <li><a href="#offline-use">Offline & PWA Support</a></li>
+                            <li><a href="#offline-use">Offline &amp; PWA Support</a></li>
                         </ul>
                     </nav>
 
@@ -368,6 +391,31 @@
                                 segments instantly (lowercase, UPPERCASE, snake_case, camelCase, or As Entered).
                             </li>
                         </ul>
+
+                        <h3 id="utm-templates" style="font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.5rem;">UTM
+                            &amp; URL Templates</h3>
+                        <p>
+                            If a template's name contains <strong>"UTM"</strong> or <strong>"URL"</strong>
+                            (case-insensitive), FileNamer transforms the output into a query-parameterized URL instead
+                            of a standard filename.
+                        </p>
+                        <ul class="help-list" style="margin-top: 0.5rem;">
+                            <li><strong>Destination URL Field:</strong> Ensure you include a text field for the base URL
+                                (usually labeled containing <code>URL</code>).</li>
+                            <li><strong>Query Parameter Mapping:</strong> Add parentheses to any field's label to
+                                specify its query parameter key. For example, a field labeled
+                                <code>Campaign Name (utm_campaign)</code> will map to
+                                <code>&amp;utm_campaign=value</code> in the generated URL.
+                            </li>
+                        </ul>
+                        <div class="info-aside"
+                            style="background-color: var(--accent-light); border-left-color: var(--accent); margin-top: 1rem;">
+                            <div class="aside-badge">UTM Campaign Builder Guide</div>
+                            <p>
+                                Learn more about advanced use cases, CSV batch generation, and file uploader integration
+                                in the dedicated <a href="utm-builder/index.html">UTM Campaign Builder Guide</a>.
+                            </p>
+                        </div>
                     </article>
 
                     <hr class="section-divider">
@@ -391,12 +439,11 @@
                         </ul>
                         <div class="info-aside"
                             style="background-color: var(--accent-light); border-left-color: var(--accent);">
-                            <div class="aside-badge">Advanced Mode</div>
+                            <div class="aside-badge">See Structure</div>
                             <p>
-                                Toggle the "Advanced" button inside the preview box to display the literal
-                                naming schema structure and evaluated segment values directly below the live filename
-                                preview.
-                                This helps you validate your templates and inspect individual field outputs.
+                                Toggle the "Show Structure" button inside the preview box to display the literal
+                                naming schema structure directly below the live preview. This helps you
+                                validate your templates and inspect individual field outputs.
                             </p>
                         </div>
                     </article>
@@ -452,9 +499,10 @@
                         </p>
                         <ul class="help-list" style="gap: 0.75rem; display: flex; flex-direction: column;">
                             <li><strong>Bulk Edit Grid:</strong> Click the "Bulk Edit Grid" button above the file queue
-                                to open an interactive spreadsheet view inside the app. You can type or select values
-                                for individual files. Any cells left empty automatically inherit the default values set
-                                in the Template Picker form.</li>
+                                to open an interactive spreadsheet view. You can type or select values for individual
+                                files. Any cells left empty automatically inherit the default values set
+                                in the Template Picker form.
+                            </li>
                             <li><strong>CSV File Import:</strong> You can download, edit, and import CSV files to
                                 populate varying fields:
                                 <ul style="margin-left: 1.25rem; margin-top: 0.25rem; list-style-type: circle;">

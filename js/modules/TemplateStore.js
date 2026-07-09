@@ -46,6 +46,7 @@ export const DEFAULT_TEMPLATES = [
         separator: '_',
         case: 'lower',
         fields: [
+            { id: 'f-utm-url', type: 'text', label: 'Destination URL', placeholder: 'https://example.com' },
             { id: 'f-utm-source', type: 'select', label: 'Campaign Source (utm_source)', options: ['google', 'newsletter', 'facebook', 'linkedin', 'partner'] },
             { id: 'f-utm-medium', type: 'select', label: 'Campaign Medium (utm_medium)', options: ['cpc', 'email', 'social', 'affiliate', 'referral'] },
             { id: 'f-utm-campaign', type: 'text', label: 'Campaign Name (utm_campaign)', placeholder: 'spring-launch' },
@@ -81,6 +82,10 @@ export class TemplateStore {
                     const extFieldIdx = existingUtmTpl.fields.findIndex(f => f.type === 'extension');
                     if (extFieldIdx !== -1) {
                         existingUtmTpl.fields.splice(extFieldIdx, 1);
+                        updated = true;
+                    }
+                    if (!existingUtmTpl.fields.some(f => f.id === 'f-utm-url')) {
+                        existingUtmTpl.fields.unshift({ id: 'f-utm-url', type: 'text', label: 'Destination URL', placeholder: 'https://example.com' });
                         updated = true;
                     }
                 }

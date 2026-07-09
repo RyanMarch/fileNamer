@@ -351,12 +351,6 @@ body {
     transition: grid-template-columns 0.4s cubic-bezier(0.4, 0, 0.2, 1), gap 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@media (max-width: 768px) {
-    .workspace-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
 /* Panel Design System */
 .panel {
     position: relative;
@@ -412,6 +406,43 @@ body {
 [data-theme-style="classic"] .panel {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        padding: 1rem 0;
+        gap: 1rem;
+    }
+
+    .app-header {
+        padding: 0 1rem;
+    }
+
+    .workspace-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .panel {
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+        padding: 0.7rem !important;
+    }
+
+    .page-footer {
+        padding: 1rem;
+    }
+
+    .btn-fullwidth-toggle {
+        display: none !important;
+    }
+
+    .fields-list {
+        max-height: none;
+        overflow-y: visible;
+        padding-right: 0;
+    }
 }
 
 .panel h2 {
@@ -546,13 +577,56 @@ body {
     display: none;
 }
 
-/* Namer Form Description Details display mode */
+/* Field Control Wrapper to group inputs, helper text, and descriptions closer */
+.field-control-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    width: 100%;
+}
+
+/* Namer Form Description Details styles */
 .namer-field-desc-details {
     display: none;
+    margin: 0;
 }
 
 .workspace-grid.fullwidth-mode .namer-field-desc-details {
     display: block;
+}
+
+.namer-field-desc-summary {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    width: fit-content;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+}
+
+.namer-field-desc-summary:hover {
+    color: var(--text-main);
+}
+
+.namer-field-desc-summary .restrictions-chevron {
+    transition: transform var(--transition-fast);
+}
+
+.namer-field-desc-content {
+    font-size: 0.725rem;
+    color: var(--text-muted);
+    margin-top: 0.125rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--accent-light);
+    border-left: 2px solid var(--accent);
+    border-radius: var(--radius-sm);
+    line-height: 1.4;
+    font-style: italic;
 }
 
 .divider {
@@ -1076,8 +1150,9 @@ body {
 .field-helper-text {
     font-size: 0.725rem;
     color: var(--text-muted);
-    margin-top: 0.25rem;
+    margin-top: 0.125rem;
     display: block;
+    line-height: 1.4;
 }
 
 .live-preview-box {
