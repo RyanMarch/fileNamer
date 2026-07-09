@@ -6,7 +6,7 @@
     <link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <link class="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="FileNamer" />
     <link rel="manifest" href="/assets/favicon/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -36,10 +36,10 @@
     <!-- Global Style -->
     <link rel="stylesheet" href="../../css/style.css">
 
-    <title>UTM Campaign Builder — FileNamer Docs</title>
+    <title>Project Files Naming Guide — FileNamer Docs</title>
     <meta name="description"
-        content="Learn how to use UTM/URL campaign templates with FileNamer, configure query parameters, and utilize the file uploader feature to generate and track links.">
-    <link rel="canonical" href="https://filenamer.ryanmarch.me/docs/utm-builder/">
+        content="Learn how to structure and standardize your project files using FileNamer. Keep your team organized with consistent naming conventions.">
+    <link rel="canonical" href="https://filenamer.ryanmarch.me/docs/project-files/">
 
     <!-- Docs Style Sheet -->
     <link rel="stylesheet" href="../style.css">
@@ -47,7 +47,6 @@
 
 <body class="user-docs-page">
     <div class="app-container">
-        <!-- Mobile Navigation Overlay -->
         <div id="mobile-overlay" class="mobile-overlay"></div>
 
         <main class="page-container-sidebar user-docs">
@@ -73,20 +72,12 @@
                 </div>
                 <ul>
                     <li><a href="../index.html" class="sidebar-link">← General Docs</a></li>
-                    <li class="sidebar-section-title"
-                        style="margin-top: 1rem; margin-bottom: 0.25rem; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; padding: 0 0.75rem;">
-                        UTM Guide</li>
-                    <li><a href="#overview" class="sidebar-link active">Overview</a></li>
-                    <li><a href="#configuration" class="sidebar-link">Configuration</a></li>
-                    <li>
-                        <a href="#uploader-integration" class="sidebar-link">File Uploader Uses</a>
-                        <ul class="sidebar-sublist">
-                            <li><a href="#asset-renaming" class="sidebar-link sub-link">Asset Renaming</a></li>
-                            <li><a href="#auto-population" class="sidebar-link sub-link">Auto-population</a></li>
-                            <li><a href="#bulk-csv" class="sidebar-link sub-link">Bulk CSV links</a></li>
-                            <li><a href="#link-registry" class="sidebar-link sub-link">Link-Asset Registry</a></li>
-                        </ul>
-                    </li>
+                    <li class="sidebar-section-title" style="margin-top: 1rem; margin-bottom: 0.25rem; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; padding: 0 0.75rem;">Template Guides</li>
+                    <li><a href="../project-files/index.html" class="sidebar-link active">Project Files</a></li>
+                    <li><a href="../academic-papers/index.html" class="sidebar-link">Academic Papers</a></li>
+                    <li><a href="../invoices-receipts/index.html" class="sidebar-link">Invoices &amp; Receipts</a></li>
+                    <li><a href="../utm-builder/index.html" class="sidebar-link">UTM Campaign Builder</a></li>
+                    <li><a href="../media-library/index.html" class="sidebar-link">Media Library</a></li>
                 </ul>
                 <div class="sidebar-footer">
                     <div class="cta-card">
@@ -145,27 +136,22 @@
                 </header>
 
                 <!-- Content Area -->
-                <section class="page-content" aria-label="UTM Builder Guide Content">
+                <section class="page-content" aria-label="Project Files Guide Content">
 
                     <!-- Overview -->
                     <article id="overview" class="doc-section">
-                        <h1>UTM Campaign Builder</h1>
+                        <h1>Project Files Naming Guide</h1>
                         <p class="lead">
-                            Discover how to build naming templates that automatically transform inputs into
-                            campaign-tagged URLs, and integrate with the file uploader feature.
+                            Optimize document organization and team collaboration by standardizing your creative and technical project files.
                         </p>
                         <p>
-                            FileNamer includes dedicated logic to build parameter-tagged URLs instead of standard
-                            filenames. If a template’s name contains <strong>"UTM"</strong> or <strong>"URL"</strong>,
-                            the engine shifts into URL Mode.
+                            Keeping design files, codebases, assets, and project logs consistent is essential for fast retrieval. The built-in <strong>Project Files</strong> template provides a reliable structure for organizing corporate, freelance, and personal files.
                         </p>
 
                         <div class="info-aside">
-                            <div class="aside-badge">URL Mode Trigger</div>
+                            <div class="aside-badge">Design Tip</div>
                             <p>
-                                Name your custom template with terms like <code>UTM Campaign</code> or
-                                <code>Marketing URL Builder</code> to automatically switch the output generator from a
-                                filesystem-based path separator to a query string parser.
+                                While these default presets serve as helpful starting points, FileNamer is designed for complete customization. You can adapt, reorder, or build entire naming structures from scratch to match the needs of your exact workflows and file standards.
                             </p>
                         </div>
                     </article>
@@ -174,111 +160,44 @@
                     <nav class="inline-toc" aria-label="Table of contents">
                         <div class="toc-title">Table of Contents</div>
                         <ul class="toc-list">
-                            <li><a href="#configuration">Configuration Rules</a></li>
-                            <li>
-                                <a href="#uploader-integration">File Uploader Integration</a>
-                                <ul class="toc-sublist">
-                                    <li><a href="#asset-renaming">Renaming Creative Assets</a></li>
-                                    <li><a href="#auto-population">Auto-populating Campaign Fields</a></li>
-                                    <li><a href="#bulk-csv">Bulk UTM Generation via CSV</a></li>
-                                    <li><a href="#link-registry">Creating a Link-Asset Registry</a></li>
-                                </ul>
-                            </li>
+                            <li><a href="#structure">Default Template Structure</a></li>
+                            <li><a href="#customization">Best Practices for Customizing</a></li>
                         </ul>
                     </nav>
 
                     <hr class="section-divider">
 
-                    <!-- Configuration -->
-                    <article id="configuration" class="doc-section">
-                        <h2>Configuration Rules</h2>
+                    <!-- Default Structure -->
+                    <article id="structure" class="doc-section">
+                        <h2>Default Template Structure</h2>
                         <p>
-                            To configure a UTM template, follow these mapping rules in the template editor:
+                            The default Project Files template uses an underscore separator (<code>_</code>) and consists of the following components:
                         </p>
                         <ul class="help-list" style="margin-top: 0.5rem;">
-                            <li><strong>Destination URL:</strong> Create a standard text input field and include the
-                                word <code>URL</code> in its label (e.g. <code>Destination URL</code>). This will serve
-                                as the base address of the generated link.</li>
-                            <li><strong>Query Parameters:</strong> To turn any template field into a URL query
-                                parameter, place the query name in parentheses inside the field label. For example:
-                                <ul>
-                                    <li>A field labeled <code>Campaign Source (utm_source)</code> becomes
-                                        <code>?utm_source=value</code>.</li>
-                                    <li>A field labeled <code>Ad Type (utm_medium)</code> becomes
-                                        <code>&amp;utm_medium=value</code>.</li>
-                                </ul>
-                            </li>
-                            <li><strong>Spaces and Casing:</strong> Enable the <strong>lowercase</strong> filter to
-                                ensure campaign keys and parameters conform to web standard formats. Separation rule
-                                spaces will automatically convert to URL-safe separators.</li>
+                            <li><strong>Date Created:</strong> Date format in YYYYMMDD (e.g. <code>20260709</code>) to keep files sorted chronologically in your filesystem.</li>
+                            <li><strong>Project Code:</strong> A short code representing the client or project name (e.g. <code>PRJ101</code>).</li>
+                            <li><strong>Description:</strong> A brief description of the specific asset or content (e.g. <code>PromoShot</code>).</li>
+                            <li><strong>Index:</strong> A two-digit auto-incrementing counter (e.g. <code>01</code>, <code>02</code>) to manage versioning and sequential asset lists.</li>
+                            <li><strong>Extension:</strong> Preserves the original file extension automatically.</li>
                         </ul>
+                        <p>
+                            <strong>Example output filename:</strong> <code>20260709_PRJ101_PromoShot_01.png</code>
+                        </p>
                     </article>
 
                     <hr class="section-divider">
 
-                    <!-- File Uploader Integration -->
-                    <article id="uploader-integration" class="doc-section">
-                        <h2>File Uploader Integration</h2>
+                    <!-- Customization -->
+                    <article id="customization" class="doc-section">
+                        <h2>Best Practices for Customizing</h2>
                         <p>
-                            Combining the UTM builder with batch processing provides powerful workflows for marketing
-                            and content distribution teams:
+                            Every project team has distinct operational needs. When tailoring this template in the Field Builder, consider these adjustments:
                         </p>
-
-                        <!-- Asset Renaming -->
-                        <h3 id="asset-renaming" style="font-size: 1.15rem; margin-top: 2rem;">1. Renaming Creative
-                            Assets to Match Campaign Structures</h3>
-                        <p>
-                            When uploading creative files (e.g., banner graphics, PDF checklists, newsletter
-                            attachments) to an ad manager, CDN, or CMS, it is best practice to keep filenames consistent
-                            with campaign attributes.
-                        </p>
-                        <p>
-                            Use the File Uploader to drop raw file assets, and standard naming filters will convert
-                            their local filenames into campaign-indexed names (e.g.,
-                            <code>newsletter_cpc_spring-launch_blue-button-banner.png</code>) matching your campaign
-                            parameters before you batch download.
-                        </p>
-
-                        <!-- Auto-population -->
-                        <h3 id="auto-population" style="font-size: 1.15rem; margin-top: 2rem;">2. Auto-populating
-                            Campaign Fields from Uploaded Filenames</h3>
-                        <p>
-                            If you upload multiple different creative assets at once, FileNamer can extract their
-                            original filenames and inject them into specific query parameters dynamically.
-                        </p>
-                        <p>
-                            This allows parameters like <code>utm_content</code> to dynamically reference the filename
-                            (e.g. <code>utm_content=blue-button-banner</code>), producing a custom tracking URL tailored
-                            to each unique creative element.
-                        </p>
-
-                        <!-- Bulk CSV -->
-                        <h3 id="bulk-csv" style="font-size: 1.15rem; margin-top: 2rem;">3. Bulk UTM Generation via CSV
-                            URL Lists</h3>
-                        <p>
-                            If you have dozens of different destination landing pages and need to create campaign
-                            tracking links for all of them:
-                        </p>
-                        <ul class="help-list">
-                            <li>Download the CSV template using the action button in the uploader queue.</li>
-                            <li>Fill out the destination URLs in the document spreadsheet.</li>
-                            <li>Import the file back into the Bulk Edit grid. All UTM queries will be compiled
-                                instantly, generating a complete sequence of campaign links in one action.</li>
+                        <ul class="help-list" style="margin-top: 0.5rem;">
+                            <li><strong>Differentiate Drafts:</strong> Add a custom dropdown component for version stages, such as <code>draft</code>, <code>review</code>, and <code>final</code>.</li>
+                            <li><strong>Incorporate User Initials:</strong> Add a text field for creator initials (e.g. <code>RM</code>) to identify who worked on a specific file.</li>
+                            <li><strong>Enforce Snake or Kebab Case:</strong> Use the global casing controls at the bottom of the template builder to automatically force lowercase or camelCase filenames depending on cross-platform compatibility needs.</li>
                         </ul>
-
-                        <!-- Link Registry -->
-                        <h3 id="link-registry" style="font-size: 1.15rem; margin-top: 2rem;">4. Creating a Link-Asset
-                            Registry (Master Sheet)</h3>
-                        <p>
-                            Once creative assets are named and campaign tracking links are configured inside the Bulk
-                            Edit grid, choose the <strong>Export Log (CSV)</strong> action.
-                        </p>
-                        <p>
-                            This generates a master registry spreadsheet containing the original filename, the clean
-                            campaign-safe target filename (ready for upload to your CDN), and the fully assembled
-                            destination UTM link. This tracking document is ready for copy-pasting directly into
-                            campaign managers.
-                        </p>
                     </article>
 
                 </section>
@@ -333,43 +252,6 @@
 
         <!-- Scripts -->
         <script src="../header.js"></script>
-        <script>
-            // Smooth scroll spy logic for sidebar links
-            document.addEventListener('DOMContentLoaded', () => {
-                const sections = document.querySelectorAll('.doc-section');
-                const navLinks = document.querySelectorAll('.sidebar-link');
-
-                function makeActive() {
-                    let scrollPos = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
-                    // Add offset for header height
-                    scrollPos += 100;
-
-                    for (let i = 0; i < sections.length; i++) {
-                        const section = sections[i];
-                        const top = section.offsetTop;
-                        const height = section.offsetHeight;
-
-                        if (scrollPos >= top && scrollPos < top + height) {
-                            const id = section.getAttribute('id');
-                            navLinks.forEach(link => {
-                                if (link.getAttribute('href') === `#${id}`) {
-                                    link.classList.add('active');
-                                } else {
-                                    link.classList.remove('active');
-                                }
-                            });
-                            break;
-                        }
-                    }
-                }
-
-                window.addEventListener('scroll', makeActive);
-                window.addEventListener('resize', makeActive);
-
-                // Initial call
-                setTimeout(makeActive, 100);
-            });
-        </script>
     </div>
 </body>
 
