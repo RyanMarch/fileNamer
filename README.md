@@ -1,3 +1,13 @@
+<div align="center">
+  <img src="images/filenameMaker-logo.png" alt="FileNamer Logo" width="128" height="128" />
+
+  <h1>FileNamer</h1>
+  <p><i>A local-first, client-side web application for defining naming templates and batch renaming files.</i></p>
+
+  [![Launch App](https://img.shields.io/badge/Launch_FileNamer-3b82f6?style=for-the-badge&logoColor=white)](https://filenamer.ryanmarch.me)
+</div>
+
+
 # FileNamer
 
 FileNamer is a lightweight, local-first web utility for designing standardized naming templates and batch renaming files directly in the browser. 
@@ -6,7 +16,13 @@ It is designed for professionals and teams (e.g., content managers, researchers,
 
 ## Key Features
 
-- **Standardized Templates**: Define parameters, dates, select lists, and sequence indexing to enforce naming formats.
+- **Full Customizability**: Define parameters, dates, select lists, and sequence indexing to enforce naming formats.
+- **Pre-Built Templates**: Common-use naming templates including:
+    - Project Files
+    - Academic Papers
+    - Invoices & Receipts
+    - UTM Campaign Builder
+    - Media Library
 - **Client-Side Rename & Packaging**: Drag and drop or browse files to queue them. Files are processed entirely locally in the browser and downloaded directly (or packaged into a `.zip`). **Your files never leave your computer.**
 - **Bulk Edit Spreadsheet Grid**: Switch from the simple list view to a spreadsheet-like grid to customize/override naming parameters for individual files in the queue.
 - **CSV Data Integration**: Export templates to a CSV file, populate them in your spreadsheet software (e.g. Excel, Sheets), and import them back to automatically fill segment values.
@@ -16,52 +32,28 @@ It is designed for professionals and teams (e.g., content managers, researchers,
 ## How to Use FileNamer
 
 ### 1. Choose or Build a Template
-Use the **Template Picker** sidebar to choose a preset (e.g., Project Files, Invoices / Receipts, Media Library, UTM Campaigns) or click the **Plus (+)** button to create a custom template.
+Use the **Template Picker** sidebar to choose a preset or click the **Plus (+)** button to create a custom template.
 - Add fields: **Text**, **Dropdown**, **Date**, **Index** (automatic padding), or **Extension**.
 - Customize configurations like characters length restrictions, whitespace blocking, date formats (including custom templates), and case styling (e.g. `lowercase`, `snake_case`, `camelCase`).
 - Use the grab handle icon or the up/down arrows to reorder segments.
 
 ### 2. Enter Parameters & Preview
-As you add fields, form inputs appear dynamically in the main viewport. Filling out fields updates the **Output Preview** in real-time. Click **Show Structure** to see which visual segment maps to which template variable.
+As you add fields, form inputs appear dynamically in the main viewport. Filling out these fields and see real-time updates to the **Output Preview**. Click **Show Structure** to see which visual segment maps to which template variable.
 
 ### 3. Load & Process Files
 - Drag files into the dropzone or click **Browse Files**.
 - **List View**: Displays original files side-by-side with their target renamed output.
 - **Bulk Edit Grid**: Displays an interactive table where you can override individual parameters per file (e.g. setting a unique sequence or project code for row 3).
-- Click **Rename & Download** to trigger sequential downloads or save them packaged inside a single `.zip` file (if multiple).
+- Click **Rename & Download** to start the renaming process and download the files.
 
 ### 4. Import/Export Templates
-- Export a template to a `.json` configuration file, or share it using the **Share Link** button to copy a URL with the template configuration base64-encoded directly into the hash.
+- Export a template to a `.json` configuration file, or share it using the **Share Link** button to copy a link with the template configuration encoded directly into the URL.
 
----
+## User Guide Help Center
 
-## Local Development
+For more information about using FileNamer, visit the [User Guide](https://filenamer.ryanmarch.me/docs/).
 
-### Prerequisites
-You need [Node.js](https://nodejs.org/) installed to run tests and construct builds.
-
-### Dev Server
-To start the local development server (uses Cloudflare Wrangler Pages dev):
-```bash
-npm install
-npm run dev
-```
-
-### Build & Package
-Build and bundle assets into the `dist/` directory using esbuild:
-```bash
-npm run build
-```
-
-### Running Tests
-The project uses Vitest for unit testing data sanitization, security validation, and template conversions:
-```bash
-npm run test
-```
-
----
-
-## Project Architecture
+<!-- ## Project Architecture
 
 The application is built using vanilla Web APIs (HTML5/CSS3/ES6 Modules) to maximize performance, keep dependencies low, and ensure longevity.
 
@@ -87,4 +79,4 @@ The application is built using vanilla Web APIs (HTML5/CSS3/ES6 Modules) to maxi
 │   └── security.test.js        # XSS protection and base64 parsing validations
 ├── sw.js               # Service Worker caching for PWA offline execution
 └── package.json        # Project scripts, esbuild dependencies, and vitest setup
-```
+``` -->

@@ -426,7 +426,8 @@ export class TemplateBuilder {
         if (shareTplBtn) {
             shareTplBtn.addEventListener('click', () => {
                 const hash = this.store.serializeTemplate(activeTpl);
-                const shareUrl = `${window.location.origin}${window.location.pathname}#template=${hash}`;
+                // Always link directly to /app/ — the root redirects and strips hash fragments
+                const shareUrl = `${window.location.origin}/app/#t:${hash}`;
 
                 navigator.clipboard.writeText(shareUrl).then(() => {
                     alert('Shareable template link copied to clipboard!');
