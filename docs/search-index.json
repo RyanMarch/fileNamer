@@ -12,7 +12,6 @@
       "4. Queue Files &amp; Batch Rename"
     ],
     "excerpt": "Step-by-step tutorial guiding new users through preset templates, field customization, live previews, and batch file renaming in FileNamer.",
-    "homeFeature": false,
     "lastUpdated": "2026-07-09"
   },
   {
@@ -28,7 +27,6 @@
       "Chrome &amp; Edge"
     ],
     "excerpt": "Learn how to install FileNamer as a Progressive Web App (PWA) on macOS, iOS, Android, and Windows for fully offline file renaming.",
-    "homeFeature": false,
     "lastUpdated": "2026-07-09"
   },
   {
@@ -51,7 +49,6 @@
       "Bulk Editing & CSV Data"
     ],
     "excerpt": "Learn how to use FileNamer to design custom file naming templates, fill parameters dynamically, and batch-rename local files entirely in your browser.",
-    "homeFeature": false,
     "lastUpdated": "2026-07-09"
   },
   {
@@ -65,7 +62,6 @@
       "Best Practices for Customizing"
     ],
     "excerpt": "Organize your research literature, essays, and PDF libraries. Learn how to standardize academic paper filenames using FileNamer.",
-    "homeFeature": false,
     "lastUpdated": "2026-07-09"
   },
   {
@@ -79,7 +75,6 @@
       "Best Practices for Customizing"
     ],
     "excerpt": "Streamline your accounting and bookkeeping files. Learn how to standardize invoice and receipt filenames with FileNamer.",
-    "homeFeature": false,
     "lastUpdated": "2026-07-09"
   },
   {
@@ -93,7 +88,6 @@
       "Best Practices for Customizing"
     ],
     "excerpt": "Standardize your movie and TV show libraries for Plex, Radarr, and Sonarr. Learn how to format media filenames with FileNamer.",
-    "homeFeature": false,
     "lastUpdated": "2026-07-09"
   },
   {
@@ -107,7 +101,6 @@
       "Best Practices for Customizing"
     ],
     "excerpt": "Learn how to structure and standardize your project files using FileNamer. Keep your team organized with consistent naming conventions.",
-    "homeFeature": false,
     "lastUpdated": "2026-07-09"
   },
   {
@@ -123,7 +116,6 @@
       "Share Templates"
     ],
     "excerpt": "Learn how to save custom naming schemas, import or export JSON templates, and share presets with your team.",
-    "homeFeature": false,
     "lastUpdated": "2026-07-09"
   },
   {
@@ -141,7 +133,6 @@
       "4. Creating a Link-Asset Registry (Master Sheet)"
     ],
     "excerpt": "Learn how to use UTM/URL campaign templates with FileNamer, configure query parameters, and utilize the uploader feature to generate and track links.",
-    "homeFeature": false,
     "lastUpdated": "2026-07-09"
   }
 ]

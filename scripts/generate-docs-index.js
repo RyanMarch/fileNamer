@@ -41,11 +41,6 @@ function generateIndex() {
                                html.match(/<meta\s+content="([^"]+)"\s+name="category"/i);
         const category = categoryMatch ? categoryMatch[1] : 'Guides';
 
-        // Extract Home Feature
-        const homeFeatureMatch = html.match(/<meta\s+name="home-feature"\s+content="([^"]+)"/i) ||
-                                 html.match(/<meta\s+content="([^"]+)"\s+name="home-feature"/i);
-        const homeFeature = homeFeatureMatch ? homeFeatureMatch[1].toLowerCase() === 'true' : false;
-
         // Extract Doc ID (fallback to folder name)
         const idMatch = html.match(/<meta\s+name="doc-id"\s+content="([^"]+)"/i) ||
                         html.match(/<meta\s+content="([^"]+)"\s+name="doc-id"/i);
@@ -74,7 +69,6 @@ function generateIndex() {
             category,
             headings: ['Overview', ...finalHeadings],
             excerpt,
-            homeFeature,
             lastUpdated: new Date().toISOString().split('T')[0]
         });
     }

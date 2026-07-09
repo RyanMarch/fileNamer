@@ -901,7 +901,7 @@ class DocsGrid extends HTMLElement {
             if (!response.ok) throw new Error('Failed to load search-index.json');
             let items = await response.json();
             
-            // Filter by specific IDs or homeFeature if attributes are present
+            // Filter by specific IDs if attribute is present
             const idsAttr = this.getAttribute('ids');
             if (idsAttr) {
                 const allowedIds = idsAttr.split(',').map(id => id.trim().toLowerCase());
@@ -909,8 +909,6 @@ class DocsGrid extends HTMLElement {
                     const docId = item.id || item.path.split('/')[0];
                     return allowedIds.includes(docId.toLowerCase());
                 });
-            } else if (this.hasAttribute('featured')) {
-                items = items.filter(item => item.homeFeature === true);
             }
             
             this.innerHTML = `

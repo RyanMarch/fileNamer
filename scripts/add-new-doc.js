@@ -46,8 +46,6 @@ async function main() {
 
     const category = (await askQuestion('Category (Basics / General / [Guides]): ')).trim() || 'Guides';
     const description = (await askQuestion('Description / Meta Description: ')).trim() || 'No description provided.';
-    const homeFeatureInput = (await askQuestion('Show on Home Page? (y/N): ')).trim().toLowerCase();
-    const homeFeature = homeFeatureInput === 'y' || homeFeatureInput === 'yes';
 
     // HTML template content
     const htmlContent = `<!DOCTYPE html>
@@ -88,11 +86,10 @@ async function main() {
     <!-- Global Style -->
     <link rel="stylesheet" href="../../css/style.css">
 
-    <title>${title} — FileNamer Docs</title>
-    <meta name="description" content="${description.replace(/"/g, '&quot;')}">
-    <meta name="category" content="${category}">
-    <meta name="home-feature" content="${homeFeature}">
-    <meta name="doc-id" content="${folderSlug}">
+    <title>\${title} — FileNamer Docs</title>
+    <meta name="description" content="\${description.replace(/"/g, '&quot;')}">
+    <meta name="category" content="\${category}">
+    <meta name="doc-id" content="\${folderSlug}">
     <link rel="canonical" href="https://filenamer.ryanmarch.me/docs/${folderSlug}/">
 
     <!-- Docs Style Sheet -->
