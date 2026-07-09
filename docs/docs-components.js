@@ -2,6 +2,74 @@
  * Custom Native Web Components for reusable helpdocs layout
  */
 
+// Helper to extract word stem for robust search matching
+function stemWord(word) {
+    let stemmed = word.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (stemmed.endsWith('ing')) stemmed = stemmed.slice(0, -3);
+    else if (stemmed.endsWith('ed')) stemmed = stemmed.slice(0, -2);
+    else if (stemmed.endsWith('es')) stemmed = stemmed.slice(0, -2);
+    else if (stemmed.endsWith('s') && !stemmed.endsWith('ss')) stemmed = stemmed.slice(0, -1);
+    
+    if (stemmed.endsWith('e')) stemmed = stemmed.slice(0, -1);
+    return stemmed;
+}
+
+// Check if target text matches the query using word stems
+function stemMatch(targetText, queryText) {
+    const queryStems = queryText.split(/\s+/).map(stemWord).filter(Boolean);
+    const targetWords = targetText.split(/\s+/).map(w => w.toLowerCase().replace(/[^a-z0-9]/g, '')).filter(Boolean);
+
+    if (queryStems.length === 0) return false;
+
+    // Return true if every query word stem matches at least one word in the target text
+    return queryStems.every(qStem => {
+        return targetWords.some(tWord => {
+            const tStem = stemWord(tWord);
+            return tWord.startsWith(qStem) || tStem.startsWith(qStem) || qStem.startsWith(tStem);
+        });
+    });
+}
+
+// Central category mapping for helpdocs pages
+const CATEGORY_MAP = {
+    'getting-started': 'Basics',
+    'offline-pwa': 'Basics',
+    'app-features': 'General',
+    'project-files': 'Guides',
+    'academic-papers': 'Guides',
+    'invoices-receipts': 'Guides',
+    'utm-builder': 'Guides',
+    'media-library': 'Guides',
+    'template-management': 'Guides'
+};
+
+// Resolve category based on document folder path
+function getCategoryFromPath(path) {
+    if (!path) return 'Guides';
+    const cleanPath = path.replace(/^\/|\/$/g, '').replace('index.html', '');
+    const parts = cleanPath.split('/');
+    const dir = parts[parts.length - 1] || parts[0];
+    return CATEGORY_MAP[dir] || 'Guides';
+}
+
+// Automatically update category labels on cards on load
+function updateCardCategories() {
+    document.querySelectorAll('.docs-card').forEach(card => {
+        const href = card.getAttribute('href');
+        if (href) {
+            const categoryEl = card.querySelector('.docs-card-category');
+            if (categoryEl) {
+                categoryEl.textContent = getCategoryFromPath(href);
+            }
+        }
+    });
+}
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateCardCategories);
+} else {
+    updateCardCategories();
+}
+
 class DocsHeader extends HTMLElement {
     constructor() {
         super();
@@ -186,7 +254,8 @@ class DocsHeader extends HTMLElement {
             const results = this.index
                 .map(item => {
                     const titleLower = item.title.toLowerCase();
-                    const categoryLower = item.category.toLowerCase();
+                    const category = getCategoryFromPath(item.path);
+                    const categoryLower = category.toLowerCase();
 
                     let score = 0;
                     if (titleLower === query) {
@@ -195,6 +264,8 @@ class DocsHeader extends HTMLElement {
                         score += 80;
                     } else if (titleLower.includes(query)) {
                         score += 50;
+                    } else if (stemMatch(item.title, query)) {
+                        score += 35;
                     }
 
                     if (categoryLower.includes(query)) {
@@ -202,9 +273,13 @@ class DocsHeader extends HTMLElement {
                     }
                     if (item.headings.some(h => h.toLowerCase().includes(query))) {
                         score += 10;
+                    } else if (item.headings.some(h => stemMatch(h, query))) {
+                        score += 6;
                     }
                     if (item.excerpt.toLowerCase().includes(query)) {
                         score += 5;
+                    } else if (item.excerpt.toLowerCase().includes(query) || stemMatch(item.excerpt, query)) {
+                        score += 3;
                     }
                     return { item, score };
                 })
@@ -229,7 +304,7 @@ class DocsHeader extends HTMLElement {
                     return `
                         <a href="${basePath}${item.path}" class="search-result-item" data-index="${idx}">
                             <div class="result-title">${item.title}</div>
-                            <div class="result-category">${item.category}</div>
+                            <div class="result-category">${getCategoryFromPath(item.path)}</div>
                             <div class="result-excerpt">${item.excerpt}</div>
                             ${headingSnippet}
                         </a>
@@ -418,27 +493,10 @@ class DocsSidebar extends HTMLElement {
     highlightActiveLink() {
         const currentHash = window.location.hash;
 
-        const categoryMap = {
-            'getting-started': 'Basics',
-            'offline-pwa': 'Basics',
-            'app-features': 'General',
-            'project-files': 'Guides',
-            'academic-papers': 'Guides',
-            'invoices-receipts': 'Guides',
-            'utm-builder': 'Guides',
-            'media-library': 'Guides',
-            'template-management': 'Guides'
-        };
-
         // Insert category badge above the h1 in the content area
         const h1 = document.querySelector('.page-content h1');
         if (h1 && !document.querySelector('.doc-page-category')) {
-            const pathParts = window.location.pathname.split('/');
-            let dir = pathParts[pathParts.length - 2];
-            if (pathParts[pathParts.length - 1] && pathParts[pathParts.length - 1] !== 'index.html') {
-                dir = pathParts[pathParts.length - 1].replace('.html', '');
-            }
-            const category = categoryMap[dir] || 'Guides';
+            const category = getCategoryFromPath(window.location.pathname);
 
             const basePath = this.isSubpage() ? '../' : '';
             const categoryEl = document.createElement('a');
@@ -747,7 +805,8 @@ class DocsSearch extends HTMLElement {
             const results = this.index
                 .map(item => {
                     const titleLower = item.title.toLowerCase();
-                    const categoryLower = item.category.toLowerCase();
+                    const category = getCategoryFromPath(item.path);
+                    const categoryLower = category.toLowerCase();
 
                     let score = 0;
                     if (titleLower === query) {
@@ -756,6 +815,8 @@ class DocsSearch extends HTMLElement {
                         score += 80;
                     } else if (titleLower.includes(query)) {
                         score += 50;
+                    } else if (stemMatch(item.title, query)) {
+                        score += 35;
                     }
 
                     if (categoryLower.includes(query)) {
@@ -763,9 +824,13 @@ class DocsSearch extends HTMLElement {
                     }
                     if (item.headings.some(h => h.toLowerCase().includes(query))) {
                         score += 10;
+                    } else if (item.headings.some(h => stemMatch(h, query))) {
+                        score += 6;
                     }
                     if (item.excerpt.toLowerCase().includes(query)) {
                         score += 5;
+                    } else if (item.excerpt.toLowerCase().includes(query) || stemMatch(item.excerpt, query)) {
+                        score += 3;
                     }
                     return { item, score };
                 })
@@ -790,7 +855,7 @@ class DocsSearch extends HTMLElement {
                     return `
                         <a href="${basePath}${item.path}" class="search-result-item" data-index="${idx}">
                             <div class="result-title">${item.title}</div>
-                            <div class="result-category">${item.category}</div>
+                            <div class="result-category">${getCategoryFromPath(item.path)}</div>
                             <div class="result-excerpt">${item.excerpt}</div>
                             ${headingSnippet}
                         </a>
