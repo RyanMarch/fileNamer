@@ -4,8 +4,8 @@
 
 export const DEFAULT_TEMPLATES = [
     {
-        id: 'tpl-media',
-        name: 'Media Asset Naming',
+        id: 'tpl-project-files',
+        name: 'Project Files',
         separator: '_',
         case: 'none',
         fields: [
@@ -46,10 +46,28 @@ export const DEFAULT_TEMPLATES = [
         separator: '_',
         case: 'lower',
         fields: [
+            { id: 'f-utm-url', type: 'text', label: 'Destination URL', placeholder: 'https://example.com' },
             { id: 'f-utm-source', type: 'select', label: 'Campaign Source (utm_source)', options: ['google', 'newsletter', 'facebook', 'linkedin', 'partner'] },
             { id: 'f-utm-medium', type: 'select', label: 'Campaign Medium (utm_medium)', options: ['cpc', 'email', 'social', 'affiliate', 'referral'] },
             { id: 'f-utm-campaign', type: 'text', label: 'Campaign Name (utm_campaign)', placeholder: 'spring-launch' },
             { id: 'f-utm-content', type: 'text', label: 'Campaign Content (utm_content)', placeholder: 'button-blue', behavior: 'placeholder' }
+        ]
+    },
+    {
+        id: 'tpl-media-library',
+        name: 'Media Library (Plex/Radarr)',
+        separator: ' ',
+        case: 'none',
+        fields: [
+            { id: 'f-media-title', type: 'text', label: 'Movie Title', placeholder: 'Avatar' },
+            { id: 'f-media-year', type: 'text', label: 'Release Year', placeholder: '2009', minLength: 4, maxLength: 4, charType: 'numeric' },
+            { id: 'f-media-imdb', type: 'text', label: 'IMDb ID', placeholder: 'tt0499549', charType: 'alphanumeric' },
+            { id: 'f-media-resolution', type: 'select', label: 'Resolution', options: ['1080p', '2160p (4K)', '720p'] },
+            { id: 'f-media-source', type: 'select', label: 'Source', options: ['BluRay', 'WEB-DL', 'Remux', 'HDTV'] },
+            { id: 'f-media-codec', type: 'select', label: 'Video Codec', options: ['x264', 'x265', 'HEVC', 'AVC'] },
+            { id: 'f-media-audio', type: 'select', label: 'Audio Codec', options: ['DTS-HD', 'TrueHD', 'AAC', 'AC3', 'EAC3'] },
+            { id: 'f-media-group', type: 'text', label: 'Release Group', placeholder: 'RARBG' },
+            { id: 'f-ext', type: 'extension', label: 'Extension', extensionMode: 'keep', customExtension: '', includeExtInPreview: true }
         ]
     }
 ];
@@ -81,6 +99,10 @@ export class TemplateStore {
                     const extFieldIdx = existingUtmTpl.fields.findIndex(f => f.type === 'extension');
                     if (extFieldIdx !== -1) {
                         existingUtmTpl.fields.splice(extFieldIdx, 1);
+                        updated = true;
+                    }
+                    if (!existingUtmTpl.fields.some(f => f.id === 'f-utm-url')) {
+                        existingUtmTpl.fields.unshift({ id: 'f-utm-url', type: 'text', label: 'Destination URL', placeholder: 'https://example.com' });
                         updated = true;
                     }
                 }

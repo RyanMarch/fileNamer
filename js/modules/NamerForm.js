@@ -1,5 +1,5 @@
 /**
- * NamerForm - Dynamically renders parameter input fields and generates real-time filename previews.
+ * NamerForm - Dynamically renders parameter input fields and generates real-time previews.
  */
 
 import { escapeHtml } from './utils.js';
@@ -34,7 +34,7 @@ export class NamerForm {
                 
                 <div class="live-preview-box">
                     <div class="preview-header">
-                        <span class="preview-label">Filename Preview</span>
+                        <span class="preview-label">Output Preview</span>
                         <button id="advanced-toggle-btn" class="btn btn-secondary btn-small" type="button" style="margin-left: auto; margin-right: 1rem;" aria-pressed="false">
                             Show Structure
                         </button>
@@ -76,12 +76,12 @@ export class NamerForm {
         this.formElement.addEventListener('keydown', (e) => {
             // Block spaces/underscores and char-type restrictions on text fields
             if (e.target.dataset.fieldId) {
-                const noSpaces      = e.target.dataset.noSpaces === 'true';
+                const noSpaces = e.target.dataset.noSpaces === 'true';
                 const noUnderscores = e.target.dataset.noUnderscores === 'true';
-                const charType      = e.target.dataset.charType || 'any';
+                const charType = e.target.dataset.charType || 'any';
 
                 const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter',
-                                     'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'];
+                    'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'];
                 if (allowedKeys.includes(e.key) || e.ctrlKey || e.metaKey || e.altKey) {
                     // Allow navigation/control keys always
                 } else {
@@ -106,25 +106,25 @@ export class NamerForm {
 
         this.formElement.addEventListener('paste', (e) => {
             if (e.target.dataset.fieldId) {
-                const noSpaces      = e.target.dataset.noSpaces === 'true';
+                const noSpaces = e.target.dataset.noSpaces === 'true';
                 const noUnderscores = e.target.dataset.noUnderscores === 'true';
-                const charType      = e.target.dataset.charType || 'any';
-                const maxLen        = e.target.dataset.maxLength !== undefined ? parseInt(e.target.dataset.maxLength) : null;
+                const charType = e.target.dataset.charType || 'any';
+                const maxLen = e.target.dataset.maxLength !== undefined ? parseInt(e.target.dataset.maxLength) : null;
 
                 const pasteData = (e.clipboardData || window.clipboardData).getData('text');
                 let sanitized = pasteData;
 
-                if (charType === 'alpha')         sanitized = sanitized.replace(/[^a-zA-Z]/g, '');
-                else if (charType === 'numeric')   sanitized = sanitized.replace(/[^\d]/g, '');
+                if (charType === 'alpha') sanitized = sanitized.replace(/[^a-zA-Z]/g, '');
+                else if (charType === 'numeric') sanitized = sanitized.replace(/[^\d]/g, '');
                 else if (charType === 'alphanumeric') sanitized = sanitized.replace(/[^a-zA-Z0-9]/g, '');
-                if (noSpaces)      sanitized = sanitized.replace(/ /g, '');
+                if (noSpaces) sanitized = sanitized.replace(/ /g, '');
                 if (noUnderscores) sanitized = sanitized.replace(/_/g, '');
 
                 // Trim to maxLength accounting for existing value
                 if (maxLen !== null) {
                     const el = e.target;
                     const start = el.selectionStart;
-                    const end   = el.selectionEnd;
+                    const end = el.selectionEnd;
                     const currentVal = el.value;
                     const remaining = maxLen - (currentVal.length - (end - start));
                     sanitized = sanitized.slice(0, Math.max(0, remaining));
@@ -134,7 +134,7 @@ export class NamerForm {
                     e.preventDefault();
                     const el = e.target;
                     const start = el.selectionStart;
-                    const end   = el.selectionEnd;
+                    const end = el.selectionEnd;
                     el.value = el.value.slice(0, start) + sanitized + el.value.slice(end);
                     el.selectionStart = el.selectionEnd = start + sanitized.length;
                     el.dispatchEvent(new Event('input', { bubbles: true }));
@@ -201,11 +201,11 @@ export class NamerForm {
                     const btnText = this.copyBtn.querySelector('.btn-text');
                     const copyIcon = this.copyBtn.querySelector('.copy-icon');
                     const checkIcon = this.copyBtn.querySelector('.check-icon');
-                    
+
                     if (btnText) btnText.textContent = 'Copied!';
                     if (copyIcon) copyIcon.style.display = 'none';
                     if (checkIcon) checkIcon.style.display = 'inline-block';
-                    
+
                     setTimeout(() => {
                         if (btnText) btnText.textContent = 'Copy';
                         if (copyIcon) copyIcon.style.display = 'inline-block';
@@ -257,11 +257,11 @@ export class NamerForm {
             let inputHtml = '';
             switch (field.type) {
                 case 'text':
-                    const noSpacesAttr    = field.noSpaces      ? 'data-no-spaces="true"'      : '';
-                    const noUnderAttr     = field.noUnderscores  ? 'data-no-underscores="true"'  : '';
-                    const charTypeAttr    = field.charType && field.charType !== 'any' ? `data-char-type="${field.charType}"` : '';
-                    const minLenAttr      = field.minLength !== undefined && field.minLength !== '' ? `data-min-length="${field.minLength}"` : '';
-                    const maxLenAttr      = field.maxLength !== undefined && field.maxLength !== '' ? `data-max-length="${field.maxLength}" maxlength="${field.maxLength}"` : '';
+                    const noSpacesAttr = field.noSpaces ? 'data-no-spaces="true"' : '';
+                    const noUnderAttr = field.noUnderscores ? 'data-no-underscores="true"' : '';
+                    const charTypeAttr = field.charType && field.charType !== 'any' ? `data-char-type="${field.charType}"` : '';
+                    const minLenAttr = field.minLength !== undefined && field.minLength !== '' ? `data-min-length="${field.minLength}"` : '';
+                    const maxLenAttr = field.maxLength !== undefined && field.maxLength !== '' ? `data-max-length="${field.maxLength}" maxlength="${field.maxLength}"` : '';
                     inputHtml = `
                         <input type="text" 
                                id="input-${field.id}" 
@@ -332,13 +332,13 @@ export class NamerForm {
             if (field.description && field.description.trim()) {
                 descHtml = `
                     <details class="namer-field-desc-details">
-                        <summary style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer; user-select: none; list-style: none; display: flex; align-items: center; gap: 0.25rem; margin-top: 0.25rem; width: fit-content;">
-                            <svg class="restrictions-chevron" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.18s;"><path d="m6 9 6 6 6-6"/></svg>
+                        <summary class="namer-field-desc-summary">
+                            <svg class="restrictions-chevron" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                             Description
                         </summary>
-                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; margin-bottom: 0; font-style: italic; line-height: 1.3;">
+                        <div class="namer-field-desc-content">
                             ${escapeHtml(field.description)}
-                        </p>
+                        </div>
                     </details>
                 `;
             }
@@ -346,8 +346,10 @@ export class NamerForm {
             fieldsHtml += `
                 <div class="form-group namer-field-group">
                     <label for="${labelFor}">${escapeHtml(field.label)}</label>
-                    ${inputHtml}
-                    ${descHtml}
+                    <div class="field-control-wrapper">
+                        ${inputHtml}
+                        ${descHtml}
+                    </div>
                 </div>
             `;
         });
@@ -375,14 +377,85 @@ export class NamerForm {
         return this.startIndexVal;
     }
 
+    getQueryParamKey(field) {
+        // e.g. "Campaign Source (utm_source)" -> "utm_source"
+        const match = field.label.match(/\(([^)]+)\)/);
+        if (match) {
+            return match[1].trim();
+        }
+        // Fallback: sanitize label
+        return field.label.toLowerCase().replace(/[^a-z0-9_]/g, '_').replace(/_+/g, '_').replace(/^_+|_+$/g, '');
+    }
+
     generateFilename(indexOffset = 0, csvRow = null, showStructure = false) {
         const activeTpl = this.store.getActiveTemplate();
         if (!activeTpl) return '';
 
+        const isUtm = activeTpl.id === 'tpl-utm' || (activeTpl.name && (activeTpl.name.toUpperCase().includes('UTM') || activeTpl.name.toUpperCase().includes('URL')));
         const separator = activeTpl.separator;
         const caseStyle = activeTpl.case;
-        const segments = [];
 
+        if (isUtm) {
+            // Find URL field
+            const urlField = activeTpl.fields.find(f => f.id === 'f-utm-url' || f.label.toLowerCase().includes('url'));
+            let baseUrl = '';
+            if (showStructure) {
+                baseUrl = urlField ? (urlField.label || 'URL') : 'URL';
+            } else if (urlField) {
+                baseUrl = (csvRow && csvRow[urlField.id]) ? csvRow[urlField.id] : (this.valuesCache[urlField.id] || '');
+                if (!baseUrl) {
+                    baseUrl = urlField.placeholder || 'https://example.com';
+                }
+            } else {
+                baseUrl = 'https://example.com';
+            }
+
+            // Ensure baseUrl has protocol if it doesn't look like it has one
+            if (!showStructure && baseUrl && !/^https?:\/\//i.test(baseUrl)) {
+                baseUrl = 'https://' + baseUrl;
+            }
+
+            const queryParams = [];
+            activeTpl.fields.forEach(field => {
+                if (field.type === 'extension') return;
+                if (field === urlField) return; // skip URL field
+
+                let val = '';
+                if (showStructure) {
+                    val = field.label || '';
+                } else if (field.type === 'index') {
+                    const countVal = this.startIndexVal + indexOffset;
+                    const padDigits = parseInt(field.digits);
+                    val = isNaN(padDigits) || padDigits <= 1 ? String(countVal) : String(countVal).padStart(padDigits, '0');
+                } else if (field.type === 'date') {
+                    const rawDate = (csvRow && csvRow[field.id]) ? csvRow[field.id] : this.valuesCache[field.id];
+                    val = this.formatDateString(rawDate, field.format, field.customFormat);
+                } else {
+                    val = (csvRow && csvRow[field.id]) ? csvRow[field.id] : (this.valuesCache[field.id] || '');
+                    val = this.applyCaseStyle(val, caseStyle);
+                    if (separator) {
+                        val = val.replace(/\s+/g, separator);
+                    }
+                }
+
+                if (val !== '' || showStructure) {
+                    const key = this.getQueryParamKey(field);
+                    if (showStructure) {
+                        queryParams.push(`${key}=[${val}]`);
+                    } else {
+                        queryParams.push(`${encodeURIComponent(key)}=${encodeURIComponent(val)}`);
+                    }
+                }
+            });
+
+            if (queryParams.length > 0) {
+                const joinChar = baseUrl.includes('?') ? '&' : '?';
+                return `${baseUrl}${joinChar}${queryParams.join('&')}`;
+            }
+            return baseUrl;
+        }
+
+        const segments = [];
         activeTpl.fields.forEach(field => {
             if (field.type === 'extension') {
                 return; // Skip extension field from base name segments
@@ -395,10 +468,10 @@ export class NamerForm {
                 const padDigits = parseInt(field.digits);
                 val = isNaN(padDigits) || padDigits <= 1 ? String(countVal) : String(countVal).padStart(padDigits, '0');
             } else if (field.type === 'date') {
-                const rawDate = (csvRow && csvRow[field.id] !== undefined) ? csvRow[field.id] : this.valuesCache[field.id];
+                const rawDate = (csvRow && csvRow[field.id]) ? csvRow[field.id] : this.valuesCache[field.id];
                 val = this.formatDateString(rawDate, field.format, field.customFormat);
             } else {
-                val = (csvRow && csvRow[field.id] !== undefined) ? csvRow[field.id] : (this.valuesCache[field.id] || '');
+                val = (csvRow && csvRow[field.id]) ? csvRow[field.id] : (this.valuesCache[field.id] || '');
                 val = this.applyCaseStyle(val, caseStyle);
                 if (separator) {
                     val = val.replace(/\s+/g, separator);
@@ -428,21 +501,21 @@ export class NamerForm {
             this.previewElement.innerHTML = '<span class="preview-placeholder">[Fill in parameters]</span>';
         } else {
             const extField = activeTpl.fields.find(f => f.type === 'extension');
-            let previewExt = '.ext';
-            if (extField && extField.includeExtInPreview !== false) {
-                const extMode = extField.extensionMode || 'keep';
-                if (extMode === 'lowercase') {
-                    previewExt = '.ext';
-                } else if (extMode === 'uppercase') {
-                    previewExt = '.EXT';
-                } else if (extMode === 'custom') {
-                    const custom = (extField.customExtension || '').trim();
-                    previewExt = custom ? (custom.startsWith('.') ? custom : `.${custom}`) : '';
-                } else if (extMode === 'none') {
-                    previewExt = '';
+            let previewExt = '';
+            if (extField) {
+                if (extField.includeExtInPreview !== false) {
+                    const extMode = extField.extensionMode || 'keep';
+                    if (extMode === 'lowercase' || extMode === 'keep') {
+                        previewExt = '.ext';
+                    } else if (extMode === 'uppercase') {
+                        previewExt = '.EXT';
+                    } else if (extMode === 'custom') {
+                        const custom = (extField.customExtension || '').trim();
+                        previewExt = custom ? (custom.startsWith('.') ? custom : `.${custom}`) : '';
+                    } else if (extMode === 'none') {
+                        previewExt = '';
+                    }
                 }
-            } else if (extField && extField.includeExtInPreview === false) {
-                previewExt = '';
             }
             this.previewElement.textContent = `${baseName}${previewExt}`;
         }
@@ -452,19 +525,49 @@ export class NamerForm {
                 this.advancedInfoContainer.style.display = 'flex';
             }
             const separator = activeTpl.separator || '';
-            const caseStyle = activeTpl.case;
+            const isUtm = activeTpl.id === 'tpl-utm' || (activeTpl.name && (activeTpl.name.toUpperCase().includes('UTM') || activeTpl.name.toUpperCase().includes('URL')));
 
-            // Structure Chips
-            const structSpans = [];
-            activeTpl.fields.forEach(field => {
-                const label = escapeHtml(field.label || field.type);
-                const typeClass = field.type === 'select' ? 'badge-select' : `badge-${field.type}`;
-                structSpans.push(`<span class="preview-field-chip ${typeClass}" title="${escapeHtml(field.type)}">${label}</span>`);
-            });
-            if (this.structureChipsContainer) {
-                this.structureChipsContainer.innerHTML = structSpans.join(
-                    separator ? `<span class="preview-separator">${escapeHtml(separator)}</span>` : ''
-                );
+            if (isUtm) {
+                const urlField = activeTpl.fields.find(f => f.id === 'f-utm-url' || f.label.toLowerCase().includes('url'));
+                const chipSpans = [];
+                activeTpl.fields.forEach(field => {
+                    const label = escapeHtml(field.label || field.type);
+                    const typeClass = field.type === 'select' ? 'badge-select' : `badge-${field.type}`;
+                    const chip = `<span class="preview-field-chip ${typeClass}" title="${escapeHtml(field.type)}">${label}</span>`;
+
+                    if (field === urlField) {
+                        chipSpans.push(chip);
+                    } else {
+                        const key = this.getQueryParamKey(field);
+                        chipSpans.push(`<span class="preview-separator">${escapeHtml(key)}=</span>${chip}`);
+                    }
+                });
+
+                let html = '';
+                if (urlField) {
+                    const urlIdx = activeTpl.fields.indexOf(urlField);
+                    const urlChip = chipSpans[urlIdx];
+                    const otherChips = chipSpans.filter((_, idx) => idx !== urlIdx);
+                    html = urlChip + (otherChips.length > 0 ? `<span class="preview-separator">?</span>` + otherChips.join(`<span class="preview-separator">&</span>`) : '');
+                } else {
+                    html = chipSpans.join(`<span class="preview-separator">&</span>`);
+                }
+                if (this.structureChipsContainer) {
+                    this.structureChipsContainer.innerHTML = html;
+                }
+            } else {
+                // Structure Chips
+                const structSpans = [];
+                activeTpl.fields.forEach(field => {
+                    const label = escapeHtml(field.label || field.type);
+                    const typeClass = field.type === 'select' ? 'badge-select' : `badge-${field.type}`;
+                    structSpans.push(`<span class="preview-field-chip ${typeClass}" title="${escapeHtml(field.type)}">${label}</span>`);
+                });
+                if (this.structureChipsContainer) {
+                    this.structureChipsContainer.innerHTML = structSpans.join(
+                        separator ? `<span class="preview-separator">${escapeHtml(separator)}</span>` : ''
+                    );
+                }
             }
 
         } else {

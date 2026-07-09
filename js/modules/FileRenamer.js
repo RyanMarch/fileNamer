@@ -10,6 +10,7 @@ export class FileRenamer {
         this.namerForm = namerForm;
         this.files = [];
         this.csvData = [];
+        this.viewMode = 'list'; // 'list' or 'grid'
 
         this.init();
     }
@@ -35,7 +36,15 @@ export class FileRenamer {
                 </div>
 
                 <div id="files-list-container" class="files-list-container" style="display: none;">
-                    <div class="files-list-header">
+                    <div class="renamer-view-toggle">
+                        <span class="renamer-view-title">Files Queue</span>
+                        <div class="toggle-buttons">
+                            <button id="view-mode-list-btn" class="btn btn-toggle active" type="button">List View</button>
+                            <button id="view-mode-grid-btn" class="btn btn-toggle" type="button">Bulk Edit Grid</button>
+                        </div>
+                    </div>
+
+                    <div id="files-list-header" class="files-list-header">
                         <span>Original Name</span>
                         <span></span>
                         <span>Renamed Output</span>
@@ -57,6 +66,7 @@ export class FileRenamer {
                             </button>
                         </div>
                         <div class="file-actions-group">
+                            <button id="reset-overrides-btn" class="btn btn-secondary" type="button" style="display: none;">Reset Overrides</button>
                             <button id="clear-files-btn" class="btn btn-secondary" type="button">Clear All</button>
                             <button id="rename-execute-btn" class="btn btn-primary" type="button">
                                 Rename & Download
@@ -71,13 +81,17 @@ export class FileRenamer {
         this.dropzone = this.container.querySelector('#dropzone');
         this.fileInput = this.container.querySelector('#file-input');
         this.filesListContainer = this.container.querySelector('#files-list-container');
+        this.filesListHeader = this.container.querySelector('#files-list-header');
         this.filesList = this.container.querySelector('#files-list');
         this.clearBtn = this.container.querySelector('#clear-files-btn');
+        this.resetOverridesBtn = this.container.querySelector('#reset-overrides-btn');
         this.executeBtn = this.container.querySelector('#rename-execute-btn');
         this.csvInput = this.container.querySelector('#csv-input');
         this.importCsvBtn = this.container.querySelector('#import-csv-btn');
         this.exportCsvBtn = this.container.querySelector('#export-csv-btn');
         this.getCsvTplBtn = this.container.querySelector('#get-csv-tpl-btn');
+        this.listToggleBtn = this.container.querySelector('#view-mode-list-btn');
+        this.gridToggleBtn = this.container.querySelector('#view-mode-grid-btn');
     }
 
     setupEvents() {
@@ -111,10 +125,51 @@ export class FileRenamer {
             }
         });
 
+        // Toggle Views
+        this.listToggleBtn.addEventListener('click', () => {
+            this.viewMode = 'list';
+            this.listToggleBtn.classList.add('active');
+            this.gridToggleBtn.classList.remove('active');
+            this.updateFilesList();
+
+            // Auto exit fullwidth when returning to list view
+            const workspaceGrid = document.querySelector('.workspace-grid');
+            if (workspaceGrid && workspaceGrid.classList.contains('fullwidth-mode')) {
+                workspaceGrid.classList.remove('fullwidth-mode');
+                const fullwidthBtn = document.getElementById('toggle-fullwidth-btn');
+                if (fullwidthBtn) {
+                    fullwidthBtn.textContent = 'Go Fullwidth';
+                }
+            }
+        });
+
+        this.gridToggleBtn.addEventListener('click', () => {
+            this.viewMode = 'grid';
+            this.gridToggleBtn.classList.add('active');
+            this.listToggleBtn.classList.remove('active');
+            this.updateFilesList();
+
+            // Auto transition to fullwidth when entering grid view
+            const workspaceGrid = document.querySelector('.workspace-grid');
+            if (workspaceGrid && !workspaceGrid.classList.contains('fullwidth-mode')) {
+                workspaceGrid.classList.add('fullwidth-mode');
+                const fullwidthBtn = document.getElementById('toggle-fullwidth-btn');
+                if (fullwidthBtn) {
+                    fullwidthBtn.textContent = 'Exit Fullwidth';
+                }
+            }
+        });
+
         // Clear files list
         this.clearBtn.addEventListener('click', () => {
             this.files = [];
             this.csvData = [];
+            this.updateFilesList();
+        });
+
+        // Reset Overrides
+        this.resetOverridesBtn.addEventListener('click', () => {
+            this.csvData = this.files.map(() => ({}));
             this.updateFilesList();
         });
 
@@ -139,7 +194,69 @@ export class FileRenamer {
         this.exportCsvBtn.addEventListener('click', () => {
             this.handleCSVExport();
         });
+
+        // Keydown validation for table inputs
+        this.container.addEventListener('keydown', (e) => {
+            if (e.target.classList.contains('table-input') && e.target.dataset.fieldId) {
+                const noSpaces      = e.target.dataset.noSpaces === 'true';
+                const noUnderscores = e.target.dataset.noUnderscores === 'true';
+                const charType      = e.target.dataset.charType || 'any';
+
+                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter',
+                                     'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'];
+                if (allowedKeys.includes(e.key) || e.ctrlKey || e.metaKey || e.altKey) {
+                    // Allow navigation/control keys always
+                } else {
+                    if (noSpaces && e.key === ' ') { e.preventDefault(); return; }
+                    if (noUnderscores && e.key === '_') { e.preventDefault(); return; }
+                    if (charType === 'alpha' && !/^[a-zA-Z]$/.test(e.key)) { e.preventDefault(); return; }
+                    if (charType === 'numeric' && !/^\d$/.test(e.key)) { e.preventDefault(); return; }
+                    if (charType === 'alphanumeric' && !/^[a-zA-Z0-9]$/.test(e.key)) { e.preventDefault(); return; }
+                }
+            }
+        });
+
+        // Paste validation for table inputs
+        this.container.addEventListener('paste', (e) => {
+            if (e.target.classList.contains('table-input') && e.target.dataset.fieldId) {
+                const noSpaces      = e.target.dataset.noSpaces === 'true';
+                const noUnderscores = e.target.dataset.noUnderscores === 'true';
+                const charType      = e.target.dataset.charType || 'any';
+                const maxLen        = e.target.dataset.maxLength !== undefined ? parseInt(e.target.dataset.maxLength) : null;
+
+                const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+                let sanitized = pasteData;
+
+                if (charType === 'alpha')         sanitized = sanitized.replace(/[^a-zA-Z]/g, '');
+                else if (charType === 'numeric')   sanitized = sanitized.replace(/[^\d]/g, '');
+                else if (charType === 'alphanumeric') sanitized = sanitized.replace(/[^a-zA-Z0-9]/g, '');
+                if (noSpaces)      sanitized = sanitized.replace(/ /g, '');
+                if (noUnderscores) sanitized = sanitized.replace(/_/g, '');
+
+                // Trim to maxLength accounting for existing value
+                if (maxLen !== null) {
+                    const el = e.target;
+                    const start = el.selectionStart;
+                    const end   = el.selectionEnd;
+                    const currentVal = el.value;
+                    const remaining = maxLen - (currentVal.length - (end - start));
+                    sanitized = sanitized.slice(0, Math.max(0, remaining));
+                }
+
+                if (sanitized !== pasteData || (maxLen !== null && sanitized.length < pasteData.length)) {
+                    e.preventDefault();
+                    const el = e.target;
+                    const start = el.selectionStart;
+                    const end   = el.selectionEnd;
+                    el.value = el.value.slice(0, start) + sanitized + el.value.slice(end);
+                    el.selectionStart = el.selectionEnd = start + sanitized.length;
+                    el.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            }
+        });
     }
+
+
 
     handleCSVTemplateDownload() {
         const activeTpl = this.namerForm.store.getActiveTemplate();
@@ -154,20 +271,34 @@ export class FileRenamer {
             return;
         }
 
-        const headers = fieldsToMap.map(field => field.label || field.id);
-        
-        const sampleRow = fieldsToMap.map(field => {
-            if (field.type === 'text') return 'Sample Text';
-            if (field.type === 'dropdown') {
-                const options = field.options || [];
-                return options[0] || 'Option 1';
-            }
-            if (field.type === 'date') return '2026-07-08';
-            if (field.type === 'index') return '1';
-            return 'Sample Value';
-        });
+        let headers = [];
+        let rows = [];
 
-        const csvContent = this.convertToCSV(headers, [sampleRow]);
+        if (this.files.length > 0) {
+            headers = ['Original Filename', ...fieldsToMap.map(field => field.label || field.id)];
+            rows = this.files.map((file, idx) => {
+                const row = [file.name];
+                fieldsToMap.forEach(field => {
+                    row.push(this.csvData[idx] && this.csvData[idx][field.id] !== undefined ? this.csvData[idx][field.id] : '');
+                });
+                return row;
+            });
+        } else {
+            headers = fieldsToMap.map(field => field.label || field.id);
+            const sampleRow = fieldsToMap.map(field => {
+                if (field.type === 'text') return 'Sample Text';
+                if (field.type === 'dropdown' || field.type === 'select') {
+                    const options = field.options || [];
+                    return options[0] || 'Option 1';
+                }
+                if (field.type === 'date') return '2026-07-08';
+                if (field.type === 'index') return '1';
+                return 'Sample Value';
+            });
+            rows = [sampleRow];
+        }
+
+        const csvContent = this.convertToCSV(headers, rows);
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const csvName = `${activeTpl.name.replace(/\s+/g, '_')}_template.csv`;
 
@@ -196,35 +327,62 @@ export class FileRenamer {
                 const fieldMappings = {};
 
                 activeTpl.fields.forEach(field => {
-                    const colIdx = headers.indexOf(field.label.toLowerCase());
+                    const colIdx = headers.indexOf((field.label || '').toLowerCase());
                     if (colIdx !== -1) {
                         fieldMappings[field.id] = colIdx;
                     }
                 });
 
-                const hasHeaderMatch = Object.keys(fieldMappings).length > 0;
-                if (!hasHeaderMatch) {
-                    activeTpl.fields.forEach((field, fIdx) => {
-                        if (fIdx < headers.length) {
-                            fieldMappings[field.id] = fIdx;
+                // Find original filename column
+                const origFileColIdx = headers.findIndex(h => h.includes('original filename') || h.includes('original name') || h.includes('filename') || h.includes('file name'));
+
+                if (origFileColIdx !== -1) {
+                    // Match by filename!
+                    this.csvData = this.files.map(() => ({}));
+                    const rows = parsed.slice(1);
+                    rows.forEach(row => {
+                        const csvFilename = row[origFileColIdx]?.trim();
+                        if (!csvFilename) return;
+                        const fileIdx = this.files.findIndex(f => f.name.toLowerCase() === csvFilename.toLowerCase());
+                        if (fileIdx !== -1) {
+                            const rowData = {};
+                            activeTpl.fields.forEach(field => {
+                                const colIdx = fieldMappings[field.id];
+                                if (colIdx !== undefined && row[colIdx] !== undefined) {
+                                    rowData[field.id] = row[colIdx].trim();
+                                }
+                            });
+                            this.csvData[fileIdx] = rowData;
                         }
+                    });
+                } else {
+                    // Fall back to index matching
+                    const hasHeaderMatch = Object.keys(fieldMappings).length > 0;
+                    if (!hasHeaderMatch) {
+                        activeTpl.fields.forEach((field, fIdx) => {
+                            if (fIdx < headers.length) {
+                                fieldMappings[field.id] = fIdx;
+                            }
+                        });
+                    }
+
+                    const rows = parsed.slice(hasHeaderMatch ? 1 : 0);
+                    this.csvData = this.files.map((file, idx) => {
+                        const row = rows[idx];
+                        if (!row) return {};
+                        const rowData = {};
+                        activeTpl.fields.forEach(field => {
+                            const colIdx = fieldMappings[field.id];
+                            if (colIdx !== undefined && row[colIdx] !== undefined) {
+                                rowData[field.id] = row[colIdx].trim();
+                            }
+                        });
+                        return rowData;
                     });
                 }
 
-                const rows = parsed.slice(hasHeaderMatch ? 1 : 0);
-                this.csvData = rows.map(row => {
-                    const rowData = {};
-                    activeTpl.fields.forEach(field => {
-                        const colIdx = fieldMappings[field.id];
-                        if (colIdx !== undefined && row[colIdx] !== undefined) {
-                            rowData[field.id] = row[colIdx].trim();
-                        }
-                    });
-                    return rowData;
-                });
-
                 this.updateFilesList();
-                alert(`Successfully imported CSV data for ${this.csvData.length} row(s).`);
+                alert(`Successfully imported CSV data.`);
             } catch (err) {
                 alert('Failed to parse CSV: ' + err.message);
             }
@@ -307,6 +465,7 @@ export class FileRenamer {
             const isDuplicate = this.files.some(f => f.name === file.name && f.size === file.size);
             if (!isDuplicate) {
                 this.files.push(file);
+                this.csvData.push({});
             }
         });
         this.updateFilesList();
@@ -314,6 +473,9 @@ export class FileRenamer {
 
     removeFile(index) {
         this.files.splice(index, 1);
+        if (this.csvData && this.csvData[index] !== undefined) {
+            this.csvData.splice(index, 1);
+        }
         this.updateFilesList();
     }
 
@@ -325,48 +487,221 @@ export class FileRenamer {
 
         this.filesListContainer.style.display = 'flex';
         const activeTpl = this.namerForm.store.getActiveTemplate();
-        this.filesList.innerHTML = this.files.map((file, idx) => {
-            const ext = this.getAppliedExtension(file.name, activeTpl);
-            const csvRow = this.csvData && this.csvData[idx] ? this.csvData[idx] : null;
-            const baseName = this.namerForm.generateFilename(idx, csvRow);
 
-            // Format size for user
-            let sizeStr = '';
-            if (file.size < 1024) sizeStr = `${file.size} B`;
-            else if (file.size < 1024 * 1024) sizeStr = `${(file.size / 1024).toFixed(1)} KB`;
-            else sizeStr = `${(file.size / (1024 * 1024)).toFixed(1)} MB`;
+        // Check if there are overrides to toggle the reset button
+        const hasOverrides = this.csvData.some(row => Object.keys(row || {}).length > 0);
+        this.resetOverridesBtn.style.display = hasOverrides ? 'inline-block' : 'none';
 
-            const targetName = baseName ? `${baseName}${ext}` : `[incomplete]${ext}`;
+        if (this.viewMode === 'list') {
+            this.filesList.classList.remove('grid-view');
+            this.filesListHeader.style.display = 'grid';
+            this.filesList.innerHTML = this.files.map((file, idx) => {
+                const ext = this.getAppliedExtension(file.name, activeTpl);
+                const csvRow = this.csvData && this.csvData[idx] ? this.csvData[idx] : null;
+                const baseName = this.namerForm.generateFilename(idx, csvRow);
 
-            return `
-                <div class="file-row">
-                    <div class="file-info-col">
-                        <span class="file-name-original" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</span>
-                        <span class="file-size-badge">${sizeStr}</span>
+                let sizeStr = '';
+                if (file.size < 1024) sizeStr = `${file.size} B`;
+                else if (file.size < 1024 * 1024) sizeStr = `${(file.size / 1024).toFixed(1)} KB`;
+                else sizeStr = `${(file.size / (1024 * 1024)).toFixed(1)} MB`;
+
+                const targetName = baseName ? `${baseName}${ext}` : `[incomplete]${ext}`;
+
+                return `
+                    <div class="file-row">
+                        <div class="file-info-col">
+                            <span class="file-name-original" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</span>
+                            <span class="file-size-badge">${sizeStr}</span>
+                        </div>
+                        <div class="file-arrow-col">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="arrow-icon">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                <polyline points="12 5 19 12 12 19"/>
+                            </svg>
+                        </div>
+                        <div class="file-target-col">
+                            <span class="file-name-target" title="${escapeHtml(targetName)}">${escapeHtml(targetName)}</span>
+                        </div>
+                        <button class="btn-file-remove" data-index="${idx}" title="Remove file" aria-label="Remove file">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                        </button>
                     </div>
-                    <div class="file-arrow-col">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="arrow-icon">
-                            <line x1="5" y1="12" x2="19" y2="12"/>
-                            <polyline points="12 5 19 12 12 19"/>
-                        </svg>
-                    </div>
-                    <div class="file-target-col">
-                        <span class="file-name-target" title="${escapeHtml(targetName)}">${escapeHtml(targetName)}</span>
-                    </div>
-                    <button class="btn-file-remove" data-index="${idx}" title="Remove file" aria-label="Remove file">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-                    </button>
+                `;
+            }).join('');
+
+            // Wire up remove button click handlers
+            this.filesList.querySelectorAll('.btn-file-remove').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = parseInt(btn.dataset.index);
+                    this.removeFile(idx);
+                });
+            });
+        } else {
+            // Grid view: Render interactive spreadsheet table
+            this.filesList.classList.add('grid-view');
+            this.filesListHeader.style.display = 'none';
+
+            const fieldsToMap = activeTpl ? activeTpl.fields.filter(f => f.type !== 'extension' && f.type !== 'index') : [];
+
+            const headersHtml = `
+                <th>Original File</th>
+                ${fieldsToMap.map(f => `<th>${escapeHtml(f.label || f.id)}</th>`).join('')}
+                <th>Renamed Output</th>
+                <th></th>
+            `;
+
+            const rowsHtml = this.files.map((file, idx) => {
+                const ext = this.getAppliedExtension(file.name, activeTpl);
+                const csvRow = this.csvData && this.csvData[idx] ? this.csvData[idx] : null;
+                const baseName = this.namerForm.generateFilename(idx, csvRow);
+
+                let sizeStr = '';
+                if (file.size < 1024) sizeStr = `${file.size} B`;
+                else if (file.size < 1024 * 1024) sizeStr = `${(file.size / 1024).toFixed(1)} KB`;
+                else sizeStr = `${(file.size / (1024 * 1024)).toFixed(1)} MB`;
+
+                const targetName = baseName ? `${baseName}${ext}` : `[incomplete]${ext}`;
+
+                const cellsHtml = fieldsToMap.map(field => {
+                    const overrideVal = (this.csvData[idx] && this.csvData[idx][field.id]) ? this.csvData[idx][field.id] : '';
+                    const globalVal = this.namerForm.valuesCache[field.id] || '';
+
+                    const noSpacesAttr    = field.noSpaces      ? 'data-no-spaces="true"'      : '';
+                    const noUnderAttr     = field.noUnderscores  ? 'data-no-underscores="true"'  : '';
+                    const charTypeAttr    = field.charType && field.charType !== 'any' ? `data-char-type="${field.charType}"` : '';
+                    const minLenAttr      = field.minLength !== undefined && field.minLength !== '' ? `data-min-length="${field.minLength}"` : '';
+                    const maxLenAttr      = field.maxLength !== undefined && field.maxLength !== '' ? `data-max-length="${field.maxLength}" maxlength="${field.maxLength}"` : '';
+
+                    let inputField = '';
+                    if (field.type === 'select') {
+                        let options = field.options || [];
+                        if (field.sortAlphabetically) {
+                            options = [...options].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base', numeric: true }));
+                        }
+                        inputField = `
+                            <input type="text"
+                                   class="table-input table-select"
+                                   data-file-idx="${idx}"
+                                   data-field-id="${field.id}"
+                                   value="${escapeHtml(overrideVal)}"
+                                   placeholder="${escapeHtml(globalVal)}"
+                                   ${noSpacesAttr} ${noUnderAttr} ${charTypeAttr} ${minLenAttr} ${maxLenAttr}
+                                   list="list-table-${field.id}">
+                            <datalist id="list-table-${field.id}">
+                                ${options.map(opt => `<option value="${escapeHtml(opt)}"></option>`).join('')}
+                            </datalist>
+                        `;
+                    } else if (field.type === 'date') {
+                        const inputType = overrideVal ? 'date' : 'text';
+                        inputField = `
+                            <input type="${inputType}"
+                                   class="table-input table-date"
+                                   data-file-idx="${idx}"
+                                   data-field-id="${field.id}"
+                                   value="${escapeHtml(overrideVal)}"
+                                   placeholder="${escapeHtml(globalVal)}"
+                                   ${noSpacesAttr} ${noUnderAttr} ${charTypeAttr} ${minLenAttr} ${maxLenAttr}
+                                   onfocus="this.type='date'"
+                                   onblur="if(!this.value) this.type='text'">
+                        `;
+                    } else {
+                        inputField = `
+                            <input type="text"
+                                   class="table-input table-text"
+                                   data-file-idx="${idx}"
+                                   data-field-id="${field.id}"
+                                   value="${escapeHtml(overrideVal)}"
+                                   placeholder="${escapeHtml(globalVal)}"
+                                   ${noSpacesAttr} ${noUnderAttr} ${charTypeAttr} ${minLenAttr} ${maxLenAttr}">
+                        `;
+                    }
+                    return `<td>${inputField}</td>`;
+                }).join('');
+
+                return `
+                    <tr data-row-idx="${idx}">
+                        <td>
+                            <div class="table-file-info">
+                                <span class="file-name-original" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</span>
+                                <span class="file-size-badge">${sizeStr}</span>
+                            </div>
+                        </td>
+                        ${cellsHtml}
+                        <td>
+                            <span class="file-name-target" title="${escapeHtml(targetName)}">${escapeHtml(targetName)}</span>
+                        </td>
+                        <td>
+                            <button class="btn-file-remove" data-index="${idx}" title="Remove file" aria-label="Remove file">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            this.filesList.innerHTML = `
+                <div class="table-responsive">
+                    <table class="bulk-edit-table">
+                        <thead>
+                            <tr>
+                                ${headersHtml}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rowsHtml}
+                        </tbody>
+                    </table>
                 </div>
             `;
-        }).join('');
 
-        // Wire up remove button click handlers
-        this.filesList.querySelectorAll('.btn-file-remove').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const idx = parseInt(btn.dataset.index);
-                this.removeFile(idx);
+            // Wire up input changes for cell overrides
+            this.filesList.querySelectorAll('.table-input').forEach(input => {
+                input.addEventListener('input', (e) => {
+                    const idx = parseInt(e.target.dataset.fileIdx);
+                    const fieldId = e.target.dataset.fieldId;
+                    const val = e.target.value;
+
+                    // Min length invalid state check
+                    if (e.target.dataset.minLength) {
+                        const minLen = parseInt(e.target.dataset.minLength);
+                        if (val.length > 0 && val.length < minLen) {
+                            e.target.classList.add('input-invalid');
+                            e.target.title = `Minimum ${minLen} character${minLen !== 1 ? 's' : ''} required`;
+                        } else {
+                            e.target.classList.remove('input-invalid');
+                            e.target.title = '';
+                        }
+                    }
+
+                    if (!this.csvData[idx]) {
+                        this.csvData[idx] = {};
+                    }
+                    this.csvData[idx][fieldId] = val;
+
+                    // Update target preview dynamically without full re-render
+                    const ext = this.getAppliedExtension(this.files[idx].name, activeTpl);
+                    const baseName = this.namerForm.generateFilename(idx, this.csvData[idx]);
+                    const targetName = baseName ? `${baseName}${ext}` : `[incomplete]${ext}`;
+
+                    const rowEl = e.target.closest('tr');
+                    const targetEl = rowEl.querySelector('.file-name-target');
+                    targetEl.textContent = targetName;
+                    targetEl.title = targetName;
+
+                    // Show or hide the reset overrides button based on current state
+                    const curHasOverrides = this.csvData.some(row => Object.keys(row || {}).length > 0);
+                    this.resetOverridesBtn.style.display = curHasOverrides ? 'inline-block' : 'none';
+                });
             });
-        });
+
+            // Wire up remove button click handlers
+            this.filesList.querySelectorAll('.btn-file-remove').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = parseInt(btn.dataset.index);
+                    this.removeFile(idx);
+                });
+            });
+        }
     }
 
     async executeRename() {
