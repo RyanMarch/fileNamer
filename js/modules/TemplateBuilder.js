@@ -4,6 +4,14 @@
 
 import { escapeHtml } from './utils.js';
 
+const HELP_DOCS_MAPPING = {
+    'tpl-project-files': '../docs/project-files/index.html',
+    'tpl-academic': '../docs/academic-papers/index.html',
+    'tpl-invoice': '../docs/invoices-receipts/index.html',
+    'tpl-utm': '../docs/utm-builder/index.html',
+    'tpl-media-library': '../docs/media-library/index.html'
+};
+
 export class TemplateBuilder {
     constructor(containerId, store, onTemplateChange) {
         this.container = document.getElementById(containerId);
@@ -26,6 +34,8 @@ export class TemplateBuilder {
             this.container.innerHTML = `<div class="error-msg">No templates found. Please reset.</div>`;
             return;
         }
+
+        const helpDocUrl = HELP_DOCS_MAPPING[activeTpl.id];
 
         // Render template builder container
         this.container.innerHTML =  /*html*/`
@@ -54,13 +64,25 @@ export class TemplateBuilder {
                         </div>
                     </div>
                 </div>
+
+                ${helpDocUrl ? `
+                <div class="template-guide-banner">
+                    <span class="banner-icon">💡</span>
+                    <span class="banner-text">
+                        For help with this template, read the <a href="${helpDocUrl}" target="_blank" class="banner-link">${escapeHtml(activeTpl.name)} Guide</a> to learn about conventions and best practices.
+                    </span>
+                </div>
+                ` : ''}
+
                 <div class="divider"></div>
 
                 <h3>Field Builder</h3>
                 <p>Add and configure fields for your filenames below. You can drag and drop fields to reorder them.</p>
                 <!-- Field Builder List -->
-                <div id="fields-list" class="fields-list">
-                    ${activeTpl.fields.map((f, idx) => this.renderFieldItem(f, idx, activeTpl.fields.length)).join('')}
+                <div class="fields-list-container">
+                    <div id="fields-list" class="fields-list">
+                        ${activeTpl.fields.map((f, idx) => this.renderFieldItem(f, idx, activeTpl.fields.length)).join('')}
+                    </div>
                 </div>
 
                 <!-- Add Field Actions -->
@@ -404,7 +426,8 @@ export class TemplateBuilder {
         if (shareTplBtn) {
             shareTplBtn.addEventListener('click', () => {
                 const hash = this.store.serializeTemplate(activeTpl);
-                const shareUrl = `${window.location.origin}${window.location.pathname}#template=${hash}`;
+                // Always link directly to /app/ — the root redirects and strips hash fragments
+                const shareUrl = `${window.location.origin}/app/#t:${hash}`;
 
                 navigator.clipboard.writeText(shareUrl).then(() => {
                     alert('Shareable template link copied to clipboard!');

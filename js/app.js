@@ -15,16 +15,32 @@ document.addEventListener('DOMContentLoaded', () => {
 function initApp() {
     const store = new TemplateStore();
 
-    // Check if shared via URL hash
+    // Check if shared via URL — three formats supported:
+    //   1. #t:VALUE      (primary, no = sign, iMessage-safe)
+    //   2. ?template=VALUE  (legacy query param)
+    //   3. #template=VALUE  (legacy hash)
+    let hashVal = null;
     const hash = window.location.hash;
-    if (hash.startsWith('#template=')) {
-        const hashVal = hash.slice('#template='.length);
+
+    if (hash.startsWith('#t:')) {
+        hashVal = hash.slice(3);
+    } else {
+        const urlParams = new URLSearchParams(window.location.search);
+        const queryTemplate = urlParams.get('template');
+        if (queryTemplate) {
+            hashVal = queryTemplate;
+        } else if (hash.startsWith('#template=')) {
+            hashVal = hash.slice('#template='.length);
+        }
+    }
+
+    if (hashVal) {
         const imported = store.deserializeTemplate(hashVal);
         if (imported) {
             const added = store.addTemplate(imported);
             store.setActiveTemplate(added.id);
-            // Clear hash so bookmarking/reloads don't duplicate
-            window.history.replaceState(null, null, ' ');
+            // Clear URL so bookmarking/reloads don't duplicate
+            window.history.replaceState(null, null, window.location.pathname);
         }
     }
 

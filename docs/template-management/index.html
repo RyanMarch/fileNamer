@@ -33,44 +33,59 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
 
-    <!-- Global Style (Relative back up to root) -->
-    <link rel="stylesheet" href="../css/style.css">
+    <!-- Global Style -->
+    <link rel="stylesheet" href="../../css/style.css">
 
-    <title>User Guide — FileNamer</title>
+    <title>Template Management Guide — FileNamer Docs</title>
     <meta name="description"
-        content="Learn how to use FileNamer to design custom file naming templates, fill parameters dynamically, and batch-rename local files entirely in your browser.">
-    <link rel="canonical" href="https://filenamer.ryanmarch.me/docs/">
+        content="Learn how to save custom naming schemas, import or export JSON templates, and share presets with your team.">
+    <meta name="category" content="Guides">
+    <link rel="canonical" href="https://filenamer.ryanmarch.me/docs/template-management/">
 
     <!-- Docs Style Sheet -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
     <script src="/js/components.js" type="module"></script>
-    <script src="docs-components.js" type="module"></script>
+    <script src="../docs-components.js" type="module"></script>
 </head>
 
-<body class="user-docs-page docs-home-page">
+<body class="user-docs-page">
     <div class="app-container">
         <!-- Mobile Navigation Overlay -->
         <div id="mobile-overlay" class="mobile-overlay"></div>
 
-        <main class="page-container-fullwidth user-docs">
+        <main class="page-container-sidebar user-docs">
+            <!-- Sidebar Navigation -->
+            <docs-sidebar></docs-sidebar>
+
             <!-- Right-side Content & Header Wrapper -->
             <div class="page-content-wrapper" style="width: 100%; display: flex; flex-direction: column; gap: 1.25rem;">
                 <docs-header></docs-header>
 
                 <!-- Content Area -->
                 <docs-anchor-helper>
-                    <div class="docs-hero">
-                        <h1>Help Center</h1>
-                        <p class="lead">Search guides, explore naming standards, and learn how to manage templates in
-                            FileNamer.</p>
-                        <docs-search></docs-search>
-                    </div>
+                    <section class="page-content" aria-label="Template Management Guide Content">
+                        <!-- Template Management -->
+                        <article id="overview" class="doc-section">
+                            <h1>Template Management</h1>
+                            <p class="lead">
+                                Learn how to create, save, export, import, and share your custom naming schemas.
+                            </p>
+                            
+                            <h2 style="margin-top: 2rem;">Saving &amp; Managing Templates</h2>
+                            <p>
+                                FileNamer saves all of your custom naming templates locally in your browser's persistent database. You can manage your schemas using the controls inside the template bar.
+                            </p>
+                            
+                            <h3 style="margin-top: 1.5rem;">Create Templates</h3>
+                            <p>To create a new, custom naming template, click the <strong>Add Template</strong> button in the template header. You can then add static segments or dynamic fields like dates, text inputs, and counters.</p>
 
-                    <h2 class="docs-categories-title">Explore Guides</h2>
+                            <h3 style="margin-top: 1.5rem;">Export &amp; Import Templates</h3>
+                            <p>You can backup your configurations or move them to another computer by clicking the <strong>Export</strong> button. This saves your templates as a structured <code>.json</code> configuration file. To load them back, click <strong>Import</strong> and select the configuration file.</p>
 
-                    <docs-grid
-                        ids="getting-started,app-features,academic-papers,invoices-receipts,media-library,project-files,template-management,utm-builder"></docs-grid>
-
+                            <h3 style="margin-top: 1.5rem;">Share Templates</h3>
+                            <p>If you want to share a specific template layout with your team, you can generate a <strong>Shareable URL</strong>. Click the share button to copy a direct link to your configuration details directly to your clipboard.</p>
+                        </article>
+                    </section>
                 </docs-anchor-helper>
             </div>
         </main>
