@@ -4,6 +4,14 @@
 
 import { escapeHtml } from './utils.js';
 
+const HELP_DOCS_MAPPING = {
+    'tpl-project-files': '../docs/project-files/index.html',
+    'tpl-academic': '../docs/academic-papers/index.html',
+    'tpl-invoice': '../docs/invoices-receipts/index.html',
+    'tpl-utm': '../docs/utm-builder/index.html',
+    'tpl-media-library': '../docs/media-library/index.html'
+};
+
 export class TemplateBuilder {
     constructor(containerId, store, onTemplateChange) {
         this.container = document.getElementById(containerId);
@@ -27,6 +35,8 @@ export class TemplateBuilder {
             return;
         }
 
+        const helpDocUrl = HELP_DOCS_MAPPING[activeTpl.id];
+
         // Render template builder container
         this.container.innerHTML =  /*html*/`
             <div class="template-builder-controls">
@@ -38,6 +48,11 @@ export class TemplateBuilder {
                                 ${templates.map(t => `<option value="${escapeHtml(t.id)}" ${t.id === activeTpl.id ? 'selected' : ''}>${escapeHtml(t.name)}</option>`).join('')}
                             </select>
                             <div class="button-actions">
+                                ${helpDocUrl ? `
+                                <a id="help-tpl-btn" href="${helpDocUrl}" target="_blank" class="btn btn-secondary btn-icon-only" title="View Guide for ${escapeHtml(activeTpl.name)}" aria-label="View Guide for ${escapeHtml(activeTpl.name)}" style="text-decoration: none;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                                </a>
+                                ` : ''}
                                 <button id="rename-tpl-btn" class="btn btn-secondary btn-icon-only" title="Rename Active Template" aria-label="Rename Active Template">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
                                 </button>
@@ -59,8 +74,10 @@ export class TemplateBuilder {
                 <h3>Field Builder</h3>
                 <p>Add and configure fields for your filenames below. You can drag and drop fields to reorder them.</p>
                 <!-- Field Builder List -->
-                <div id="fields-list" class="fields-list">
-                    ${activeTpl.fields.map((f, idx) => this.renderFieldItem(f, idx, activeTpl.fields.length)).join('')}
+                <div class="fields-list-container">
+                    <div id="fields-list" class="fields-list">
+                        ${activeTpl.fields.map((f, idx) => this.renderFieldItem(f, idx, activeTpl.fields.length)).join('')}
+                    </div>
                 </div>
 
                 <!-- Add Field Actions -->
