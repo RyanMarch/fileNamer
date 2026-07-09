@@ -6,11 +6,12 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "build": "mkdir -p dist/app && cp index.html sw.js robots.txt dist/ && cp app/index.html dist/app/ && cp -r assets docs terms dist/ && esbuild js/app.js --bundle --minify --outfile=dist/js/app.js && esbuild css/style.css --minify --outfile=dist/css/style.css",
+    "build": "mkdir -p dist/app && cp index.html sw.js robots.txt dist/ && cp app/index.html dist/app/ && cp -r assets docs terms dist/ && esbuild js/app.js --bundle --minify --outfile=dist/js/app.js && esbuild js/components.js --bundle --minify --outfile=dist/js/components.js && esbuild css/style.css --minify --outfile=dist/css/style.css",
     "dev": "wrangler pages dev ."
   },
   "devDependencies": {
     "esbuild": "^0.20.0",
+    "happy-dom": "^20.10.6",
     "vitest": "^4.1.10",
     "wrangler": "^3.0.0"
   }

@@ -79,6 +79,9 @@ export class TemplateBuilder {
                         <button class="btn btn-small add-field-btn" data-type="index">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg> Index
                         </button>
+                        <button class="btn btn-small add-field-btn" data-type="original-name">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15h6"/><path d="M9 11h6"/></svg> Original Name
+                        </button>
                         <button class="btn btn-small add-field-btn" data-type="extension">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Extension
                         </button>
@@ -249,6 +252,33 @@ export class TemplateBuilder {
                                title="Padding digits"
                                style="width: 70px;">
                         <span style="margin-left: 0.5rem;">Increments automatically per file.</span>
+                    </div>
+                `;
+                break;
+            case 'original-name':
+                typeBadge = `<span class="badge badge-original-name">ORG</span>`;
+                configHtml = /*html*/ `
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem; width: 100%;">
+                        <div class="template-rules-row" style="display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap;">
+                            <div class="control-item" style="flex: 1 1 calc(50% - 0.375rem); display: flex; flex-direction: column; gap: 0.375rem;">
+                                <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Name Option</label>
+                                <select class="form-select field-origname-mode" data-index="${index}">
+                                    <option value="keep" ${field.origNameMode === 'keep' ? 'selected' : ''}>Keep Original Case</option>
+                                    <option value="lowercase" ${field.origNameMode === 'lowercase' ? 'selected' : ''}>Force lowercase</option>
+                                    <option value="uppercase" ${field.origNameMode === 'uppercase' ? 'selected' : ''}>Force UPPERCASE</option>
+                                </select>
+                            </div>
+                            <div class="control-item" style="flex: 1 1 calc(30% - 0.375rem); display: flex; flex-direction: column; gap: 0.375rem;">
+                                <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Max Length (Truncate)</label>
+                                <input type="number" class="form-input field-origname-truncate" data-index="${index}" min="1" placeholder="Unlimited" value="${field.truncateLength !== undefined && field.truncateLength !== '' ? field.truncateLength : ''}">
+                            </div>
+                        </div>
+                        <div class="checkbox-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem;">
+                            <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.625rem; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); cursor: pointer;">
+                                <input type="checkbox" class="field-origname-replace-spaces" data-index="${index}" ${field.replaceSpaces !== false ? 'checked' : ''}>
+                                Replace spaces with template separator
+                            </label>
+                        </div>
                     </div>
                 `;
                 break;
@@ -558,6 +588,15 @@ export class TemplateBuilder {
                     this.onTemplateChange();
                 }
 
+                if (e.target.classList.contains('field-origname-truncate')) {
+                    const idx = parseInt(e.target.dataset.index);
+                    const fields = [...activeTpl.fields];
+                    const val = parseInt(e.target.value);
+                    fields[idx].truncateLength = isNaN(val) || val <= 0 ? '' : val;
+                    this.store.updateTemplate(activeTpl.id, { fields });
+                    this.onTemplateChange();
+                }
+
                 if (e.target.classList.contains('field-min-length')) {
                     const idx = parseInt(e.target.dataset.index);
                     const fields = [...activeTpl.fields];
@@ -687,6 +726,22 @@ export class TemplateBuilder {
                     this.onTemplateChange();
                 }
 
+                if (e.target.classList.contains('field-origname-mode')) {
+                    const idx = parseInt(e.target.dataset.index);
+                    const fields = [...activeTpl.fields];
+                    fields[idx].origNameMode = e.target.value;
+                    this.store.updateTemplate(activeTpl.id, { fields });
+                    this.onTemplateChange();
+                }
+
+                if (e.target.classList.contains('field-origname-replace-spaces')) {
+                    const idx = parseInt(e.target.dataset.index);
+                    const fields = [...activeTpl.fields];
+                    fields[idx].replaceSpaces = e.target.checked;
+                    this.store.updateTemplate(activeTpl.id, { fields });
+                    this.onTemplateChange();
+                }
+
                 if (e.target.classList.contains('field-sort-alphabetically')) {
                     const idx = parseInt(e.target.dataset.index);
                     const fields = [...activeTpl.fields];
@@ -753,6 +808,10 @@ export class TemplateBuilder {
                     newField.customFormat = 'YYYY-MM-DD';
                 } else if (type === 'index') {
                     newField.digits = 0;
+                } else if (type === 'original-name') {
+                    newField.origNameMode = 'keep';
+                    newField.replaceSpaces = true;
+                    newField.truncateLength = '';
                 } else if (type === 'extension') {
                     newField.extensionMode = 'keep';
                     newField.customExtension = '';

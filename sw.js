@@ -3,16 +3,18 @@
  * Placeholder for offline support / caching.
  */
 
-const CACHE_NAME = 'fn-maker-cache-v4';
+const CACHE_NAME = 'fn-maker-cache-v6';
 const ASSETS = [
     '/app/',
     '/app/index.html',
     '/css/style.css',
     '/js/app.js',
+    '/js/components.js',
     '/docs/',
     '/docs/index.html',
     '/docs/style.css',
-    '/docs/header.js'
+    '/docs/header.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js'
 ];
 
 self.addEventListener('install', (e) => {
