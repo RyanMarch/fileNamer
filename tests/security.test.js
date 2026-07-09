@@ -4,7 +4,7 @@
  * data without mapping through the allowed fields.
  */
 
-import { describe, it, expect } from 'vitest';
+import { vi, describe, it, expect } from 'vitest';
 import { escapeHtml } from '../js/modules/utils.js';
 import { TemplateStore } from '../js/modules/TemplateStore.js';
 
@@ -88,7 +88,9 @@ describe('TemplateStore.deserializeTemplate', () => {
     const ts = new TemplateStore();
 
     it('returns null for a completely invalid hash', () => {
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
         expect(ts.deserializeTemplate('!!!not-base64!!!')).toBeNull();
+        consoleSpy.mockRestore();
     });
 
     it('returns null when required fields (n, f) are missing', () => {
