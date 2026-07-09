@@ -257,6 +257,21 @@ export class NamerForm {
                                required>
                     `;
                     break;
+                case 'original-name':
+                    const origPlaceholder = field.placeholder || 'original-file';
+                    if (this.valuesCache[field.id] === undefined) {
+                        this.valuesCache[field.id] = origPlaceholder;
+                    }
+                    inputHtml = `
+                        <input type="text" 
+                               id="input-${field.id}" 
+                               data-field-id="${field.id}" 
+                               class="form-input" 
+                               value="${escapeHtml(this.valuesCache[field.id])}" 
+                               placeholder="e.g. document"
+                               required>
+                    `;
+                    break;
                 case 'index':
                     hasIndex = true;
                     const digitCount = parseInt(field.digits);
@@ -337,7 +352,7 @@ export class NamerForm {
         return field.label.toLowerCase().replace(/[^a-z0-9_]/g, '_').replace(/_+/g, '_').replace(/^_+|_+$/g, '');
     }
 
-    generateFilename(indexOffset = 0, csvRow = null, showStructure = false) {
+    generateFilename(indexOffset = 0, csvRow = null, showStructure = false, originalFilename = null) {
         const activeTpl = this.store.getActiveTemplate();
         if (!activeTpl) return '';
 
@@ -380,6 +395,29 @@ export class NamerForm {
                 } else if (field.type === 'date') {
                     const rawDate = (csvRow && csvRow[field.id]) ? csvRow[field.id] : this.valuesCache[field.id];
                     val = this.formatDateString(rawDate, field.format, field.customFormat);
+                } else if (field.type === 'original-name') {
+                    let nameVal = '';
+                    if (originalFilename) {
+                        const lastDot = originalFilename.lastIndexOf('.');
+                        nameVal = lastDot !== -1 ? originalFilename.substring(0, lastDot) : originalFilename;
+                    } else {
+                        nameVal = (csvRow && csvRow[field.id]) ? csvRow[field.id] : (this.valuesCache[field.id] || field.placeholder || 'original-file');
+                    }
+                    if (field.replaceSpaces !== false && separator) {
+                        nameVal = nameVal.replace(/\s+/g, separator);
+                    }
+                    if (field.origNameMode === 'lowercase') {
+                        nameVal = nameVal.toLowerCase();
+                    } else if (field.origNameMode === 'uppercase') {
+                        nameVal = nameVal.toUpperCase();
+                    }
+                    if (field.truncateLength) {
+                        const len = parseInt(field.truncateLength);
+                        if (!isNaN(len) && len > 0) {
+                            nameVal = nameVal.substring(0, len);
+                        }
+                    }
+                    val = nameVal;
                 } else {
                     val = (csvRow && csvRow[field.id]) ? csvRow[field.id] : (this.valuesCache[field.id] || '');
                     val = this.applyCaseStyle(val, caseStyle);
@@ -420,6 +458,29 @@ export class NamerForm {
             } else if (field.type === 'date') {
                 const rawDate = (csvRow && csvRow[field.id]) ? csvRow[field.id] : this.valuesCache[field.id];
                 val = this.formatDateString(rawDate, field.format, field.customFormat);
+            } else if (field.type === 'original-name') {
+                let nameVal = '';
+                if (originalFilename) {
+                    const lastDot = originalFilename.lastIndexOf('.');
+                    nameVal = lastDot !== -1 ? originalFilename.substring(0, lastDot) : originalFilename;
+                } else {
+                    nameVal = (csvRow && csvRow[field.id]) ? csvRow[field.id] : (this.valuesCache[field.id] || field.placeholder || 'original-file');
+                }
+                if (field.replaceSpaces !== false && separator) {
+                    nameVal = nameVal.replace(/\s+/g, separator);
+                }
+                if (field.origNameMode === 'lowercase') {
+                    nameVal = nameVal.toLowerCase();
+                } else if (field.origNameMode === 'uppercase') {
+                    nameVal = nameVal.toUpperCase();
+                }
+                if (field.truncateLength) {
+                    const len = parseInt(field.truncateLength);
+                    if (!isNaN(len) && len > 0) {
+                        nameVal = nameVal.substring(0, len);
+                    }
+                }
+                val = nameVal;
             } else {
                 val = (csvRow && csvRow[field.id]) ? csvRow[field.id] : (this.valuesCache[field.id] || '');
                 val = this.applyCaseStyle(val, caseStyle);

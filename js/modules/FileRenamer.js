@@ -354,7 +354,7 @@ export class FileRenamer {
         const rows = this.files.map((file, idx) => {
             const ext = this.getAppliedExtension(file.name, activeTpl);
             const csvRow = this.csvData && this.csvData[idx] ? this.csvData[idx] : null;
-            const baseName = this.namerForm.generateFilename(idx, csvRow);
+            const baseName = this.namerForm.generateFilename(idx, csvRow, false, file.name);
             const targetName = baseName ? `${baseName}${ext}` : file.name;
             return [file.name, targetName, String(file.size)];
         });
@@ -453,7 +453,7 @@ export class FileRenamer {
             this.filesList.innerHTML = this.files.map((file, idx) => {
                 const ext = this.getAppliedExtension(file.name, activeTpl);
                 const csvRow = this.csvData && this.csvData[idx] ? this.csvData[idx] : null;
-                const baseName = this.namerForm.generateFilename(idx, csvRow);
+                const baseName = this.namerForm.generateFilename(idx, csvRow, false, file.name);
 
                 let sizeStr = '';
                 if (file.size < 1024) sizeStr = `${file.size} B`;
@@ -496,7 +496,7 @@ export class FileRenamer {
             this.filesList.classList.add('grid-view');
             this.filesListHeader.style.display = 'none';
 
-            const fieldsToMap = activeTpl ? activeTpl.fields.filter(f => f.type !== 'extension' && f.type !== 'index') : [];
+            const fieldsToMap = activeTpl ? activeTpl.fields.filter(f => f.type !== 'extension' && f.type !== 'index' && f.type !== 'original-name') : [];
 
             const headersHtml = `
                 <th>Original File</th>
@@ -508,7 +508,7 @@ export class FileRenamer {
             const rowsHtml = this.files.map((file, idx) => {
                 const ext = this.getAppliedExtension(file.name, activeTpl);
                 const csvRow = this.csvData && this.csvData[idx] ? this.csvData[idx] : null;
-                const baseName = this.namerForm.generateFilename(idx, csvRow);
+                const baseName = this.namerForm.generateFilename(idx, csvRow, false, file.name);
 
                 let sizeStr = '';
                 if (file.size < 1024) sizeStr = `${file.size} B`;
@@ -635,7 +635,7 @@ export class FileRenamer {
 
                     // Update target preview dynamically without full re-render
                     const ext = this.getAppliedExtension(this.files[idx].name, activeTpl);
-                    const baseName = this.namerForm.generateFilename(idx, this.csvData[idx]);
+                    const baseName = this.namerForm.generateFilename(idx, this.csvData[idx], false, this.files[idx].name);
                     const targetName = baseName ? `${baseName}${ext}` : `[incomplete]${ext}`;
 
                     const rowEl = e.target.closest('tr');
@@ -666,7 +666,7 @@ export class FileRenamer {
         const renames = this.files.map((file, idx) => {
             const ext = this.getAppliedExtension(file.name, activeTpl);
             const csvRow = this.csvData && this.csvData[idx] ? this.csvData[idx] : null;
-            const baseName = this.namerForm.generateFilename(idx, csvRow);
+            const baseName = this.namerForm.generateFilename(idx, csvRow, false, file.name);
             return {
                 file: file,
                 targetName: baseName ? `${baseName}${ext}` : file.name

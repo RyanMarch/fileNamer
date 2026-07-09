@@ -207,6 +207,10 @@ export class TemplateStore {
                 if (f.includeExtInPreview !== undefined) minimalField.iep = f.includeExtInPreview;
                 if (f.description) minimalField.de = f.description;
                 if (f.sortAlphabetically) minimalField.sa = f.sortAlphabetically;
+                // Original name fields
+                if (f.origNameMode) minimalField.onm = f.origNameMode;
+                if (f.replaceSpaces !== undefined) minimalField.rs = f.replaceSpaces;
+                if (f.truncateLength !== undefined && f.truncateLength !== '') minimalField.tl = f.truncateLength;
                 // Restriction fields
                 if (f.noSpaces) minimalField.ns = f.noSpaces;
                 if (f.noUnderscores) minimalField.nu = f.noUnderscores;
@@ -245,6 +249,10 @@ export class TemplateStore {
                     if (f.iep !== undefined) field.includeExtInPreview = f.iep;
                     if (f.de) field.description = f.de;
                     if (f.sa) field.sortAlphabetically = f.sa;
+                    // Original name fields
+                    if (f.onm) field.origNameMode = f.onm;
+                    if (f.rs !== undefined) field.replaceSpaces = f.rs;
+                    if (f.tl !== undefined) field.truncateLength = f.tl;
                     // Restriction fields
                     if (f.ns) field.noSpaces = f.ns;
                     if (f.nu) field.noUnderscores = f.nu;
