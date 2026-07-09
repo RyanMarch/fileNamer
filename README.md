@@ -4,8 +4,6 @@ FileNamer is a lightweight, local-first web utility for designing standardized n
 
 It is designed for professionals and teams (e.g., content managers, researchers, accountants) who need to maintain strict, structured guidelines for document and media file naming.
 
----
-
 ## Key Features
 
 - **Standardized Templates**: Define parameters, dates, select lists, and sequence indexing to enforce naming formats.
@@ -14,8 +12,6 @@ It is designed for professionals and teams (e.g., content managers, researchers,
 - **CSV Data Integration**: Export templates to a CSV file, populate them in your spreadsheet software (e.g. Excel, Sheets), and import them back to automatically fill segment values.
 - **URL-Based Template Sharing**: Serialize template rules into the URL hash so you can bookmark or share naming schemas with teammates without an account or server backend.
 - **PWA / Offline Support**: Service worker caching enables full offline functionality as a Progressive Web App.
-
----
 
 ## How to Use FileNamer
 

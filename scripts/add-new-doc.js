@@ -1,4 +1,56 @@
-<!DOCTYPE html>
+const fs = require('fs');
+const path = require('path');
+const readline = require('readline');
+const { execSync } = require('child_process');
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+const DOCS_DIR = path.join(__dirname, '../docs');
+
+function askQuestion(query) {
+    return new Promise(resolve => rl.question(query, resolve));
+}
+
+function slugify(text) {
+    return text
+        .toString()
+        .toLowerCase()
+        .replace(/\s+/g, '-')           // Replace spaces with -
+        .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+        .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+        .replace(/^-+/, '')             // Trim - from start
+        .replace(/-+$/, '');            // Trim - from end
+}
+
+async function main() {
+    console.log('\n====================================');
+    console.log('    Create a New Documentation Page  ');
+    console.log('====================================\n');
+
+    let title = '';
+    while (!title.trim()) {
+        title = await askQuestion('Document Title (e.g. Template Management): ');
+    }
+
+    const folderSlug = slugify(title);
+    const targetDir = path.join(DOCS_DIR, folderSlug);
+
+    if (fs.existsSync(targetDir)) {
+        console.error(`\nError: Directory already exists at docs/${folderSlug}`);
+        rl.close();
+        return;
+    }
+
+    const category = (await askQuestion('Category (Basics / General / [Guides]): ')).trim() || 'Guides';
+    const description = (await askQuestion('Description / Meta Description: ')).trim() || 'No description provided.';
+    const homeFeatureInput = (await askQuestion('Show on Home Page? (y/N): ')).trim().toLowerCase();
+    const homeFeature = homeFeatureInput === 'y' || homeFeatureInput === 'yes';
+
+    // HTML template content
+    const htmlContent = `<!DOCTYPE html>
 <html lang="en" translate="no" data-theme-style="tech">
 
 <head>
@@ -6,7 +58,7 @@
     <link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
-    <link class="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="FileNamer" />
     <link rel="manifest" href="/assets/favicon/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -36,11 +88,12 @@
     <!-- Global Style -->
     <link rel="stylesheet" href="../../css/style.css">
 
-    <title>Invoices & Receipts Naming Guide — FileNamer Docs</title>
-    <meta name="description"
-        content="Streamline your accounting and bookkeeping files. Learn how to standardize invoice and receipt filenames with FileNamer.">
-    <meta name="category" content="Guides">
-    <link rel="canonical" href="https://filenamer.ryanmarch.me/docs/invoices-receipts/">
+    <title>${title} — FileNamer Docs</title>
+    <meta name="description" content="${description.replace(/"/g, '&quot;')}">
+    <meta name="category" content="${category}">
+    <meta name="home-feature" content="${homeFeature}">
+    <meta name="doc-id" content="${folderSlug}">
+    <link rel="canonical" href="https://filenamer.ryanmarch.me/docs/${folderSlug}/">
 
     <!-- Docs Style Sheet -->
     <link rel="stylesheet" href="../style.css">
@@ -50,6 +103,7 @@
 
 <body class="user-docs-page">
     <div class="app-container">
+        <!-- Mobile Navigation Overlay -->
         <div id="mobile-overlay" class="mobile-overlay"></div>
 
         <main class="page-container-sidebar user-docs">
@@ -62,65 +116,49 @@
 
                 <!-- Content Area -->
                 <docs-anchor-helper>
-                <section class="page-content" aria-label="Invoices & Receipts Guide Content">
+                    <section class="page-content" aria-label="${title} Guide Content">
 
                     <!-- Overview -->
                     <article id="overview" class="doc-section">
-                        <h1>Invoices & Receipts Naming Guide</h1>
+                        <h1>${title} Guide</h1>
                         <p class="lead">
-                            Simplify tax prep, bookkeeping, and accounting processes with systematically named financial records.
+                            ${description}
                         </p>
                         <p>
-                            Mishandled receipt names make tracking expenses difficult. The built-in <strong>Invoices / Receipts</strong> template establishes a structured, searchable format that simplifies search, file retrieval, and expense auditing.
+                            Start writing your new documentation content here.
                         </p>
-
-                         <design-tip></design-tip>
                     </article>
 
                     <!-- Table of Contents -->
                     <nav class="inline-toc" aria-label="Table of contents">
                         <div class="toc-title">Table of Contents</div>
                         <ul class="toc-list">
-                            <li><a href="#structure">Default Template Structure</a></li>
-                            <li><a href="#customization">Best Practices for Customizing</a></li>
+                            <li><a href="#section-1">1. First Section</a></li>
+                            <li><a href="#section-2">2. Second Section</a></li>
                         </ul>
                     </nav>
 
                     <hr class="section-divider">
 
-                    <!-- Default Structure -->
-                    <article id="structure" class="doc-section">
-                        <h2>Default Template Structure</h2>
+                    <!-- Section 1 -->
+                    <article id="section-1" class="doc-section">
+                        <h2>1. First Section</h2>
                         <p>
-                            The default Invoices / Receipts template uses a hyphen separator (<code>-</code>) and consists of the following components:
-                        </p>
-                        <ul class="help-list" style="margin-top: 0.5rem;">
-                            <li><strong>Date:</strong> Date format in YYYY-MM-DD (e.g. <code>2026-07-09</code>) to enable simple sorting.</li>
-                            <li><strong>Vendor:</strong> The vendor or provider name (e.g. <code>Google</code>).</li>
-                            <li><strong>Invoice Number:</strong> The exact invoice or reference number (e.g. <code>INV-98765</code>).</li>
-                            <li><strong>Extension:</strong> Preserves the original file extension automatically.</li>
-                        </ul>
-                        <p>
-                            <strong>Example output filename:</strong> <code>2026-07-09-Google-INV-98765.pdf</code>
+                            Add details about the first sub-section here.
                         </p>
                     </article>
 
                     <hr class="section-divider">
 
-                    <!-- Customization -->
-                    <article id="customization" class="doc-section">
-                        <h2>Best Practices for Customizing</h2>
+                    <!-- Section 2 -->
+                    <article id="section-2" class="doc-section">
+                        <h2>2. Second Section</h2>
                         <p>
-                            Personal budgets and corporate finance groups have distinct organization structures. Try adding these custom components:
+                            Add details about the second sub-section here.
                         </p>
-                        <ul class="help-list" style="margin-top: 0.5rem;">
-                            <li><strong>Expense Categories:</strong> Add a select/dropdown menu with options like <code>Software</code>, <code>Office</code>, <code>Travel</code>, or <code>Meals</code> to group files visually.</li>
-                            <li><strong>Dollar Amount:</strong> Add a numeric text input to record the transaction value directly in the filename (e.g., <code>150USD</code> or <code>150_00</code>).</li>
-                            <li><strong>Tax Status:</strong> Add a dropdown for tax years or write-off status (e.g. <code>tax-deductible</code>) to speed up filing preparation.</li>
-                        </ul>
                     </article>
 
-                </section>
+                    </section>
                 </docs-anchor-helper>
             </div>
         </main>
@@ -134,10 +172,30 @@
             <img class="lightbox-content" id="lightbox-img" alt="">
             <div class="lightbox-caption" id="lightbox-caption"></div>
         </div>
-
-        <!-- Scripts -->
-        
     </div>
 </body>
 
 </html>
+`;
+
+    fs.mkdirSync(targetDir, { recursive: true });
+    fs.writeFileSync(path.join(targetDir, 'index.html'), htmlContent, 'utf-8');
+
+    console.log(`\nCreated docs folder: docs/${folderSlug}`);
+    console.log(`Created docs page:   docs/${folderSlug}/index.html`);
+
+    // Rebuild index
+    try {
+        console.log('Rebuilding search index...');
+        execSync('node scripts/generate-docs-index.js', { stdio: 'inherit' });
+    } catch (err) {
+        console.error('Failed to rebuild search index:', err);
+    }
+
+    rl.close();
+}
+
+main().catch(err => {
+    console.error(err);
+    rl.close();
+});

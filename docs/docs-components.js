@@ -30,44 +30,9 @@ function stemMatch(targetText, queryText) {
     });
 }
 
-// Central category mapping for helpdocs pages
-const CATEGORY_MAP = {
-    'getting-started': 'Basics',
-    'offline-pwa': 'Basics',
-    'app-features': 'General',
-    'project-files': 'Guides',
-    'academic-papers': 'Guides',
-    'invoices-receipts': 'Guides',
-    'utm-builder': 'Guides',
-    'media-library': 'Guides',
-    'template-management': 'Guides'
-};
-
-// Resolve category based on document folder path
-function getCategoryFromPath(path) {
-    if (!path) return 'Guides';
-    const cleanPath = path.replace(/^\/|\/$/g, '').replace('index.html', '');
-    const parts = cleanPath.split('/');
-    const dir = parts[parts.length - 1] || parts[0];
-    return CATEGORY_MAP[dir] || 'Guides';
-}
-
-// Automatically update category labels on cards on load
+// Automatically update category labels on cards on load if any static ones remain
 function updateCardCategories() {
-    document.querySelectorAll('.docs-card').forEach(card => {
-        const href = card.getAttribute('href');
-        if (href) {
-            const categoryEl = card.querySelector('.docs-card-category');
-            if (categoryEl) {
-                categoryEl.textContent = getCategoryFromPath(href);
-            }
-        }
-    });
-}
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', updateCardCategories);
-} else {
-    updateCardCategories();
+    // Left empty since CATEGORY_MAP is deprecated and cards are dynamically rendered.
 }
 
 class DocsHeader extends HTMLElement {
@@ -254,7 +219,7 @@ class DocsHeader extends HTMLElement {
             const results = this.index
                 .map(item => {
                     const titleLower = item.title.toLowerCase();
-                    const category = getCategoryFromPath(item.path);
+                    const category = item.category || 'Guides';
                     const categoryLower = category.toLowerCase();
 
                     let score = 0;
@@ -304,7 +269,7 @@ class DocsHeader extends HTMLElement {
                     return `
                         <a href="${basePath}${item.path}" class="search-result-item" data-index="${idx}">
                             <div class="result-title">${item.title}</div>
-                            <div class="result-category">${getCategoryFromPath(item.path)}</div>
+                            <div class="result-category">${item.category || 'Guides'}</div>
                             <div class="result-excerpt">${item.excerpt}</div>
                             ${headingSnippet}
                         </a>
@@ -496,14 +461,21 @@ class DocsSidebar extends HTMLElement {
         // Insert category badge above the h1 in the content area
         const h1 = document.querySelector('.page-content h1');
         if (h1 && !document.querySelector('.doc-page-category')) {
-            const category = getCategoryFromPath(window.location.pathname);
-
             const basePath = this.isSubpage() ? '../' : '';
-            const categoryEl = document.createElement('a');
-            categoryEl.className = 'doc-page-category';
-            categoryEl.href = `${basePath}list.html?category=${encodeURIComponent(category)}`;
-            categoryEl.textContent = category;
-            h1.parentNode.insertBefore(categoryEl, h1);
+            fetch(`${basePath}search-index.json`)
+                .then(r => r.json())
+                .then(index => {
+                    const currentPath = window.location.pathname;
+                    const match = index.find(item => currentPath.endsWith(item.path) || item.path.includes(currentPath.split('/docs/')[1]));
+                    const category = match ? match.category : 'Guides';
+
+                    const categoryEl = document.createElement('a');
+                    categoryEl.className = 'doc-page-category';
+                    categoryEl.href = `${basePath}list.html?category=${encodeURIComponent(category)}`;
+                    categoryEl.textContent = category;
+                    h1.parentNode.insertBefore(categoryEl, h1);
+                })
+                .catch(e => console.error(e));
         }
 
         // Generate dynamic section links for the current page
@@ -805,7 +777,7 @@ class DocsSearch extends HTMLElement {
             const results = this.index
                 .map(item => {
                     const titleLower = item.title.toLowerCase();
-                    const category = getCategoryFromPath(item.path);
+                    const category = item.category || 'Guides';
                     const categoryLower = category.toLowerCase();
 
                     let score = 0;
@@ -855,7 +827,7 @@ class DocsSearch extends HTMLElement {
                     return `
                         <a href="${basePath}${item.path}" class="search-result-item" data-index="${idx}">
                             <div class="result-title">${item.title}</div>
-                            <div class="result-category">${getCategoryFromPath(item.path)}</div>
+                            <div class="result-category">${item.category || 'Guides'}</div>
                             <div class="result-excerpt">${item.excerpt}</div>
                             ${headingSnippet}
                         </a>
@@ -915,3 +887,54 @@ class DocsSearch extends HTMLElement {
 }
 
 customElements.define('docs-search', DocsSearch);
+
+class DocsGrid extends HTMLElement {
+    connectedCallback() {
+        this.style.display = 'contents';
+        this.render();
+    }
+    async render() {
+        const isSubpage = /\/docs\/[^\/]+\//.test(window.location.pathname);
+        const basePath = isSubpage ? '../' : '';
+        try {
+            const response = await fetch(`${basePath}search-index.json`);
+            if (!response.ok) throw new Error('Failed to load search-index.json');
+            let items = await response.json();
+            
+            // Filter by specific IDs or homeFeature if attributes are present
+            const idsAttr = this.getAttribute('ids');
+            if (idsAttr) {
+                const allowedIds = idsAttr.split(',').map(id => id.trim().toLowerCase());
+                items = items.filter(item => {
+                    const docId = item.id || item.path.split('/')[0];
+                    return allowedIds.includes(docId.toLowerCase());
+                });
+            } else if (this.hasAttribute('featured')) {
+                items = items.filter(item => item.homeFeature === true);
+            }
+            
+            this.innerHTML = `
+                <div class="docs-grid">
+                    ${items.map(item => `
+                        <a href="${basePath}${item.path}" class="docs-card">
+                            <div class="docs-card-category">${item.category || 'Guides'}</div>
+                            <h3 class="docs-card-title">${item.title}</h3>
+                            <p class="docs-card-desc">${item.excerpt}</p>
+                            <span class="docs-card-link">
+                                Read Guide
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </span>
+                        </a>
+                    `).join('')}
+                </div>
+            `;
+        } catch (e) {
+            this.innerHTML = `<div class="error">Failed to load guides.</div>`;
+            console.error(e);
+        }
+    }
+}
+customElements.define('docs-grid', DocsGrid);
