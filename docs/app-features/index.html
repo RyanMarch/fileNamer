@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en" translate="no" data-theme-style="tech">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="FileNamer" />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="google" content="notranslate">
+    <script>
+        // Theme initialization to prevent flicker
+        (function () {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'system') {
+                const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme-mode', 'system');
+            } else {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                document.documentElement.removeAttribute('data-theme-mode');
+            }
+        })();
+    </script>
+
+    <!-- Preconnect Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Global Style -->
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <title>App Features — FileNamer Docs</title>
+    <meta name="description"
+        content="Learn how to use FileNamer to design custom file naming templates, fill parameters dynamically, and batch-rename local files entirely in your browser.">
+    <link rel="canonical" href="https://filenamer.ryanmarch.me/docs/app-features/">
+
+    <!-- Docs Style Sheet -->
+    <link rel="stylesheet" href="../style.css">
+    <script src="/js/components.js" type="module"></script>
+    <script src="../docs-components.js" type="module"></script>
+</head>
+
+<body class="user-docs-page">
+    <div class="app-container">
+        <!-- Mobile Navigation Overlay -->
+        <div id="mobile-overlay" class="mobile-overlay"></div>
+
+        <main class="page-container-sidebar user-docs">
+            <!-- Sidebar Navigation -->
+            <docs-sidebar></docs-sidebar>
+
+            <!-- Right-side Content & Header Wrapper -->
+            <div class="page-content-wrapper" style="width: 100%; display: flex; flex-direction: column; gap: 1.25rem;">
+                <docs-header></docs-header>
+
+                <!-- Content Area -->
+                <docs-anchor-helper>
+                    <section class="page-content" aria-label="App Features Content">
+                        <!-- Overview -->
+                        <article id="overview" class="doc-section">
+                            <h1>App Features</h1>
+                            <p class="lead">
+                                Learn how to build naming templates, map values dynamically, and batch rename files cleanly
+                                using FileNamer.
+                            </p>
+                            <p>
+                                FileNamer is a browser-based template builder and batch file renamer that helps structure
+                                files according to consistent file naming standards.
+                            </p>
+                            <p>
+                                Built with a privacy-first approach, all processing occurs entirely within your web browser.
+                                No accounts are required, no invasive tracking, and no data is uploaded to remote servers.
+                            </p>
+
+                            <!-- Visualizing Layout info block -->
+                            <div class="info-aside">
+                                <div class="aside-badge">Local-First Processing</div>
+                                <p>
+                                    Your files never leave your device. FileNamer works by reading the metadata of the files
+                                    you drop, mapping their names locally, and letting you download the renamed copies
+                                    directly.
+                                </p>
+                            </div>
+                        </article>
+
+                        <hr class="section-divider">
+
+                        <!-- Template Picker -->
+                        <article id="template-picker" class="doc-section">
+                            <h2>Template Picker</h2>
+                            <p>
+                                The <strong>Template Picker</strong> allows you to manage and back up your file naming
+                                templates. Choose from included presets or create and name your own custom templates. Once
+                                you create a template, you can export, share, and import at any time.
+                            </p>
+
+                            <div class="help-feature-grid" style="margin-top: 1.25rem;">
+                                <div class="help-feature-card" style="margin-top: 0;">
+                                    <h3>Manage Templates</h3>
+                                    <p style="margin-bottom: 0.75rem;">Configure templates locally:</p>
+                                    <ul class="help-list" style="margin-left: 0.5rem; margin-top: 0.25rem;">
+                                        <li><strong>Switch Presets:</strong> Choose standard predefined layouts or your own
+                                            custom schemas from the select menu.</li>
+                                        <li><strong>Add Template <span class="doc-btn-inline"
+                                                    title="New Custom Template"><svg xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M5 12h14" />
+                                                        <path d="M12 5v14" />
+                                                    </svg></span>:</strong> Create a blank custom template and name it.</li>
+                                        <li><strong>Rename Template <span class="doc-btn-inline"
+                                                    title="Rename Active Template"><svg xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M12 20h9" />
+                                                        <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                                                    </svg></span>:</strong> Rename the active template.</li>
+                                        <li><strong>Delete Template <span class="doc-btn-inline danger-action"
+                                                    title="Delete Active Template"><svg xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M3 6h18" />
+                                                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                                                        <line x1="10" y1="11" x2="10" y2="17" />
+                                                        <line x1="14" y1="11" x2="14" y2="17" />
+                                                    </svg></span>:</strong> Remove the active template (requires at least
+                                            one template remaining).</li>
+                                    </ul>
+                                </div>
+                                <div class="help-feature-card" style="margin-top: 0;">
+                                    <h3>Backup & Share</h3>
+                                    <p style="margin-bottom: 0.75rem;">Share and export your layouts:</p>
+                                    <ul class="help-list" style="margin-left: 0.5rem; margin-top: 0.25rem;">
+                                        <li><strong>Share Template <span class="doc-btn-inline"
+                                                    title="Share Active Template Link"><svg
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round">
+                                                        <circle cx="18" cy="5" r="3" />
+                                                        <circle cx="6" cy="12" r="3" />
+                                                        <circle cx="18" cy="19" r="3" />
+                                                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                                                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                                                    </svg></span>:</strong> Copy a share URL with the current field schema
+                                            to your clipboard.</li>
+                                        <li><strong>JSON Export/Import:</strong> Export schemas to local JSON files (<span
+                                                class="doc-btn-inline" title="Export JSON"><svg
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                                    <polyline points="7 10 12 15 17 10" />
+                                                    <line x1="12" y1="15" x2="12" y2="3" />
+                                                </svg></span>), or
+                                            import existing layouts (<span class="doc-btn-inline" title="Import JSON"><svg
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                                    <polyline points="17 8 12 3 7 8" />
+                                                    <line x1="12" y1="3" x2="12" y2="15" />
+                                                </svg></span>) back into the application.</li>
+                                        <li><strong>Reset Defaults:</strong> Revert the workspace to default preset
+                                            configurations.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </article>
+
+                        <hr class="section-divider">
+
+                        <!-- Field Builder -->
+                        <article id="field-builder" class="doc-section">
+                            <h2>Field Builder</h2>
+                            <p>
+                                The <strong>Field Builder</strong> lets you design the custom sequence of structural
+                                segments to form your filenames. You can add new fields, configure their options, and drag
+                                and drop fields to change their sequence.
+                            </p>
+
+                            <h3 style="font-size: 1.1rem; margin-top: 1.25rem; margin-bottom: 0.5rem;">Field Segment Options
+                            </h3>
+                            <p>
+                                Add, reorder, and configure individual structural components:
+                            </p>
+                            <ul class="help-list-custom">
+                                <li>
+                                    <div class="list-icon" style="background-color: #3b82f6;"><span
+                                            style="font-size: 0.65rem; font-weight: 700;">TXT</span></div>
+                                    <div class="list-text">
+                                        <strong class="list-subhead">Text:</strong> Create text inputs. Configure as a
+                                        default value (pre-populated) or as a placeholder (blank by default).
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="list-icon" style="background-color: #ec4899;"><span
+                                            style="font-size: 0.65rem; font-weight: 700;">DRP</span></div>
+                                    <div class="list-text">
+                                        <strong class="list-subhead">Dropdown:</strong> Enforce strict classification
+                                        values. Enter options as a comma-separated list to render a picker menu in the
+                                        preview form.
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="list-icon" style="background-color: #10b981;"><span
+                                            style="font-size: 0.65rem; font-weight: 700;">DAT</span></div>
+                                    <div class="list-text">
+                                        <strong class="list-subhead">Date:</strong> Enforce standardized dates. Select
+                                        output formats
+                                        like <code>YYYYMMDD</code>, <code>YYYY-MM-DD</code>, <code>YYYY</code>, or
+                                        <code>HHMMSS</code>. Supports Custom Format using standard tokens:
+                                        <ul style="margin-top: 0.25rem; padding-left: 1.25rem; font-size: 0.75rem;">
+                                            <li><code>YYYY</code> / <code>YY</code> (Year, e.g. 2026 / 26)</li>
+                                            <li><code>MM</code> / <code>M</code> (Month, e.g. 07 / 7)</li>
+                                            <li><code>DD</code> / <code>D</code> (Day, e.g. 08 / 8)</li>
+                                            <li><code>HH</code> / <code>H</code> (24h Hour, e.g. 15 / 15)</li>
+                                            <li><code>hh</code> / <code>h</code> (12h Hour, e.g. 03 / 3)</li>
+                                            <li><code>mm</code> / <code>m</code> (Minute, e.g. 42 / 42)</li>
+                                            <li><code>ss</code> / <code>s</code> (Second, e.g. 12 / 12)</li>
+                                            <li><code>A</code> / <code>a</code> (AM/PM or am/pm)</li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="list-icon" style="background-color: #f59e0b;"><span
+                                            style="font-size: 0.65rem; font-weight: 700;">IDX</span></div>
+                                    <div class="list-text">
+                                        <strong class="list-subhead">Index:</strong> Add sequential numbers to each file.
+                                        Configure numerical digit padding (e.g. set digits to 3 to output <code>001</code>,
+                                        <code>002</code>, etc.).
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="list-icon" style="background-color: #06b6d4;"><span
+                                            style="font-size: 0.65rem; font-weight: 700;">ORG</span></div>
+                                    <div class="list-text">
+                                        <strong class="list-subhead">Original Name:</strong> Preserve the original filename
+                                        (without its extension). Configure option modes to force lowercase/UPPERCASE,
+                                        truncate long names to a specific length, and automatically replace spaces with the active separator.
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="list-icon" style="background-color: #8b5cf6;"><span
+                                            style="font-size: 0.65rem; font-weight: 700;">EXT</span></div>
+                                    <div class="list-text">
+                                        <strong class="list-subhead">Extension:</strong> Control output extension behaviors.
+                                        Choose to keep the original file extension, force case styles, supply a custom
+                                        suffix (e.g. <code>pdf</code>), or strip the extension entirely.
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <h3 style="font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.5rem;">Format Settings</h3>
+                            <p>
+                                Configure core rules at the bottom of the column that apply across the entire template:
+                            </p>
+                            <ul class="help-list" style="margin-top: 0.5rem;">
+                                <li><strong>Separator:</strong> Choose how segments are separated. Options include
+                                    Underscores (<code>_</code>), Hyphens (<code>-</code>), Dots (<code>.</code>),
+                                    or None.</li>
+                                <li><strong>Case Styling:</strong> Force capitalization styles across all text
+                                    segments instantly (lowercase, UPPERCASE, snake_case, camelCase, or As Entered).
+                                </li>
+                            </ul>
+                        </article>
+
+                        <hr class="section-divider">
+
+                        <!-- Preview & Rename -->
+                        <article id="preview-rename" class="doc-section">
+                            <h2>Preview & Rename</h2>
+                            <p>
+                                The <strong>Preview & Rename</strong> panel automatically creates a form based on the rules
+                                you create in the Field Builder. As you type, the preview window builds the
+                                output string in real-time.
+                            </p>
+                            <ul class="help-list">
+                                <li><strong>Dynamic Fields:</strong> Text strings, dropdown lists, and calendar date
+                                    selectors align to your active template segments.</li>
+                                <li><strong>Sequence Start Control:</strong> If an Index segment exists, a "Start
+                                    Index" counter box lets you choose the initial value of your numbering sequence.
+                                </li>
+                                <li><strong>Quick Copy:</strong> Click the "Copy" button to grab a single previewed
+                                    filename directly to your clipboard.</li>
+                            </ul>
+                            <div class="info-aside">
+                                <div class="aside-badge">See Structure</div>
+                                <p>
+                                    Toggle the "Show Structure" button inside the preview box to display the literal
+                                    naming schema structure directly below the live preview. This helps you
+                                    validate your templates and inspect individual field outputs.
+                                </p>
+                            </div>
+                        </article>
+
+                        <hr class="section-divider">
+
+                        <!-- Batch Renaming -->
+                        <article id="batch-renaming" class="doc-section">
+                            <h2>Batch Renaming</h2>
+                            <p>
+                                FileNamer can rename folders of files sequentially in a single click. Simply drag
+                                files from your file explorer and drop them directly onto the workspace dropzone.
+                            </p>
+
+                            <h3 id="batch-original-target" style="font-size: 1.15rem; margin-top: 1.5rem;">Original vs Target Previews</h3>
+                            <p>
+                                Once files are dropped, a side-by-side verification log list displays:
+                            </p>
+                            <ul class="help-list">
+                                <li><strong>Original Filename:</strong> Shows the filename and file size (KB/MB).
+                                </li>
+                                <li><strong>Renamed Output:</strong> Displays the target output, verifying that the
+                                    separators, formatting, date strings, and sequence offsets apply correctly.</li>
+                                <li><strong>Remove Files:</strong> Click the minus icon on individual rows to
+                                    remove any files from the renaming batch list.</li>
+                            </ul>
+
+                            <h3 id="batch-downloading" style="font-size: 1.15rem; margin-top: 1.5rem;">Downloading Files</h3>
+                            <p>
+                                Download renamed files securely:
+                            </p>
+                            <ul class="help-list">
+                                <li><strong>ZIP Download:</strong> Bundles your newly named files into a single
+                                    <code>.zip</code> archive.
+                                </li>
+                                <li><strong>Sequential Fallback:</strong> If needed, files download individually
+                                    in sequence to your browser's downloads directory.</li>
+                            </ul>
+
+                            <h3 id="batch-csv" style="font-size: 1.15rem; margin-top: 1.5rem;">Bulk Editing & CSV Data</h3>
+                            <p>
+                                For advanced cataloging workflows, FileNamer offers two ways to customize template fields
+                                for individual files in your queue, both featuring automatic defaulting:
+                            </p>
+                            <ul class="help-list" style="gap: 0.75rem; display: flex; flex-direction: column;">
+                                <li><strong>Bulk Edit Grid:</strong> Click the "Bulk Edit Grid" button above the file queue
+                                    to open an interactive spreadsheet view. You can type or select values for individual
+                                    files. Any cells left empty automatically inherit the default values set
+                                    in the Template Picker form.
+                                </li>
+                                <li><strong>CSV File Import:</strong> You can download, edit, and import CSV files to
+                                    populate varying fields:
+                                    <ul style="margin-left: 1.25rem; margin-top: 0.25rem; list-style-type: circle;">
+                                        <li><em>Filename Matching:</em> If your CSV contains an
+                                            <code>Original Filename</code> column, the app matches rows to your files by
+                                            filename, regardless of order.
+                                        </li>
+                                        <li><em>Index Fallback:</em> If no filename column is found, the CSV rows map
+                                            sequentially (Row 1 to File 1, Row 2 to File 2, etc.).</li>
+                                        <li><em>Empty Value Defaulting:</em> Any empty CSV cell inherits the global template
+                                            default value.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Get CSV Template:</strong> Download a pre-formatted CSV template tailored
+                                    exactly to your active template. If you have files queued, the CSV template includes the
+                                    <code>Original Filename</code> column pre-populated with your current files list.
+                                </li>
+                                <li><strong>Export Log (CSV):</strong> Export a translation sheet mapping original filenames
+                                    to their renamed outputs and file sizes for database records, audit trails, or other
+                                    uses.</li>
+                            </ul>
+                        </article>
+                    </section>
+                </docs-anchor-helper>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <filenamer-footer></filenamer-footer>
+
+        <!-- Lightbox Modal -->
+        <div id="lightbox-modal" class="lightbox-modal" aria-hidden="true" role="dialog" aria-label="Image Viewer">
+            <button class="lightbox-close" aria-label="Close image viewer">&times;</button>
+            <img class="lightbox-content" id="lightbox-img" alt="">
+            <div class="lightbox-caption" id="lightbox-caption"></div>
+        </div>
+    </div>
+</body>
+
+</html>

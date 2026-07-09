@@ -41,550 +41,155 @@
         content="Learn how to use FileNamer to design custom file naming templates, fill parameters dynamically, and batch-rename local files entirely in your browser.">
     <link rel="canonical" href="https://filenamer.ryanmarch.me/docs/">
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://filenamer.ryanmarch.me/docs/">
-    <meta property="og:title" content="User Guide — FileNamer">
-    <meta property="og:description"
-        content="Learn how to use FileNamer to design custom file naming templates, fill parameters dynamically, and batch-rename local files entirely in your browser.">
-
     <!-- Docs Style Sheet -->
     <link rel="stylesheet" href="style.css">
     <script src="/js/components.js" type="module"></script>
+    <script src="docs-components.js" type="module"></script>
 </head>
 
-<body class="user-docs-page">
+<body class="user-docs-page docs-home-page">
     <div class="app-container">
         <!-- Mobile Navigation Overlay -->
         <div id="mobile-overlay" class="mobile-overlay"></div>
 
-        <main class="page-container-sidebar user-docs">
-            <!-- Sidebar Navigation -->
-            <nav class="page-sidebar" aria-label="Documentation sections">
-                <div class="sidebar-logo">
-                    <a href="/" class="logo-link"
-                        style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--accent); margin-bottom: 1.5rem;">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"
-                            style="width: 1.85rem; height: 1.85rem; flex-shrink: 0;">
-                            <rect x="1.5" y="1" width="16" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
-                            <rect x="1.5" y="8.5" width="10" height="2.5" rx="1.25" fill="#3b82f6" />
-                            <rect x="1.5" y="15" width="7.5" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
-                            <line x1="13" y1="6.5" x2="22" y2="6.5" stroke="#3b82f6" stroke-width="2"
-                                stroke-linecap="round" />
-                            <line x1="17.5" y1="6.5" x2="17.5" y2="17.5" stroke="#3b82f6" stroke-width="2.2" />
-                            <line x1="13" y1="17.5" x2="22" y2="17.5" stroke="#3b82f6" stroke-width="2"
-                                stroke-linecap="round" />
-                        </svg>
-                        <span
-                            style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700; color: var(--text-main); letter-spacing: -0.025em;">FileNamer</span>
-                    </a>
-                </div>
-                <ul>
-                    <li class="mobile-nav-item"><a href="../app/" class="sidebar-global-link">App</a></li>
-                    <li class="mobile-nav-item"><a href="index.html" class="sidebar-global-link active">Docs</a></li>
-                    <li class="mobile-nav-divider"></li>
-                    <li><a href="#overview" class="sidebar-link active">Overview</a></li>
-                    <li><a href="#template-picker" class="sidebar-link">Template Picker</a></li>
-                    <li><a href="#template-guides" class="sidebar-link">Template Guides</a></li>
-                    <li><a href="#utm-templates" class="sidebar-link">UTM &amp; URL Templates</a></li>
-                    <li><a href="#field-builder" class="sidebar-link">Field Builder</a></li>
-                    <li><a href="#preview-rename" class="sidebar-link">Preview & Rename</a></li>
-                    <li>
-                        <a href="#batch-renaming" class="sidebar-link">Batch Renaming</a>
-                        <ul class="sidebar-sublist">
-                            <li><a href="#batch-original-target" class="sidebar-link sub-link">Original vs Target</a>
-                            </li>
-                            <li><a href="#batch-downloading" class="sidebar-link sub-link">Downloading Files</a></li>
-                            <li><a href="#batch-csv" class="sidebar-link sub-link">Renaming with CSV</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#offline-use" class="sidebar-link">Offline & PWA</a></li>
-                </ul>
-                <div class="sidebar-footer">
-                    <div class="cta-card">
-                        <div class="cta-card-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                <rect x="1.5" y="1" width="16" height="2.5" rx="1.25" fill="currentColor"
-                                    opacity="0.4" />
-                                <rect x="1.5" y="8.5" width="10" height="2.5" rx="1.25" fill="#3b82f6" />
-                                <rect x="1.5" y="15" width="7.5" height="2.5" rx="1.25" fill="currentColor"
-                                    opacity="0.4" />
-                                <line x1="13" y1="6.5" x2="22" y2="6.5" stroke="#3b82f6" stroke-width="2"
-                                    stroke-linecap="round" />
-                                <line x1="17.5" y1="6.5" x2="17.5" y2="17.5" stroke="#3b82f6" stroke-width="2.2" />
-                                <line x1="13" y1="17.5" x2="22" y2="17.5" stroke="#3b82f6" stroke-width="2"
-                                    stroke-linecap="round" />
-                            </svg>
-                        </div>
-                        <h4 class="cta-card-title">FileNamer</h4>
-                        <p class="cta-card-desc">Design custom schemas, test with live previews, and batch rename local
-                            files safely in-browser.</p>
-                        <a href="../app/" class="btn-cta-generator">
-                            <span>Go to FileNamer</span>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14"
-                                height="14">
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                <polyline points="12 5 19 12 12 19"></polyline>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </nav>
-
+        <main class="page-container-fullwidth user-docs">
             <!-- Right-side Content & Header Wrapper -->
             <div class="page-content-wrapper" style="width: 100%; display: flex; flex-direction: column; gap: 1.25rem;">
-                <header class="app-header">
-                    <a href="/" class="header-logo" style="text-decoration: none;">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <rect x="1.5" y="1" width="16" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
-                            <rect x="1.5" y="8.5" width="10" height="2.5" rx="1.25" fill="#3b82f6" />
-                            <rect x="1.5" y="15" width="7.5" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
-                            <line x1="13" y1="6.5" x2="22" y2="6.5" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" />
-                            <line x1="17.5" y1="6.5" x2="17.5" y2="17.5" stroke="#3b82f6" stroke-width="2.2" />
-                            <line x1="13" y1="17.5" x2="22" y2="17.5" stroke="#3b82f6" stroke-width="2"
-                                stroke-linecap="round" />
-                        </svg>
-                        <h1>FileNamer</h1>
-                    </a>
-                    <div class="header-actions">
-                        <div class="header-nav" aria-label="Main Navigation">
-                            <a href="../app/" class="nav-link">App</a>
-                            <a href="index.html" class="nav-link active">Docs</a>
-                        </div>
-                        <button id="mobile-nav-toggle" class="mobile-nav-toggle" aria-label="Toggle navigation menu"
-                            aria-expanded="false">
-                            <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="3" y1="12" x2="21" y2="12"></line>
-                                <line x1="3" y1="6" x2="21" y2="6"></line>
-                                <line x1="3" y1="18" x2="21" y2="18"></line>
-                            </svg>
-                            <svg class="close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
-                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                            </svg>
-                        </button>
-                    </div>
-                </header>
+                <docs-header></docs-header>
 
                 <!-- Content Area -->
-                <section class="page-content" aria-label="User Guide Content">
+                <docs-anchor-helper>
+                    <div class="docs-hero">
+                        <h1>Help Center</h1>
+                        <p class="lead">Search guides, explore naming standards, and learn how to manage templates in
+                            FileNamer.</p>
+                        <docs-search></docs-search>
+                    </div>
 
-                    <!-- Overview -->
-                    <article id="overview" class="doc-section">
-                        <h1>User Guide</h1>
-                        <p class="lead">
-                            Learn how to build naming templates, map values dynamically, and batch rename files cleanly
-                            using FileNamer.
-                        </p>
-                        <p>
-                            FileNamer is a browser-based template builder and batch file renamer that helps structure
-                            files according to consistent file naming standards.
-                        </p>
-                        <p>
-                            Built with a privacy-first approach, all processing occurs entirely within your web browser.
-                            No accounts are required, no invasive tracking, and no data is uploaded to remote servers.
-                        </p>
+                    <h2 class="docs-categories-title">Explore Guides</h2>
 
-                        <!-- Visualizing Layout info block -->
-                        <div class="info-aside">
-                            <div class="aside-badge">Local-First Processing</div>
-                            <p>
-                                Your files never leave your device. FileNamer works by reading the metadata of the files
-                                you drop, mapping their names locally, and letting you download the renamed copies
-                                directly.
-                            </p>
-                        </div>
-                    </article>
+                    <div class="docs-grid">
+                        <a href="getting-started/index.html" class="docs-card">
+                            <div class="docs-card-category">Basics</div>
+                            <h3 class="docs-card-title">Getting Started Guide</h3>
+                            <p class="docs-card-desc">New to FileNamer? Follow our interactive quick start guide to
+                                configure templates and rename your first batch of files safely.</p>
+                            <span class="docs-card-link">
+                                Read Guide
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="3">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </span>
+                        </a>
 
-                    <!-- Table of Contents -->
-                    <nav class="inline-toc" aria-label="Table of contents">
-                        <div class="toc-title">Table of Contents</div>
-                        <ul class="toc-list">
-                            <li><a href="#template-picker">Template Picker</a></li>
-                            <li><a href="#template-guides">Template Guides</a></li>
-                            <li>
-                                <a href="#field-builder">Field Builder</a>
-                                <ul class="toc-sublist">
-                                    <li><a href="#utm-templates">UTM &amp; URL Templates</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#preview-rename">Preview &amp; Rename</a></li>
-                            <li>
-                                <a href="#batch-renaming">Batch Renaming</a>
-                                <ul class="toc-sublist">
-                                    <li><a href="#batch-original-target">Original vs Target Previews</a></li>
-                                    <li><a href="#batch-downloading">Downloading Files</a></li>
-                                    <li><a href="#batch-csv">Renaming with CSV Data</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#offline-use">Offline &amp; PWA Support</a></li>
-                        </ul>
-                    </nav>
+                        <a href="app-features/index.html" class="docs-card">
+                            <div class="docs-card-category">General</div>
+                            <h3 class="docs-card-title">App Features</h3>
+                            <p class="docs-card-desc">Learn how to build naming templates, map values dynamically, and
+                                batch rename files cleanly using FileNamer.</p>
+                            <span class="docs-card-link">
+                                Read Guide
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="3">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </span>
+                        </a>
 
-                    <hr class="section-divider">
+                        <a href="template-management/index.html" class="docs-card">
+                            <div class="docs-card-category">Advanced</div>
+                            <h3 class="docs-card-title">Template Management</h3>
+                            <p class="docs-card-desc">Learn how to import and export JSON configuration files, save
+                                custom layouts locally, and share presets with your team.</p>
+                            <span class="docs-card-link">
+                                Read Guide
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="3">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </span>
+                        </a>
 
-                    <!-- Template Picker -->
-                    <article id="template-picker" class="doc-section">
-                        <h2>Template Picker</h2>
-                        <p>
-                            The <strong>Template Picker</strong> allows you to manage and back up your file naming
-                            templates. Choose from included presets or create and name your own custom templates. Once
-                            you create a template, you can export, share, and import at any time.
-                        </p>
+                        <a href="utm-builder/index.html" class="docs-card">
+                            <div class="docs-card-category">Guides</div>
+                            <h3 class="docs-card-title">UTM Campaign Builder</h3>
+                            <p class="docs-card-desc">Standardize your URL tags. Map campaign sources, mediums,
+                                contents, and terms cleanly to generate readable analytics links.</p>
+                            <span class="docs-card-link">
+                                Read Guide
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="3">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </span>
+                        </a>
 
-                        <div class="help-feature-grid" style="margin-top: 1.25rem;">
-                            <div class="help-feature-card" style="margin-top: 0;">
-                                <h3>Manage Templates</h3>
-                                <p style="margin-bottom: 0.75rem;">Configure templates locally:</p>
-                                <ul class="help-list" style="margin-left: 0.5rem; margin-top: 0.25rem;">
-                                    <li><strong>Switch Presets:</strong> Choose standard predefined layouts or your own
-                                        custom schemas from the select menu.</li>
-                                    <li><strong>Add Template <span class="doc-btn-inline"
-                                                title="New Custom Template"><svg xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M5 12h14" />
-                                                    <path d="M12 5v14" />
-                                                </svg></span>:</strong> Create a blank custom template and name it.</li>
-                                    <li><strong>Rename Template <span class="doc-btn-inline"
-                                                title="Rename Active Template"><svg xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M12 20h9" />
-                                                    <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
-                                                </svg></span>:</strong> Rename the active template.</li>
-                                    <li><strong>Delete Template <span class="doc-btn-inline danger-action"
-                                                title="Delete Active Template"><svg xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M3 6h18" />
-                                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                                                    <line x1="10" y1="11" x2="10" y2="17" />
-                                                    <line x1="14" y1="11" x2="14" y2="17" />
-                                                </svg></span>:</strong> Remove the active template (requires at least
-                                        one template remaining).</li>
-                                </ul>
-                            </div>
-                            <div class="help-feature-card" style="margin-top: 0;">
-                                <h3>Backup & Share</h3>
-                                <p style="margin-bottom: 0.75rem;">Share and export your layouts:</p>
-                                <ul class="help-list" style="margin-left: 0.5rem; margin-top: 0.25rem;">
-                                    <li><strong>Share Template <span class="doc-btn-inline"
-                                                title="Share Active Template Link"><svg
-                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <circle cx="18" cy="5" r="3" />
-                                                    <circle cx="6" cy="12" r="3" />
-                                                    <circle cx="18" cy="19" r="3" />
-                                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-                                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-                                                </svg></span>:</strong> Copy a share URL with the current field schema
-                                        to your clipboard.</li>
-                                    <li><strong>JSON Export/Import:</strong> Export schemas to local JSON files (<span
-                                            class="doc-btn-inline" title="Export JSON"><svg
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                stroke-linejoin="round">
-                                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                                <polyline points="7 10 12 15 17 10" />
-                                                <line x1="12" y1="15" x2="12" y2="3" />
-                                            </svg></span>), or
-                                        import existing layouts (<span class="doc-btn-inline" title="Import JSON"><svg
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                stroke-linejoin="round">
-                                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                                <polyline points="17 8 12 3 7 8" />
-                                                <line x1="12" y1="3" x2="12" y2="15" />
-                                            </svg></span>) back into the application.</li>
-                                    <li><strong>Reset Defaults:</strong> Revert the workspace to default preset
-                                        configurations.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </article>
+                        <a href="media-library/index.html" class="docs-card">
+                            <div class="docs-card-category">Guides</div>
+                            <h3 class="docs-card-title">Media Library Organization</h3>
+                            <p class="docs-card-desc">Format movies, TV shows, and anime directories to be fully
+                                compliant with Plex, Radarr, Sonarr, and Kodi scanner criteria.</p>
+                            <span class="docs-card-link">
+                                Read Guide
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="3">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </span>
+                        </a>
 
-                    <hr class="section-divider">
+                        <a href="invoices-receipts/index.html" class="docs-card">
+                            <div class="docs-card-category">Guides</div>
+                            <h3 class="docs-card-title">Invoices &amp; Receipts</h3>
+                            <p class="docs-card-desc">Keep your financial records clean. Organize business expenses,
+                                payment details, bill statements, and accounts for fast tax audit lookups.</p>
+                            <span class="docs-card-link">
+                                Read Guide
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="3">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </span>
+                        </a>
 
-                    <!-- Template Guides -->
-                    <article id="template-guides" class="doc-section">
-                        <h2>Template Guides</h2>
-                        <p>
-                            Explore our customized guides detailing how to use, configure, and benefit from each of the default file naming templates built into FileNamer:
-                        </p>
-                        <ul class="help-list" style="margin-top: 1rem; margin-left: 0.5rem;">
-                            <li><strong><a href="project-files/index.html">Project Files Guide</a>:</strong> Standardize creative files and corporate assets sequentially.</li>
-                            <li><strong><a href="academic-papers/index.html">Academic Papers Guide</a>:</strong> Keep citation catalogs, research files, and bibliography databases clean and searchable.</li>
-                            <li><strong><a href="invoices-receipts/index.html">Invoices &amp; Receipts Guide</a>:</strong> Simplify tax filing and bookkeeping workflows with structured financial names.</li>
-                            <li><strong><a href="utm-builder/index.html">UTM Campaign Builder Guide</a>:</strong> Generate campaign tracking URLs with query parameters instead of standard filenames.</li>
-                            <li><strong><a href="media-library/index.html">Media Library Guide</a>:</strong> Structure movie and show files to match Plex, Radarr, and home theater agent rules.</li>
-                        </ul>
-                    </article>
+                        <a href="project-files/index.html" class="docs-card">
+                            <div class="docs-card-category">Guides</div>
+                            <h3 class="docs-card-title">Project Files</h3>
+                            <p class="docs-card-desc">Maintain order in your asset directories. Organize mockups,
+                                production exports, raw footage, and source assets under clear conventions.</p>
+                            <span class="docs-card-link">
+                                Read Guide
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="3">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </span>
+                        </a>
 
-                    <hr class="section-divider">
-
-                    <!-- Field Builder -->
-                    <article id="field-builder" class="doc-section">
-                        <h2>Field Builder</h2>
-                        <p>
-                            The <strong>Field Builder</strong> lets you design the custom sequence of structural
-                            segments to form your filenames. You can add new fields, configure their options, and drag
-                            and drop fields to change their sequence.
-                        </p>
-
-                        <h3 style="font-size: 1.1rem; margin-top: 1.25rem; margin-bottom: 0.5rem;">Field Segment Options
-                        </h3>
-                        <p>
-                            Add, reorder, and configure individual structural components:
-                        </p>
-                        <ul class="help-list-custom">
-                            <li>
-                                <div class="list-icon" style="background-color: #3b82f6;"><span
-                                        style="font-size: 0.65rem; font-weight: 700;">TXT</span></div>
-                                <div class="list-text">
-                                    <strong class="list-subhead">Text:</strong> Create text inputs. Configure as a
-                                    default value (pre-populated) or as a placeholder (blank by default).
-                                </div>
-                            </li>
-                            <li>
-                                <div class="list-icon" style="background-color: #ec4899;"><span
-                                        style="font-size: 0.65rem; font-weight: 700;">DRP</span></div>
-                                <div class="list-text">
-                                    <strong class="list-subhead">Dropdown:</strong> Enforce strict classification
-                                    values. Enter options as a comma-separated list to render a picker menu in the
-                                    preview form.
-                                </div>
-                            </li>
-                            <li>
-                                <div class="list-icon" style="background-color: #10b981;"><span
-                                        style="font-size: 0.65rem; font-weight: 700;">DAT</span></div>
-                                <div class="list-text">
-                                    <strong class="list-subhead">Date:</strong> Enforce standardized dates. Select
-                                    output formats
-                                    like <code>YYYYMMDD</code>, <code>YYYY-MM-DD</code>, <code>YYYY</code>, or
-                                    <code>HHMMSS</code>. Supports Custom Format using standard tokens:
-                                    <ul style="margin-top: 0.25rem; padding-left: 1.25rem; font-size: 0.75rem;">
-                                        <li><code>YYYY</code> / <code>YY</code> (Year, e.g. 2026 / 26)</li>
-                                        <li><code>MM</code> / <code>M</code> (Month, e.g. 07 / 7)</li>
-                                        <li><code>DD</code> / <code>D</code> (Day, e.g. 08 / 8)</li>
-                                        <li><code>HH</code> / <code>H</code> (24h Hour, e.g. 15 / 15)</li>
-                                        <li><code>hh</code> / <code>h</code> (12h Hour, e.g. 03 / 3)</li>
-                                        <li><code>mm</code> / <code>m</code> (Minute, e.g. 42 / 42)</li>
-                                        <li><code>ss</code> / <code>s</code> (Second, e.g. 12 / 12)</li>
-                                        <li><code>A</code> / <code>a</code> (AM/PM or am/pm)</li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="list-icon" style="background-color: #f59e0b;"><span
-                                        style="font-size: 0.65rem; font-weight: 700;">IDX</span></div>
-                                <div class="list-text">
-                                    <strong class="list-subhead">Index:</strong> Add sequential numbers to each file.
-                                    Configure numerical digit padding (e.g. set digits to 3 to output <code>001</code>,
-                                    <code>002</code>, etc.).
-                                </div>
-                            </li>
-                            <li>
-                                <div class="list-icon" style="background-color: #06b6d4;"><span
-                                        style="font-size: 0.65rem; font-weight: 700;">ORG</span></div>
-                                <div class="list-text">
-                                    <strong class="list-subhead">Original Name:</strong> Preserve the original filename
-                                    (without its extension). Configure option modes to force lowercase/UPPERCASE,
-                                    truncate long names to a specific length, and automatically replace spaces with the active separator.
-                                </div>
-                            </li>
-                            <li>
-                                <div class="list-icon" style="background-color: #8b5cf6;"><span
-                                        style="font-size: 0.65rem; font-weight: 700;">EXT</span></div>
-                                <div class="list-text">
-                                    <strong class="list-subhead">Extension:</strong> Control output extension behaviors.
-                                    Choose to keep the original file extension, force case styles, supply a custom
-                                    suffix (e.g. <code>pdf</code>), or strip the extension entirely.
-                                </div>
-                            </li>
-                        </ul>
-
-                        <h3 style="font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.5rem;">Format Settings</h3>
-                        <p>
-                            Configure core rules at the bottom of the column that apply across the entire template:
-                        </p>
-                        <ul class="help-list" style="margin-top: 0.5rem;">
-                            <li><strong>Separator:</strong> Choose how segments are separated. Options include
-                                Underscores (<code>_</code>), Hyphens (<code>-</code>), Dots (<code>.</code>),
-                                or None.</li>
-                            <li><strong>Case Styling:</strong> Force capitalization styles across all text
-                                segments instantly (lowercase, UPPERCASE, snake_case, camelCase, or As Entered).
-                            </li>
-                        </ul>
-
-                        <h3 id="utm-templates" style="font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.5rem;">UTM
-                            &amp; URL Templates</h3>
-                        <p>
-                            If a template's name contains <strong>"UTM"</strong> or <strong>"URL"</strong>
-                            (case-insensitive), FileNamer transforms the output into a query-parameterized URL instead
-                            of a standard filename.
-                        </p>
-                        <ul class="help-list" style="margin-top: 0.5rem;">
-                            <li><strong>Destination URL Field:</strong> Ensure you include a text field for the base URL
-                                (usually labeled containing <code>URL</code>).</li>
-                            <li><strong>Query Parameter Mapping:</strong> Add parentheses to any field's label to
-                                specify its query parameter key. For example, a field labeled
-                                <code>Campaign Name (utm_campaign)</code> will map to
-                                <code>&amp;utm_campaign=value</code> in the generated URL.
-                            </li>
-                        </ul>
-                        <div class="info-aside"
-                            style="background-color: var(--accent-light); border-left-color: var(--accent); margin-top: 1rem;">
-                            <div class="aside-badge">UTM Campaign Builder Guide</div>
-                            <p>
-                                Learn more about advanced use cases, CSV batch generation, and file uploader integration
-                                in the dedicated <a href="utm-builder/index.html">UTM Campaign Builder Guide</a>.
-                            </p>
-                        </div>
-                    </article>
-
-                    <hr class="section-divider">
-
-                    <!-- Preview & Rename -->
-                    <article id="preview-rename" class="doc-section">
-                        <h2>Preview & Rename</h2>
-                        <p>
-                            The <strong>Preview & Rename</strong> panel automatically creates a form based on the rules
-                            you create in the Field Builder. As you type, the preview window builds the
-                            output string in real-time.
-                        </p>
-                        <ul class="help-list">
-                            <li><strong>Dynamic Fields:</strong> Text strings, dropdown lists, and calendar date
-                                selectors align to your active template segments.</li>
-                            <li><strong>Sequence Start Control:</strong> If an Index segment exists, a "Start
-                                Index" counter box lets you choose the initial value of your numbering sequence.
-                            </li>
-                            <li><strong>Quick Copy:</strong> Click the "Copy" button to grab a single previewed
-                                filename directly to your clipboard.</li>
-                        </ul>
-                        <div class="info-aside"
-                            style="background-color: var(--accent-light); border-left-color: var(--accent);">
-                            <div class="aside-badge">See Structure</div>
-                            <p>
-                                Toggle the "Show Structure" button inside the preview box to display the literal
-                                naming schema structure directly below the live preview. This helps you
-                                validate your templates and inspect individual field outputs.
-                            </p>
-                        </div>
-                    </article>
-
-                    <hr class="section-divider">
-
-                    <!-- Batch Renaming -->
-                    <article id="batch-renaming" class="doc-section">
-                        <h2>Batch Renaming</h2>
-                        <p>
-                            FileNamer can rename folders of files sequentially in a single click. Simply drag
-                            files from your file explorer and drop them directly onto the workspace dropzone.
-                        </p>
-                    </article>
-
-                    <!-- Original vs Target Previews -->
-                    <article id="batch-original-target" class="doc-section" style="margin-bottom: 2rem;">
-                        <h3>Original vs Target Previews</h3>
-                        <p>
-                            Once files are dropped, a side-by-side verification log list displays:
-                        </p>
-                        <ul class="help-list">
-                            <li><strong>Original Filename:</strong> Shows the filename and file size (KB/MB).
-                            </li>
-                            <li><strong>Renamed Output:</strong> Displays the target output, verifying that the
-                                separators, formatting, date strings, and sequence offsets apply correctly.</li>
-                            <li><strong>Remove Files:</strong> Click the minus icon on individual rows to
-                                remove any files from the renaming batch list.</li>
-                        </ul>
-                    </article>
-
-                    <!-- Downloading Files -->
-                    <article id="batch-downloading" class="doc-section" style="margin-bottom: 2rem;">
-                        <h3>Downloading Files</h3>
-                        <p>
-                            Download renamed files securely:
-                        </p>
-                        <ul class="help-list">
-                            <li><strong>ZIP Download:</strong> Bundles your newly named files into a single
-                                <code>.zip</code> archive.
-                            </li>
-                            <li><strong>Sequential Fallback:</strong> If needed, files download individually
-                                in sequence to your browser's downloads directory.</li>
-                        </ul>
-                    </article>
-
-                    <!-- Renaming with CSV Data -->
-                    <article id="batch-csv" class="doc-section" style="margin-bottom: 2rem;">
-                        <h3>Bulk Editing & CSV Data</h3>
-                        <p>
-                            For advanced cataloging workflows, FileNamer offers two ways to customize template fields
-                            for individual files in your queue, both featuring automatic defaulting:
-                        </p>
-                        <ul class="help-list" style="gap: 0.75rem; display: flex; flex-direction: column;">
-                            <li><strong>Bulk Edit Grid:</strong> Click the "Bulk Edit Grid" button above the file queue
-                                to open an interactive spreadsheet view. You can type or select values for individual
-                                files. Any cells left empty automatically inherit the default values set
-                                in the Template Picker form.
-                            </li>
-                            <li><strong>CSV File Import:</strong> You can download, edit, and import CSV files to
-                                populate varying fields:
-                                <ul style="margin-left: 1.25rem; margin-top: 0.25rem; list-style-type: circle;">
-                                    <li><em>Filename Matching:</em> If your CSV contains an
-                                        <code>Original Filename</code> column, the app matches rows to your files by
-                                        filename, regardless of order.
-                                    </li>
-                                    <li><em>Index Fallback:</em> If no filename column is found, the CSV rows map
-                                        sequentially (Row 1 to File 1, Row 2 to File 2, etc.).</li>
-                                    <li><em>Empty Value Defaulting:</em> Any empty CSV cell inherits the global template
-                                        default value.</li>
-                                </ul>
-                            </li>
-                            <li><strong>Get CSV Template:</strong> Download a pre-formatted CSV template tailored
-                                exactly to your active template. If you have files queued, the CSV template includes the
-                                <code>Original Filename</code> column pre-populated with your current files list.
-                            </li>
-                            <li><strong>Export Log (CSV):</strong> Export a translation sheet mapping original filenames
-                                to their renamed outputs and file sizes for database records, audit trails, or other
-                                uses.</li>
-                        </ul>
-                    </article>
-
-                    <hr class="section-divider">
-
-                    <!-- Offline & PWA Support -->
-                    <article id="offline-use" class="doc-section">
-                        <h2>Offline & PWA Support</h2>
-                        <p>
-                            FileNamer can be installed to run as a local, standalone application on both desktop and
-                            mobile devices. It remains fully functional offline and all data processing happens locally.
-                        </p>
-                        <div class="help-feature-grid">
-                            <div class="help-feature-card">
-                                <h3>macOS (Safari)</h3>
-                                <p>Open the app in Safari, click <strong>File</strong> in the top menu bar, and choose
-                                    <strong>Add to Dock...</strong> to place FileNamer in your dock.
-                                </p>
-                            </div>
-                            <div class="help-feature-card">
-                                <h3>iOS & iPadOS</h3>
-                                <p>Open FileNamer in Safari on your iPhone or iPad, tap the standard
-                                    <strong>Share</strong> icon, and select <strong>Add to Home Screen</strong>.
-                                </p>
-                            </div>
-                            <div class="help-feature-card">
-                                <h3>Chrome & Edge</h3>
-                                <p>Click the install indicator (app icon badge) on the right side of the browser address
-                                    bar to install FileNamer on your system desktop or device app launcher.</p>
-                            </div>
-                        </div>
-                    </article>
-                </section>
+                        <a href="offline-pwa/index.html" class="docs-card">
+                            <div class="docs-card-category">Basics</div>
+                            <h3 class="docs-card-title">Offline &amp; PWA Support</h3>
+                            <p class="docs-card-desc">Learn how to install FileNamer as a Progressive Web App (PWA) on
+                                macOS, iOS, Android, and Windows for fully offline file renaming.</p>
+                            <span class="docs-card-link">
+                                Read Guide
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="3">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </span>
+                        </a>
+                    </div>
+                </docs-anchor-helper>
             </div>
         </main>
 
@@ -597,46 +202,6 @@
             <img class="lightbox-content" id="lightbox-img" alt="">
             <div class="lightbox-caption" id="lightbox-caption"></div>
         </div>
-
-        <!-- Scripts (Relative paths back up to root) -->
-        <script src="header.js"></script>
-        <script>
-            // Smooth scroll spy logic for sidebar links
-            document.addEventListener('DOMContentLoaded', () => {
-                const sections = document.querySelectorAll('.doc-section');
-                const navLinks = document.querySelectorAll('.sidebar-link');
-
-                function makeActive() {
-                    let scrollPos = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
-                    // Add offset for header height
-                    scrollPos += 100;
-
-                    for (let i = 0; i < sections.length; i++) {
-                        const section = sections[i];
-                        const top = section.offsetTop;
-                        const height = section.offsetHeight;
-
-                        if (scrollPos >= top && scrollPos < top + height) {
-                            const id = section.getAttribute('id');
-                            navLinks.forEach(link => {
-                                if (link.getAttribute('href') === `#${id}`) {
-                                    link.classList.add('active');
-                                } else {
-                                    link.classList.remove('active');
-                                }
-                            });
-                            break;
-                        }
-                    }
-                }
-
-                window.addEventListener('scroll', makeActive);
-                window.addEventListener('resize', makeActive);
-
-                // Initial call
-                setTimeout(makeActive, 100);
-            });
-        </script>
     </div>
 </body>
 

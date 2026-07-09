@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" translate="no" data-theme-style="tech">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="FileNamer" />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="google" content="notranslate">
+    <script>
+        // Theme initialization to prevent flicker
+        (function () {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'system') {
+                const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme-mode', 'system');
+            } else {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                document.documentElement.removeAttribute('data-theme-mode');
+            }
+        })();
+    </script>
+
+    <!-- Preconnect Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Global Style -->
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <title>Offline &amp; PWA Support — FileNamer Docs</title>
+    <meta name="description"
+        content="Learn how to install FileNamer as a Progressive Web App (PWA) on macOS, iOS, Android, and Windows for fully offline file renaming.">
+    <link rel="canonical" href="https://filenamer.ryanmarch.me/docs/offline-pwa/">
+
+    <!-- Docs Style Sheet -->
+    <link rel="stylesheet" href="../style.css">
+    <script src="/js/components.js" type="module"></script>
+    <script src="../docs-components.js" type="module"></script>
+</head>
+
+<body class="user-docs-page">
+    <div class="app-container">
+        <!-- Mobile Navigation Overlay -->
+        <div id="mobile-overlay" class="mobile-overlay"></div>
+
+        <main class="page-container-sidebar user-docs">
+            <!-- Sidebar Navigation -->
+            <docs-sidebar></docs-sidebar>
+
+            <!-- Right-side Content & Header Wrapper -->
+            <div class="page-content-wrapper" style="width: 100%; display: flex; flex-direction: column; gap: 1.25rem;">
+                <docs-header></docs-header>
+
+                <!-- Content Area -->
+                <docs-anchor-helper>
+                    <section class="page-content" aria-label="Offline and PWA Support Content">
+                        <!-- Offline & PWA Support -->
+                        <article id="offline-use" class="doc-section">
+                            <h1>Offline &amp; PWA Support</h1>
+                            <p class="lead">
+                                FileNamer operates entirely client-side. The application is built as a Progressive Web App (PWA) and registers a local service worker cache, enabling it to open and function offline without internet access.
+                            </p>
+                            <p>
+                                All file parsing, template rendering, parameter mapping, and compression occur locally inside your web browser. No server connection is required after the initial page load.
+                            </p>
+                            
+                            <h2 style="margin-top: 2rem;">Installation Instructions</h2>
+                            <p>To install FileNamer on your local desktop or mobile system and place a native app shortcut launcher on your system home screen:</p>
+                            
+                            <div class="help-feature-grid" style="margin-top: 1.5rem;">
+                                <div class="help-feature-card">
+                                    <h3>Safari (macOS)</h3>
+                                    <p>Open FileNamer in Safari, select <strong>File</strong> in the top application menu bar, and click
+                                        <strong>Add to Dock...</strong> to place FileNamer in your dock.
+                                    </p>
+                                </div>
+                                <div class="help-feature-card">
+                                    <h3>iOS &amp; iPadOS</h3>
+                                    <p>Open FileNamer in Safari on your iPhone or iPad, tap the standard
+                                        <strong>Share</strong> icon, and select <strong>Add to Home Screen</strong>.
+                                    </p>
+                                </div>
+                                <div class="help-feature-card">
+                                    <h3>Chrome &amp; Edge</h3>
+                                    <p>Click the install indicator (app icon badge) on the right side of the browser address
+                                        bar to install FileNamer on your system desktop or device app launcher.</p>
+                                </div>
+                            </div>
+                        </article>
+                    </section>
+                </docs-anchor-helper>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <filenamer-footer></filenamer-footer>
+
+        <!-- Lightbox Modal -->
+        <div id="lightbox-modal" class="lightbox-modal" aria-hidden="true" role="dialog" aria-label="Image Viewer">
+            <button class="lightbox-close" aria-label="Close image viewer">&times;</button>
+            <img class="lightbox-content" id="lightbox-img" alt="">
+            <div class="lightbox-caption" id="lightbox-caption"></div>
+        </div>
+    </div>
+</body>
+
+</html>

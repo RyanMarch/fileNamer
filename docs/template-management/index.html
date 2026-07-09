@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" translate="no" data-theme-style="tech">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="FileNamer" />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="google" content="notranslate">
+    <script>
+        // Theme initialization to prevent flicker
+        (function () {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'system') {
+                const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme-mode', 'system');
+            } else {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                document.documentElement.removeAttribute('data-theme-mode');
+            }
+        })();
+    </script>
+
+    <!-- Preconnect Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Global Style -->
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <title>Template Management Guide — FileNamer Docs</title>
+    <meta name="description"
+        content="Learn how to save custom naming schemas, import or export JSON templates, and share presets with your team.">
+    <link rel="canonical" href="https://filenamer.ryanmarch.me/docs/template-management/">
+
+    <!-- Docs Style Sheet -->
+    <link rel="stylesheet" href="../style.css">
+    <script src="/js/components.js" type="module"></script>
+    <script src="../docs-components.js" type="module"></script>
+</head>
+
+<body class="user-docs-page">
+    <div class="app-container">
+        <!-- Mobile Navigation Overlay -->
+        <div id="mobile-overlay" class="mobile-overlay"></div>
+
+        <main class="page-container-sidebar user-docs">
+            <!-- Sidebar Navigation -->
+            <docs-sidebar></docs-sidebar>
+
+            <!-- Right-side Content & Header Wrapper -->
+            <div class="page-content-wrapper" style="width: 100%; display: flex; flex-direction: column; gap: 1.25rem;">
+                <docs-header></docs-header>
+
+                <!-- Content Area -->
+                <docs-anchor-helper>
+                    <section class="page-content" aria-label="Template Management Guide Content">
+                        <!-- Template Management -->
+                        <article id="overview" class="doc-section">
+                            <h1>Template Management</h1>
+                            <p class="lead">
+                                Learn how to create, save, export, import, and share your custom naming schemas.
+                            </p>
+                            
+                            <h2 style="margin-top: 2rem;">Saving &amp; Managing Templates</h2>
+                            <p>
+                                FileNamer saves all of your custom naming templates locally in your browser's persistent database. You can manage your schemas using the controls inside the template bar.
+                            </p>
+                            
+                            <h3 style="margin-top: 1.5rem;">Create Templates</h3>
+                            <p>To create a new, custom naming template, click the <strong>Add Template</strong> button in the template header. You can then add static segments or dynamic fields like dates, text inputs, and counters.</p>
+
+                            <h3 style="margin-top: 1.5rem;">Export &amp; Import Templates</h3>
+                            <p>You can backup your configurations or move them to another computer by clicking the <strong>Export</strong> button. This saves your templates as a structured <code>.json</code> configuration file. To load them back, click <strong>Import</strong> and select the configuration file.</p>
+
+                            <h3 style="margin-top: 1.5rem;">Share Templates</h3>
+                            <p>If you want to share a specific template layout with your team, you can generate a <strong>Shareable URL</strong>. Click the share button to copy a direct link to your configuration details directly to your clipboard.</p>
+                        </article>
+                    </section>
+                </docs-anchor-helper>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <filenamer-footer></filenamer-footer>
+
+        <!-- Lightbox Modal -->
+        <div id="lightbox-modal" class="lightbox-modal" aria-hidden="true" role="dialog" aria-label="Image Viewer">
+            <button class="lightbox-close" aria-label="Close image viewer">&times;</button>
+            <img class="lightbox-content" id="lightbox-img" alt="">
+            <div class="lightbox-caption" id="lightbox-caption"></div>
+        </div>
+    </div>
+</body>
+
+</html>

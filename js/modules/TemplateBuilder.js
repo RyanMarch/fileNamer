@@ -48,11 +48,6 @@ export class TemplateBuilder {
                                 ${templates.map(t => `<option value="${escapeHtml(t.id)}" ${t.id === activeTpl.id ? 'selected' : ''}>${escapeHtml(t.name)}</option>`).join('')}
                             </select>
                             <div class="button-actions">
-                                ${helpDocUrl ? `
-                                <a id="help-tpl-btn" href="${helpDocUrl}" target="_blank" class="btn btn-secondary btn-icon-only" title="View Guide for ${escapeHtml(activeTpl.name)}" aria-label="View Guide for ${escapeHtml(activeTpl.name)}" style="text-decoration: none;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-                                </a>
-                                ` : ''}
                                 <button id="rename-tpl-btn" class="btn btn-secondary btn-icon-only" title="Rename Active Template" aria-label="Rename Active Template">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
                                 </button>
@@ -69,6 +64,16 @@ export class TemplateBuilder {
                         </div>
                     </div>
                 </div>
+
+                ${helpDocUrl ? `
+                <div class="template-guide-banner">
+                    <span class="banner-icon">💡</span>
+                    <span class="banner-text">
+                        For help with this template, read the <a href="${helpDocUrl}" target="_blank" class="banner-link">${escapeHtml(activeTpl.name)} Guide</a> to learn about conventions and best practices.
+                    </span>
+                </div>
+                ` : ''}
+
                 <div class="divider"></div>
 
                 <h3>Field Builder</h3>

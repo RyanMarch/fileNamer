@@ -1,0 +1,116 @@
+[
+  {
+    "title": "Getting Started Guide",
+    "path": "getting-started/index.html",
+    "category": "Basics",
+    "headings": [
+      "Overview",
+      "Select a Preset",
+      "Customize Fields",
+      "Test with Previews",
+      "Batch Rename Files"
+    ],
+    "excerpt": "Step-by-step tutorial guiding new users through presets, field customization, live previews, and batch file renaming in FileNamer.",
+    "lastUpdated": "2026-07-09"
+  },
+  {
+    "title": "App Features",
+    "path": "app-features/index.html",
+    "category": "Basics",
+    "headings": [
+      "Overview",
+      "Template Picker",
+      "Building Templates & Custom Fields",
+      "Form Entry & Live Previews",
+      "Local Batch Renaming"
+    ],
+    "excerpt": "Learn how to use FileNamer to design custom file naming templates, fill parameters dynamically, and batch-rename local files entirely in your browser.",
+    "lastUpdated": "2026-07-08"
+  },
+  {
+    "title": "Project Files Guide",
+    "path": "project-files/index.html",
+    "category": "Guides",
+    "headings": [
+      "Overview",
+      "Standard Template Fields",
+      "Best Practices for Customizing"
+    ],
+    "excerpt": "Standardize your design, coding, development, and content project directory structures. Organize raw resources and exports logically.",
+    "lastUpdated": "2026-07-02"
+  },
+  {
+    "title": "Academic Papers Guide",
+    "path": "academic-papers/index.html",
+    "category": "Guides",
+    "headings": [
+      "Overview",
+      "Standard Template Fields",
+      "Best Practices for Customizing"
+    ],
+    "excerpt": "Organize research articles, essays, and PDF journals. Maintain author names, publication years, and topic tags systematically.",
+    "lastUpdated": "2026-07-03"
+  },
+  {
+    "title": "Invoices & Receipts Guide",
+    "path": "invoices-receipts/index.html",
+    "category": "Guides",
+    "headings": [
+      "Overview",
+      "Standard Template Fields",
+      "Best Practices for Customizing"
+    ],
+    "excerpt": "Structure business invoices, payment receipts, expense forms, and bill statements for seamless accounting audits.",
+    "lastUpdated": "2026-07-04"
+  },
+  {
+    "title": "UTM Campaign Builder Guide",
+    "path": "utm-builder/index.html",
+    "category": "Guides",
+    "headings": [
+      "Overview",
+      "Standard Template Fields",
+      "Best Practices for Customizing"
+    ],
+    "excerpt": "Configure UTM query parameters in URL files. Track marketing campaign sources, mediums, terms, and content tags.",
+    "lastUpdated": "2026-07-09"
+  },
+  {
+    "title": "Media Library Guide",
+    "path": "media-library/index.html",
+    "category": "Guides",
+    "headings": [
+      "Overview",
+      "Standard Template Fields",
+      "Best Practices for Customizing"
+    ],
+    "excerpt": "Standardize movie and TV show folders for Plex, Radarr, and Sonarr media scrapers using quality, resolutions, and IMDb tags.",
+    "lastUpdated": "2026-07-05"
+  },
+  {
+    "title": "Template Management Guide",
+    "path": "template-management/index.html",
+    "category": "Advanced",
+    "headings": [
+      "Overview",
+      "Create Templates",
+      "Save Templates",
+      "Export Templates",
+      "Import Templates",
+      "Share Templates"
+    ],
+    "excerpt": "Learn how to save your custom structures locally, import or export JSON templates, and share links to your presets.",
+    "lastUpdated": "2026-07-07"
+  },
+  {
+    "title": "Offline & PWA Support",
+    "path": "offline-pwa/index.html",
+    "category": "Basics",
+    "headings": [
+      "Overview",
+      "Installation Instructions"
+    ],
+    "excerpt": "Learn how to install FileNamer as a Progressive Web App (PWA) on macOS, iOS, Android, and Windows for fully offline file renaming.",
+    "lastUpdated": "2026-07-09"
+  }
+]

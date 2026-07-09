@@ -44,6 +44,7 @@
     <!-- Docs Style Sheet -->
     <link rel="stylesheet" href="../style.css">
     <script src="/js/components.js" type="module"></script>
+    <script src="../docs-components.js" type="module"></script>
 </head>
 
 <body class="user-docs-page">
@@ -52,91 +53,14 @@
 
         <main class="page-container-sidebar user-docs">
             <!-- Sidebar Navigation -->
-            <nav class="page-sidebar" aria-label="Documentation sections">
-                <div class="sidebar-logo">
-                    <a href="/" class="logo-link"
-                        style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--accent); margin-bottom: 1.5rem;">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"
-                            style="width: 1.85rem; height: 1.85rem; flex-shrink: 0;">
-                            <rect x="1.5" y="1" width="16" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
-                            <rect x="1.5" y="8.5" width="10" height="2.5" rx="1.25" fill="#3b82f6" />
-                            <rect x="1.5" y="15" width="7.5" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
-                            <line x1="13" y1="6.5" x2="22" y2="6.5" stroke="#3b82f6" stroke-width="2"
-                                stroke-linecap="round" />
-                            <line x1="17.5" y1="6.5" x2="17.5" y2="17.5" stroke="#3b82f6" stroke-width="2.2" />
-                            <line x1="13" y1="17.5" x2="22" y2="17.5" stroke="#3b82f6" stroke-width="2"
-                                stroke-linecap="round" />
-                        </svg>
-                        <span
-                            style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700; color: var(--text-main); letter-spacing: -0.025em;">FileNamer</span>
-                    </a>
-                </div>
-                <ul>
-                    <li><a href="../index.html" class="sidebar-link">← General Docs</a></li>
-                    <li class="sidebar-section-title" style="margin-top: 1rem; margin-bottom: 0.25rem; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; padding: 0 0.75rem;">Template Guides</li>
-                    <li><a href="../project-files/index.html" class="sidebar-link">Project Files</a></li>
-                    <li><a href="../academic-papers/index.html" class="sidebar-link">Academic Papers</a></li>
-                    <li><a href="../invoices-receipts/index.html" class="sidebar-link active">Invoices &amp; Receipts</a></li>
-                    <li><a href="../utm-builder/index.html" class="sidebar-link">UTM Campaign Builder</a></li>
-                    <li><a href="../media-library/index.html" class="sidebar-link">Media Library</a></li>
-                </ul>
-                <div class="sidebar-footer">
-                    <div class="cta-card">
-                        <div class="cta-card-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                <rect x="1.5" y="1" width="16" height="2.5" rx="1.25" fill="currentColor"
-                                    opacity="0.4" />
-                                <rect x="1.5" y="8.5" width="10" height="2.5" rx="1.25" fill="#3b82f6" />
-                                <rect x="1.5" y="15" width="7.5" height="2.5" rx="1.25" fill="currentColor"
-                                    opacity="0.4" />
-                                <line x1="13" y1="6.5" x2="22" y2="6.5" stroke="#3b82f6" stroke-width="2"
-                                    stroke-linecap="round" />
-                                <line x1="17.5" y1="6.5" x2="17.5" y2="17.5" stroke="#3b82f6" stroke-width="2.2" />
-                                <line x1="13" y1="17.5" x2="22" y2="17.5" stroke="#3b82f6" stroke-width="2"
-                                    stroke-linecap="round" />
-                            </svg>
-                        </div>
-                        <h4 class="cta-card-title">FileNamer</h4>
-                        <p class="cta-card-desc">Design custom schemas, test with live previews, and batch rename local
-                            files safely in-browser.</p>
-                        <a href="../../app/" class="btn-cta-generator">
-                            <span>Go to FileNamer</span>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14"
-                                height="14">
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                <polyline points="12 5 19 12 12 19"></polyline>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </nav>
+            <docs-sidebar></docs-sidebar>
 
             <!-- Right-side Content & Header Wrapper -->
             <div class="page-content-wrapper" style="width: 100%; display: flex; flex-direction: column; gap: 1.25rem;">
-                <header class="app-header" style="justify-content: flex-end; padding-top: 0.5rem;">
-                    <div class="header-actions">
-                        <div class="header-nav" aria-label="Main Navigation">
-                            <a href="../../app/" class="nav-link">App</a>
-                            <a href="../index.html" class="nav-link active">Docs</a>
-                        </div>
-                        <button id="mobile-nav-toggle" class="mobile-nav-toggle" aria-label="Toggle navigation menu"
-                            aria-expanded="false">
-                            <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="3" y1="12" x2="21" y2="12"></line>
-                                <line x1="3" y1="6" x2="21" y2="6"></line>
-                                <line x1="3" y1="18" x2="21" y2="18"></line>
-                            </svg>
-                            <svg class="close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
-                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                            </svg>
-                        </button>
-                    </div>
-                </header>
+                <docs-header></docs-header>
 
                 <!-- Content Area -->
+                <docs-anchor-helper>
                 <section class="page-content" aria-label="Invoices & Receipts Guide Content">
 
                     <!-- Overview -->
@@ -196,6 +120,7 @@
                     </article>
 
                 </section>
+                </docs-anchor-helper>
             </div>
         </main>
 
@@ -210,7 +135,7 @@
         </div>
 
         <!-- Scripts -->
-        <script src="../header.js"></script>
+        
     </div>
 </body>
 
