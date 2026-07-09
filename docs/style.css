@@ -94,7 +94,8 @@
     gap: 0.5rem;
 }
 
-.sidebar-link {
+.sidebar-link,
+.sidebar-link:visited {
     display: block;
     padding: 0.5rem 0.75rem;
     color: var(--text-muted);
@@ -110,7 +111,8 @@
     background: var(--control-bg-hover);
 }
 
-.sidebar-link.active {
+.sidebar-link.active,
+.sidebar-link.active:visited {
     color: var(--text-main);
     background: var(--control-bg-hover);
     border-left: 3px solid var(--accent);
@@ -576,7 +578,8 @@
     display: none;
 }
 
-.sidebar-global-link {
+.sidebar-global-link,
+.sidebar-global-link:visited {
     display: block;
     padding: 0.5rem 0.75rem;
     color: var(--text-muted);
@@ -588,7 +591,8 @@
 }
 
 .sidebar-global-link:hover,
-.sidebar-global-link.active {
+.sidebar-global-link.active,
+.sidebar-global-link.active:visited {
     color: var(--accent);
     background: var(--accent-light);
 }
@@ -745,16 +749,20 @@
     gap: 0.25rem;
 }
 
-.sidebar-link.sub-link {
+.sidebar-link.sub-link,
+.sidebar-link.sub-link:visited {
     font-size: 0.825rem !important;
     padding: 0.35rem 0.5rem !important;
     font-weight: 400 !important;
+    color: var(--text-muted) !important;
 }
 
-.sidebar-link.sub-link.active {
+.sidebar-link.sub-link.active,
+.sidebar-link.sub-link.active:visited {
     border-left: 2px solid var(--accent) !important;
     padding-left: 0.4375rem !important;
     font-weight: 500 !important;
+    color: var(--text-main) !important;
 }
 
 .toc-sublist {

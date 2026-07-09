@@ -53,14 +53,7 @@ class DocsHeader extends HTMLElement {
             <header class="app-header">
                 ${showLogo ? `
                 <a href="/" class="header-logo" style="text-decoration: none;">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <rect x="1.5" y="1" width="16" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
-                        <rect x="1.5" y="8.5" width="10" height="2.5" rx="1.25" fill="#3b82f6" />
-                        <rect x="1.5" y="15" width="7.5" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
-                        <line x1="13" y1="6.5" x2="22" y2="6.5" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" />
-                        <line x1="17.5" y1="6.5" x2="17.5" y2="17.5" stroke="#3b82f6" stroke-width="2.2" />
-                        <line x1="13" y1="17.5" x2="22" y2="17.5" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" />
-                    </svg>
+                    <filenamer-logo></filenamer-logo>
                     <h1>FileNamer</h1>
                 </a>
                 ` : ''}
@@ -397,17 +390,7 @@ class DocsSidebar extends HTMLElement {
                 <div class="sidebar-logo">
                     <a href="/" class="logo-link"
                         style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--accent); margin-bottom: 1.5rem;">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"
-                            style="width: 1.85rem; height: 1.85rem; flex-shrink: 0;">
-                            <rect x="1.5" y="1" width="16" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
-                            <rect x="1.5" y="8.5" width="10" height="2.5" rx="1.25" fill="#3b82f6" />
-                            <rect x="1.5" y="15" width="7.5" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
-                            <line x1="13" y1="6.5" x2="22" y2="6.5" stroke="#3b82f6" stroke-width="2"
-                                stroke-linecap="round" />
-                            <line x1="17.5" y1="6.5" x2="17.5" y2="17.5" stroke="#3b82f6" stroke-width="2.2" />
-                            <line x1="13" y1="17.5" x2="22" y2="17.5" stroke="#3b82f6" stroke-width="2"
-                                stroke-linecap="round" />
-                        </svg>
+                        <filenamer-logo style="width: 1.85rem; height: 1.85rem; flex-shrink: 0;"></filenamer-logo>
                         <span
                             style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700; color: var(--text-main); letter-spacing: -0.025em;">FileNamer</span>
                     </a>
@@ -418,18 +401,7 @@ class DocsSidebar extends HTMLElement {
                 <div class="sidebar-footer">
                     <div class="cta-card">
                         <div class="cta-card-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                <rect x="1.5" y="1" width="16" height="2.5" rx="1.25" fill="currentColor"
-                                    opacity="0.4" />
-                                <rect x="1.5" y="8.5" width="10" height="2.5" rx="1.25" fill="#3b82f6" />
-                                <rect x="1.5" y="15" width="7.5" height="2.5" rx="1.25" fill="currentColor"
-                                    opacity="0.4" />
-                                <line x1="13" y1="6.5" x2="22" y2="6.5" stroke="#3b82f6" stroke-width="2"
-                                    stroke-linecap="round" />
-                                <line x1="17.5" y1="6.5" x2="17.5" y2="17.5" stroke="#3b82f6" stroke-width="2.2" />
-                                <line x1="13" y1="17.5" x2="22" y2="17.5" stroke="#3b82f6" stroke-width="2"
-                                    stroke-linecap="round" />
-                            </svg>
+                            <filenamer-logo></filenamer-logo>
                         </div>
                         <h4 class="cta-card-title">FileNamer</h4>
                         <p class="cta-card-desc">Design custom schemas, test with live previews, and batch rename local
@@ -568,25 +540,33 @@ class DocsSidebar extends HTMLElement {
 
         if (targets.length === 0) return;
 
+        const visibleTargets = new Map();
+
         const observerOptions = {
             root: null,
-            rootMargin: '-20% 0px -60% 0px',
+            rootMargin: '-10% 0px -55% 0px',
             threshold: 0
         };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const id = entry.target.getAttribute('id');
-                    links.forEach(link => {
-                        if (link.getAttribute('href') === `#${id}`) {
-                            link.classList.add('active');
-                        } else {
-                            link.classList.remove('active');
-                        }
-                    });
-                }
+                visibleTargets.set(entry.target, entry.isIntersecting);
             });
+
+            // Find the first target that is currently intersecting
+            const activeTarget = targets.find(target => visibleTargets.get(target));
+
+            if (activeTarget) {
+                const activeId = activeTarget.getAttribute('id');
+                links.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href') === `#${activeId}`);
+                });
+            } else if (window.scrollY < 100 && links.length > 0) {
+                // Default to highlighting the first link (e.g. Overview) when scrolled to the top
+                links.forEach((link, idx) => {
+                    link.classList.toggle('active', idx === 0);
+                });
+            }
         }, observerOptions);
 
         targets.forEach(target => observer.observe(target));

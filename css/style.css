@@ -194,7 +194,8 @@ a:focus {
     letter-spacing: -0.025em;
 }
 
-.header-logo svg {
+.header-logo svg,
+.header-logo filenamer-logo {
     width: 1.85rem;
     height: 1.85rem;
     flex-shrink: 0;

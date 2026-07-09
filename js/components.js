@@ -166,7 +166,27 @@ class FilenamerUiButton extends HTMLElement {
     }
 }
 
+class FilenamerLogo extends HTMLElement {
+    connectedCallback() {
+        this.style.display = 'inline-flex';
+        this.style.width = this.getAttribute('width') || '1.85rem';
+        this.style.height = this.getAttribute('height') || '1.85rem';
+        this.style.flexShrink = '0';
+        this.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width: 100%; height: 100%; display: block;">
+                <rect x="1.5" y="2" width="16" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
+                <rect x="1.5" y="9.3" width="10" height="2.5" rx="1.25" fill="#3b82f6" />
+                <rect x="1.5" y="16" width="7.5" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
+                <line x1="13" y1="7" x2="22" y2="7" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" />
+                <line x1="17.5" y1="7" x2="17.5" y2="21.5" stroke="#3b82f6" stroke-width="2.2" />
+                <line x1="13" y1="21.5" x2="22" y2="21.5" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" />
+            </svg>
+        `;
+    }
+}
+
 customElements.define('filenamer-footer', FilenamerFooter);
 customElements.define('design-tip', DesignTip);
 customElements.define('filenamer-ui-button', FilenamerUiButton);
+customElements.define('filenamer-logo', FilenamerLogo);
 
