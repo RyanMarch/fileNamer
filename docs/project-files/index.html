@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" translate="no" data-theme-style="tech">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+    <link class="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="FileNamer" />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="google" content="notranslate">
+    <script>
+        // Theme initialization to prevent flicker
+        (function () {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'system') {
+                const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme-mode', 'system');
+            } else {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                document.documentElement.removeAttribute('data-theme-mode');
+            }
+        })();
+    </script>
+
+    <!-- Preconnect Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Global Style -->
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <title>Project Files Naming Guide — FileNamer Docs</title>
+    <meta name="description"
+        content="Learn how to structure and standardize your project files using FileNamer. Keep your team organized with consistent naming conventions.">
+    <link rel="canonical" href="https://filenamer.ryanmarch.me/docs/project-files/">
+
+    <!-- Docs Style Sheet -->
+    <link rel="stylesheet" href="../style.css">
+    <script src="/js/components.js" type="module"></script>
+</head>
+
+<body class="user-docs-page">
+    <div class="app-container">
+        <div id="mobile-overlay" class="mobile-overlay"></div>
+
+        <main class="page-container-sidebar user-docs">
+            <!-- Sidebar Navigation -->
+            <nav class="page-sidebar" aria-label="Documentation sections">
+                <div class="sidebar-logo">
+                    <a href="/" class="logo-link"
+                        style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--accent); margin-bottom: 1.5rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+                            style="width: 1.85rem; height: 1.85rem; flex-shrink: 0;">
+                            <rect x="1.5" y="1" width="16" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
+                            <rect x="1.5" y="8.5" width="10" height="2.5" rx="1.25" fill="#3b82f6" />
+                            <rect x="1.5" y="15" width="7.5" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
+                            <line x1="13" y1="6.5" x2="22" y2="6.5" stroke="#3b82f6" stroke-width="2"
+                                stroke-linecap="round" />
+                            <line x1="17.5" y1="6.5" x2="17.5" y2="17.5" stroke="#3b82f6" stroke-width="2.2" />
+                            <line x1="13" y1="17.5" x2="22" y2="17.5" stroke="#3b82f6" stroke-width="2"
+                                stroke-linecap="round" />
+                        </svg>
+                        <span
+                            style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700; color: var(--text-main); letter-spacing: -0.025em;">FileNamer</span>
+                    </a>
+                </div>
+                <ul>
+                    <li><a href="../index.html" class="sidebar-link">← General Docs</a></li>
+                    <li class="sidebar-section-title" style="margin-top: 1rem; margin-bottom: 0.25rem; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; padding: 0 0.75rem;">Template Guides</li>
+                    <li><a href="../project-files/index.html" class="sidebar-link active">Project Files</a></li>
+                    <li><a href="../academic-papers/index.html" class="sidebar-link">Academic Papers</a></li>
+                    <li><a href="../invoices-receipts/index.html" class="sidebar-link">Invoices &amp; Receipts</a></li>
+                    <li><a href="../utm-builder/index.html" class="sidebar-link">UTM Campaign Builder</a></li>
+                    <li><a href="../media-library/index.html" class="sidebar-link">Media Library</a></li>
+                </ul>
+                <div class="sidebar-footer">
+                    <div class="cta-card">
+                        <div class="cta-card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <rect x="1.5" y="1" width="16" height="2.5" rx="1.25" fill="currentColor"
+                                    opacity="0.4" />
+                                <rect x="1.5" y="8.5" width="10" height="2.5" rx="1.25" fill="#3b82f6" />
+                                <rect x="1.5" y="15" width="7.5" height="2.5" rx="1.25" fill="currentColor"
+                                    opacity="0.4" />
+                                <line x1="13" y1="6.5" x2="22" y2="6.5" stroke="#3b82f6" stroke-width="2"
+                                    stroke-linecap="round" />
+                                <line x1="17.5" y1="6.5" x2="17.5" y2="17.5" stroke="#3b82f6" stroke-width="2.2" />
+                                <line x1="13" y1="17.5" x2="22" y2="17.5" stroke="#3b82f6" stroke-width="2"
+                                    stroke-linecap="round" />
+                            </svg>
+                        </div>
+                        <h4 class="cta-card-title">FileNamer</h4>
+                        <p class="cta-card-desc">Design custom schemas, test with live previews, and batch rename local
+                            files safely in-browser.</p>
+                        <a href="../../app/" class="btn-cta-generator">
+                            <span>Go to FileNamer</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14"
+                                height="14">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Right-side Content & Header Wrapper -->
+            <div class="page-content-wrapper" style="width: 100%; display: flex; flex-direction: column; gap: 1.25rem;">
+                <header class="app-header" style="justify-content: flex-end; padding-top: 0.5rem;">
+                    <div class="header-actions">
+                        <div class="header-nav" aria-label="Main Navigation">
+                            <a href="../../app/" class="nav-link">App</a>
+                            <a href="../index.html" class="nav-link active">Docs</a>
+                        </div>
+                        <button id="mobile-nav-toggle" class="mobile-nav-toggle" aria-label="Toggle navigation menu"
+                            aria-expanded="false">
+                            <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="3" y1="12" x2="21" y2="12"></line>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <line x1="3" y1="18" x2="21" y2="18"></line>
+                            </svg>
+                            <svg class="close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Content Area -->
+                <section class="page-content" aria-label="Project Files Guide Content">
+
+                    <!-- Overview -->
+                    <article id="overview" class="doc-section">
+                        <h1>Project Files Naming Guide</h1>
+                        <p class="lead">
+                            Optimize document organization and team collaboration by standardizing your creative and technical project files.
+                        </p>
+                        <p>
+                            Keeping design files, codebases, assets, and project logs consistent is essential for fast retrieval. The built-in <strong>Project Files</strong> template provides a reliable structure for organizing corporate, freelance, and personal files.
+                        </p>
+
+                        <design-tip></design-tip>
+                    </article>
+
+                    <!-- Table of Contents -->
+                    <nav class="inline-toc" aria-label="Table of contents">
+                        <div class="toc-title">Table of Contents</div>
+                        <ul class="toc-list">
+                            <li><a href="#structure">Default Template Structure</a></li>
+                            <li><a href="#customization">Best Practices for Customizing</a></li>
+                        </ul>
+                    </nav>
+
+                    <hr class="section-divider">
+
+                    <!-- Default Structure -->
+                    <article id="structure" class="doc-section">
+                        <h2>Default Template Structure</h2>
+                        <p>
+                            The default Project Files template uses an underscore separator (<code>_</code>) and consists of the following components:
+                        </p>
+                        <ul class="help-list" style="margin-top: 0.5rem;">
+                            <li><strong>Date Created:</strong> Date format in YYYYMMDD (e.g. <code>20260709</code>) to keep files sorted chronologically in your filesystem.</li>
+                            <li><strong>Project Code:</strong> A short code representing the client or project name (e.g. <code>PRJ101</code>).</li>
+                            <li><strong>Description:</strong> A brief description of the specific asset or content (e.g. <code>PromoShot</code>).</li>
+                            <li><strong>Index:</strong> A two-digit auto-incrementing counter (e.g. <code>01</code>, <code>02</code>) to manage versioning and sequential asset lists.</li>
+                            <li><strong>Extension:</strong> Preserves the original file extension automatically.</li>
+                        </ul>
+                        <p>
+                            <strong>Example output filename:</strong> <code>20260709_PRJ101_PromoShot_01.png</code>
+                        </p>
+                    </article>
+
+                    <hr class="section-divider">
+
+                    <!-- Customization -->
+                    <article id="customization" class="doc-section">
+                        <h2>Best Practices for Customizing</h2>
+                        <p>
+                            Every project team has distinct operational needs. When tailoring this template in the Field Builder, consider these adjustments:
+                        </p>
+                        <ul class="help-list" style="margin-top: 0.5rem;">
+                            <li><strong>Differentiate Drafts:</strong> Add a custom dropdown component for version stages, such as <code>draft</code>, <code>review</code>, and <code>final</code>.</li>
+                            <li><strong>Incorporate User Initials:</strong> Add a text field for creator initials (e.g. <code>RM</code>) to identify who worked on a specific file.</li>
+                            <li><strong>Enforce Snake or Kebab Case:</strong> Use the global casing controls at the bottom of the template builder to automatically force lowercase or camelCase filenames depending on cross-platform compatibility needs.</li>
+                        </ul>
+                    </article>
+
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <filenamer-footer></filenamer-footer>
+
+        <!-- Lightbox Modal -->
+        <div id="lightbox-modal" class="lightbox-modal" aria-hidden="true" role="dialog" aria-label="Image Viewer">
+            <button class="lightbox-close" aria-label="Close image viewer">&times;</button>
+            <img class="lightbox-content" id="lightbox-img" alt="">
+            <div class="lightbox-caption" id="lightbox-caption"></div>
+        </div>
+
+        <!-- Scripts -->
+        <script src="../header.js"></script>
+    </div>
+</body>
+
+</html>

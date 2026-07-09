@@ -3,55 +3,38 @@ import { TemplateStore } from '../js/modules/TemplateStore.js';
 import { NamerForm } from '../js/modules/NamerForm.js';
 import { FileRenamer } from '../js/modules/FileRenamer.js';
 
-// Setup Mock DOM
+// Setup happy-dom environment
 beforeEach(() => {
-    const mockElement = {
-        innerHTML: '',
-        querySelector: vi.fn((selector) => {
-            return {
-                addEventListener: vi.fn(),
-                setAttribute: vi.fn(),
-                removeAttribute: vi.fn(),
-                classList: {
-                    add: vi.fn(),
-                    remove: vi.fn(),
-                    toggle: vi.fn()
-                },
-                style: {},
-                querySelector: vi.fn(),
-                querySelectorAll: vi.fn().mockReturnValue([])
-            };
-        }),
-        querySelectorAll: vi.fn().mockReturnValue([]),
+    document.body.innerHTML = '';
+
+    const previewRoot = document.createElement('div');
+    previewRoot.id = 'preview-editor-root';
+    document.body.appendChild(previewRoot);
+
+    const dropzoneRoot = document.createElement('div');
+    dropzoneRoot.id = 'dropzone-root';
+    document.body.appendChild(dropzoneRoot);
+
+    // Stub window methods/properties that happy-dom doesn't fully support or need mocking
+    window.matchMedia = vi.fn().mockReturnValue({
+        matches: false,
         addEventListener: vi.fn(),
-        style: {}
-    };
+        removeEventListener: vi.fn()
+    });
 
-    global.document = {
-        getElementById: vi.fn().mockReturnValue(mockElement)
-    };
+    window.alert = vi.fn();
+    window.JSZip = null;
 
-    global.window = {
-        matchMedia: vi.fn().mockReturnValue({
-            matches: false,
-            addEventListener: vi.fn()
-        }),
-        location: { hash: '' },
-        history: { replaceState: vi.fn() },
-        JSZip: null
-    };
+    if (!window.URL.createObjectURL) {
+        window.URL.createObjectURL = vi.fn().mockReturnValue('mock-url');
+    }
+    if (!window.URL.revokeObjectURL) {
+        window.URL.revokeObjectURL = vi.fn();
+    }
 
-    global.Blob = class Blob {
-        constructor(content, options) {
-            this.content = content;
-            this.options = options;
-        }
-    };
-    global.URL = {
-        createObjectURL: vi.fn().mockReturnValue('mock-url'),
-        revokeObjectURL: vi.fn()
-    };
-    global.alert = vi.fn();
+    if (window.localStorage) {
+        window.localStorage.clear();
+    }
 });
 
 describe('Bulk Filename Override Defaulting', () => {

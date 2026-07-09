@@ -43,6 +43,7 @@
 
     <!-- Docs Style Sheet -->
     <link rel="stylesheet" href="../style.css">
+    <script src="/js/components.js" type="module"></script>
 </head>
 
 <body class="user-docs-page">
@@ -73,7 +74,9 @@
                 </div>
                 <ul>
                     <li><a href="../index.html" class="sidebar-link">← General Docs</a></li>
-                    <li class="sidebar-section-title" style="margin-top: 1rem; margin-bottom: 0.25rem; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; padding: 0 0.75rem;">UTM Guide</li>
+                    <li class="sidebar-section-title"
+                        style="margin-top: 1rem; margin-bottom: 0.25rem; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; padding: 0 0.75rem;">
+                        UTM Guide</li>
                     <li><a href="#overview" class="sidebar-link active">Overview</a></li>
                     <li><a href="#configuration" class="sidebar-link">Configuration</a></li>
                     <li>
@@ -149,16 +152,21 @@
                     <article id="overview" class="doc-section">
                         <h1>UTM Campaign Builder</h1>
                         <p class="lead">
-                            Discover how to build naming templates that automatically transform inputs into campaign-tagged URLs, and integrate with the file uploader feature.
+                            Discover how to build naming templates that automatically transform inputs into
+                            campaign-tagged URLs, and integrate with the file uploader feature.
                         </p>
                         <p>
-                            FileNamer includes dedicated logic to build parameter-tagged URLs instead of standard filenames. If a template’s name contains <strong>"UTM"</strong> or <strong>"URL"</strong>, the engine shifts into URL Mode.
+                            FileNamer includes dedicated logic to build parameter-tagged URLs instead of standard
+                            filenames. If a template’s name contains <strong>"UTM"</strong> or <strong>"URL"</strong>,
+                            the engine shifts into URL Mode.
                         </p>
 
                         <div class="info-aside">
                             <div class="aside-badge">URL Mode Trigger</div>
                             <p>
-                                Name your custom template with terms like <code>UTM Campaign</code> or <code>Marketing URL Builder</code> to automatically switch the output generator from a filesystem-based path separator to a query string parser.
+                                Name your custom template with terms like <code>UTM Campaign</code> or
+                                <code>Marketing URL Builder</code> to automatically switch the output generator from a
+                                filesystem-based path separator to a query string parser.
                             </p>
                         </div>
                     </article>
@@ -189,14 +197,21 @@
                             To configure a UTM template, follow these mapping rules in the template editor:
                         </p>
                         <ul class="help-list" style="margin-top: 0.5rem;">
-                            <li><strong>Destination URL:</strong> Create a standard text input field and include the word <code>URL</code> in its label (e.g. <code>Destination URL</code>). This will serve as the base address of the generated link.</li>
-                            <li><strong>Query Parameters:</strong> To turn any template field into a URL query parameter, place the query name in parentheses inside the field label. For example:
+                            <li><strong>Destination URL:</strong> Create a standard text input field and include the
+                                word <code>URL</code> in its label (e.g. <code>Destination URL</code>). This will serve
+                                as the base address of the generated link.</li>
+                            <li><strong>Query Parameters:</strong> To turn any template field into a URL query
+                                parameter, place the query name in parentheses inside the field label. For example:
                                 <ul>
-                                    <li>A field labeled <code>Campaign Source (utm_source)</code> becomes <code>?utm_source=value</code>.</li>
-                                    <li>A field labeled <code>Ad Type (utm_medium)</code> becomes <code>&amp;utm_medium=value</code>.</li>
+                                    <li>A field labeled <code>Campaign Source (utm_source)</code> becomes
+                                        <code>?utm_source=value</code>.</li>
+                                    <li>A field labeled <code>Ad Type (utm_medium)</code> becomes
+                                        <code>&amp;utm_medium=value</code>.</li>
                                 </ul>
                             </li>
-                            <li><strong>Spaces and Casing:</strong> Enable the <strong>lowercase</strong> filter to ensure campaign keys and parameters conform to web standard formats. Separation rule spaces will automatically convert to URL-safe separators.</li>
+                            <li><strong>Spaces and Casing:</strong> Enable the <strong>lowercase</strong> filter to
+                                ensure campaign keys and parameters conform to web standard formats. Separation rule
+                                spaces will automatically convert to URL-safe separators.</li>
                         </ul>
                     </article>
 
@@ -206,45 +221,64 @@
                     <article id="uploader-integration" class="doc-section">
                         <h2>File Uploader Integration</h2>
                         <p>
-                            Combining the UTM builder with batch processing provides powerful workflows for marketing and content distribution teams:
+                            Combining the UTM builder with batch processing provides powerful workflows for marketing
+                            and content distribution teams:
                         </p>
 
                         <!-- Asset Renaming -->
-                        <h3 id="asset-renaming" style="font-size: 1.15rem; margin-top: 2rem;">1. Renaming Creative Assets to Match Campaign Structures</h3>
+                        <h3 id="asset-renaming" style="font-size: 1.15rem; margin-top: 2rem;">1. Renaming Creative
+                            Assets to Match Campaign Structures</h3>
                         <p>
-                            When uploading creative files (e.g., banner graphics, PDF checklists, newsletter attachments) to an ad manager, CDN, or CMS, it is best practice to keep filenames consistent with campaign attributes.
+                            When uploading creative files (e.g., banner graphics, PDF checklists, newsletter
+                            attachments) to an ad manager, CDN, or CMS, it is best practice to keep filenames consistent
+                            with campaign attributes.
                         </p>
                         <p>
-                            Use the File Uploader to drop raw file assets, and standard naming filters will convert their local filenames into campaign-indexed names (e.g., <code>newsletter_cpc_spring-launch_blue-button-banner.png</code>) matching your campaign parameters before you batch download.
+                            Use the File Uploader to drop raw file assets, and standard naming filters will convert
+                            their local filenames into campaign-indexed names (e.g.,
+                            <code>newsletter_cpc_spring-launch_blue-button-banner.png</code>) matching your campaign
+                            parameters before you batch download.
                         </p>
 
                         <!-- Auto-population -->
-                        <h3 id="auto-population" style="font-size: 1.15rem; margin-top: 2rem;">2. Auto-populating Campaign Fields from Uploaded Filenames</h3>
+                        <h3 id="auto-population" style="font-size: 1.15rem; margin-top: 2rem;">2. Auto-populating
+                            Campaign Fields from Uploaded Filenames</h3>
                         <p>
-                            If you upload multiple different creative assets at once, FileNamer can extract their original filenames and inject them into specific query parameters dynamically.
+                            If you upload multiple different creative assets at once, FileNamer can extract their
+                            original filenames and inject them into specific query parameters dynamically.
                         </p>
                         <p>
-                            This allows parameters like <code>utm_content</code> to dynamically reference the filename (e.g. <code>utm_content=blue-button-banner</code>), producing a custom tracking URL tailored to each unique creative element.
+                            This allows parameters like <code>utm_content</code> to dynamically reference the filename
+                            (e.g. <code>utm_content=blue-button-banner</code>), producing a custom tracking URL tailored
+                            to each unique creative element.
                         </p>
 
                         <!-- Bulk CSV -->
-                        <h3 id="bulk-csv" style="font-size: 1.15rem; margin-top: 2rem;">3. Bulk UTM Generation via CSV URL Lists</h3>
+                        <h3 id="bulk-csv" style="font-size: 1.15rem; margin-top: 2rem;">3. Bulk UTM Generation via CSV
+                            URL Lists</h3>
                         <p>
-                            If you have dozens of different destination landing pages and need to create campaign tracking links for all of them:
+                            If you have dozens of different destination landing pages and need to create campaign
+                            tracking links for all of them:
                         </p>
                         <ul class="help-list">
                             <li>Download the CSV template using the action button in the uploader queue.</li>
                             <li>Fill out the destination URLs in the document spreadsheet.</li>
-                            <li>Import the file back into the Bulk Edit grid. All UTM queries will be compiled instantly, generating a complete sequence of campaign links in one action.</li>
+                            <li>Import the file back into the Bulk Edit grid. All UTM queries will be compiled
+                                instantly, generating a complete sequence of campaign links in one action.</li>
                         </ul>
 
                         <!-- Link Registry -->
-                        <h3 id="link-registry" style="font-size: 1.15rem; margin-top: 2rem;">4. Creating a Link-Asset Registry (Master Sheet)</h3>
+                        <h3 id="link-registry" style="font-size: 1.15rem; margin-top: 2rem;">4. Creating a Link-Asset
+                            Registry (Master Sheet)</h3>
                         <p>
-                            Once creative assets are named and campaign tracking links are configured inside the Bulk Edit grid, choose the <strong>Export Log (CSV)</strong> action.
+                            Once creative assets are named and campaign tracking links are configured inside the Bulk
+                            Edit grid, choose the <strong>Export Log (CSV)</strong> action.
                         </p>
                         <p>
-                            This generates a master registry spreadsheet containing the original filename, the clean campaign-safe target filename (ready for upload to your CDN), and the fully assembled destination UTM link. This tracking document is ready for copy-pasting directly into campaign managers.
+                            This generates a master registry spreadsheet containing the original filename, the clean
+                            campaign-safe target filename (ready for upload to your CDN), and the fully assembled
+                            destination UTM link. This tracking document is ready for copy-pasting directly into
+                            campaign managers.
                         </p>
                     </article>
 
@@ -253,43 +287,7 @@
         </main>
 
         <!-- Footer -->
-        <footer class="page-footer">
-            <div class="footer-container">
-                <p class="footer-copyright">&copy; <span id="copyright-year">2026</span> FileNamer • <a
-                        href="https://ryanmarch.me/">Ryan March</a></p>
-                <div class="footer-links">
-                    <a href="../../app/" class="footer-link">App</a>
-                    <a href="../index.html" class="footer-link">Docs</a>
-                    <a href="../../terms/index.html" class="footer-link footer-terms">Terms</a>
-                    <a href="../../terms/index.html#privacy-policy" class="footer-link">Privacy</a>
-                </div>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                    <svg class="system-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                        <line x1="8" y1="21" x2="16" y2="21"></line>
-                        <line x1="12" y1="17" x2="12" y2="21"></line>
-                    </svg>
-                    <span id="theme-status" class="theme-status"></span>
-                </button>
-            </div>
-        </footer>
+        <filenamer-footer></filenamer-footer>
 
         <!-- Lightbox Modal -->
         <div id="lightbox-modal" class="lightbox-modal" aria-hidden="true" role="dialog" aria-label="Image Viewer">
