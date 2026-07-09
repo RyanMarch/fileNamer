@@ -3,21 +3,14 @@ import { TemplateStore } from '../js/modules/TemplateStore.js';
 import { NamerForm } from '../js/modules/NamerForm.js';
 
 beforeEach(() => {
-    const mockElement = {
-        innerHTML: '',
-        querySelector: vi.fn().mockReturnValue({
-            addEventListener: vi.fn(),
-            setAttribute: vi.fn(),
-            classList: { add: vi.fn(), remove: vi.fn(), toggle: vi.fn() },
-            style: {}
-        }),
-        addEventListener: vi.fn(),
-        style: {}
-    };
+    document.body.innerHTML = '';
+    const previewRoot = document.createElement('div');
+    previewRoot.id = 'preview-editor-root';
+    document.body.appendChild(previewRoot);
 
-    global.document = {
-        getElementById: vi.fn().mockReturnValue(mockElement)
-    };
+    if (window.localStorage) {
+        window.localStorage.clear();
+    }
 });
 
 describe('Original Name Segment Evaluation', () => {
