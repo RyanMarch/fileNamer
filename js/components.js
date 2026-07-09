@@ -104,5 +104,89 @@ class DesignTip extends HTMLElement {
     }
 }
 
+class FilenamerUiButton extends HTMLElement {
+    connectedCallback() {
+        const type = this.getAttribute('type');
+        let title = '';
+        let svg = '';
+        let content = '';
+
+        this.classList.add('doc-btn-inline');
+        this.style.display = 'inline-flex';
+
+        switch (type) {
+            case 'add':
+                title = 'New Custom Template';
+                this.setAttribute('title', title);
+                svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="M12 5v14" /></svg>`;
+                break;
+            case 'rename':
+                title = 'Rename Active Template';
+                this.setAttribute('title', title);
+                svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg>`;
+                break;
+            case 'delete':
+                title = 'Delete Active Template';
+                this.setAttribute('title', title);
+                this.classList.add('danger-action');
+                svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /></svg>`;
+                break;
+            case 'share':
+                title = 'Share Active Template Link';
+                this.setAttribute('title', title);
+                svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" /></svg>`;
+                break;
+            case 'import':
+                title = 'Import JSON';
+                this.setAttribute('title', title);
+                svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>`;
+                break;
+            case 'export':
+                title = 'Export JSON';
+                this.setAttribute('title', title);
+                svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>`;
+                break;
+            case 'copy':
+                title = 'Copy Preview to Clipboard';
+                this.setAttribute('title', title);
+                this.classList.add('btn-primary');
+                this.style.padding = '0.15rem 0.5rem';
+                this.style.alignItems = 'center';
+                this.style.gap = '0.25rem';
+                this.style.fontSize = '0.8rem';
+                this.style.fontWeight = '500';
+                this.style.width = 'auto';
+                this.style.height = 'auto';
+                svg = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+                content = ' Copy';
+                break;
+        }
+
+        this.innerHTML = `${svg}${content}`;
+    }
+}
+
+class FilenamerLogo extends HTMLElement {
+    connectedCallback() {
+        this.style.display = 'inline-flex';
+        this.style.width = this.getAttribute('width') || '1.85rem';
+        this.style.height = this.getAttribute('height') || '1.85rem';
+        this.style.flexShrink = '0';
+        this.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width: 100%; height: 100%; display: block;">
+                <rect x="1.5" y="2" width="16" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
+                <rect x="1.5" y="9.3" width="10" height="2.5" rx="1.25" fill="#3b82f6" />
+                <rect x="1.5" y="16" width="7.5" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
+                <line x1="13" y1="7" x2="22" y2="7" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" />
+                <line x1="17.5" y1="7" x2="17.5" y2="21.5" stroke="#3b82f6" stroke-width="2.2" />
+                <line x1="13" y1="21.5" x2="22" y2="21.5" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" />
+            </svg>
+        `;
+    }
+}
+
 customElements.define('filenamer-footer', FilenamerFooter);
 customElements.define('design-tip', DesignTip);
+customElements.define('filenamer-ui-button', FilenamerUiButton);
+customElements.define('filenamer-logo', FilenamerLogo);
+

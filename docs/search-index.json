@@ -1,0 +1,138 @@
+[
+  {
+    "id": "getting-started",
+    "title": "Getting Started",
+    "path": "getting-started/index.html",
+    "category": "Basics",
+    "headings": [
+      "Overview",
+      "1. Select and Evaluate Presets",
+      "2. Customize Fields &amp; Rules",
+      "3. Test Inputs &amp; Preview Outputs",
+      "4. Queue Files &amp; Batch Rename"
+    ],
+    "excerpt": "Step-by-step tutorial guiding new users through preset templates, field customization, live previews, and batch file renaming in FileNamer.",
+    "lastUpdated": "2026-07-09"
+  },
+  {
+    "id": "offline-pwa",
+    "title": "Offline &amp; PWA Support",
+    "path": "offline-pwa/index.html",
+    "category": "Basics",
+    "headings": [
+      "Overview",
+      "Installation Instructions",
+      "Safari (macOS)",
+      "iOS &amp; iPadOS",
+      "Chrome &amp; Edge"
+    ],
+    "excerpt": "Learn how to install FileNamer as a Progressive Web App (PWA) on macOS, iOS, Android, and Windows for fully offline file renaming.",
+    "lastUpdated": "2026-07-09"
+  },
+  {
+    "id": "app-features",
+    "title": "App Features",
+    "path": "app-features/index.html",
+    "category": "Basics",
+    "headings": [
+      "Overview",
+      "Template Picker",
+      "Manage Templates",
+      "Backup & Share",
+      "Field Builder",
+      "Field Segment Options",
+      "Format Settings",
+      "Preview & Rename",
+      "Batch Renaming",
+      "Original vs Target Previews",
+      "Downloading Files",
+      "Bulk Editing & CSV Data"
+    ],
+    "excerpt": "Learn how to use FileNamer to design custom file naming templates, fill parameters dynamically, and batch-rename local files entirely in your browser.",
+    "lastUpdated": "2026-07-09"
+  },
+  {
+    "id": "academic-papers",
+    "title": "Academic Papers",
+    "path": "academic-papers/index.html",
+    "category": "Guides",
+    "headings": [
+      "Overview",
+      "Default Template Structure",
+      "Best Practices for Customizing"
+    ],
+    "excerpt": "Organize your research literature, essays, and PDF libraries. Learn how to standardize academic paper filenames using FileNamer.",
+    "lastUpdated": "2026-07-09"
+  },
+  {
+    "id": "invoices-receipts",
+    "title": "Invoices & Receipts",
+    "path": "invoices-receipts/index.html",
+    "category": "Guides",
+    "headings": [
+      "Overview",
+      "Default Template Structure",
+      "Best Practices for Customizing"
+    ],
+    "excerpt": "Streamline your accounting and bookkeeping files. Learn how to standardize invoice and receipt filenames with FileNamer.",
+    "lastUpdated": "2026-07-09"
+  },
+  {
+    "id": "media-library",
+    "title": "Media Library",
+    "path": "media-library/index.html",
+    "category": "Guides",
+    "headings": [
+      "Overview",
+      "Default Template Structure",
+      "Best Practices for Customizing"
+    ],
+    "excerpt": "Standardize your movie and TV show libraries for Plex, Radarr, and Sonarr. Learn how to format media filenames with FileNamer.",
+    "lastUpdated": "2026-07-09"
+  },
+  {
+    "id": "project-files",
+    "title": "Project Files",
+    "path": "project-files/index.html",
+    "category": "Guides",
+    "headings": [
+      "Overview",
+      "Default Template Structure",
+      "Best Practices for Customizing"
+    ],
+    "excerpt": "Learn how to structure and standardize your project files using FileNamer. Keep your team organized with consistent naming conventions.",
+    "lastUpdated": "2026-07-09"
+  },
+  {
+    "id": "template-management",
+    "title": "Template Management Guide",
+    "path": "template-management/index.html",
+    "category": "Guides",
+    "headings": [
+      "Overview",
+      "Saving &amp; Managing Templates",
+      "Create Templates",
+      "Export &amp; Import Templates",
+      "Share Templates"
+    ],
+    "excerpt": "Learn how to save custom naming schemas, import or export JSON templates, and share presets with your team.",
+    "lastUpdated": "2026-07-09"
+  },
+  {
+    "id": "utm-builder",
+    "title": "UTM Campaign Builder",
+    "path": "utm-builder/index.html",
+    "category": "Guides",
+    "headings": [
+      "Overview",
+      "Configuration Rules",
+      "File Uploader Integration",
+      "1. Renaming Creative Assets to Match Campaign Structures",
+      "2. Auto-populating Campaign Fields from Uploaded Filenames",
+      "3. Bulk UTM Generation via CSV URL Lists",
+      "4. Creating a Link-Asset Registry (Master Sheet)"
+    ],
+    "excerpt": "Learn how to use UTM/URL campaign templates with FileNamer, configure query parameters, and utilize the uploader feature to generate and track links.",
+    "lastUpdated": "2026-07-09"
+  }
+]
