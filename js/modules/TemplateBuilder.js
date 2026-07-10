@@ -5,11 +5,11 @@
 import { escapeHtml } from './utils.js';
 
 const HELP_DOCS_MAPPING = {
-    'tpl-project-files': '../docs/project-files/index.html',
-    'tpl-academic': '../docs/academic-papers/index.html',
-    'tpl-invoice': '../docs/invoices-receipts/index.html',
-    'tpl-utm': '../docs/utm-builder/index.html',
-    'tpl-media-library': '../docs/media-library/index.html'
+    'tpl-project-files': '../docs/project-files/',
+    'tpl-academic': '../docs/academic-papers/',
+    'tpl-invoice': '../docs/invoices-receipts/',
+    'tpl-utm': '../docs/utm-builder/',
+    'tpl-media-library': '../docs/media-library/'
 };
 
 export class TemplateBuilder {

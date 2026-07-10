@@ -1268,7 +1268,8 @@ a.doc-page-category:hover {
     background: rgba(59, 130, 246, 0.03);
 }
 
-.full-search-row:hover, .full-search-row.selected {
+.full-search-row:hover,
+.full-search-row.selected {
     background: rgba(59, 130, 246, 0.1) !important;
 }
 

@@ -65,7 +65,7 @@ function generateIndex() {
         entries.push({
             id,
             title,
-            path: `${file}/index.html`,
+            path: `${file}/`,
             category,
             headings: ['Overview', ...finalHeadings],
             excerpt,
