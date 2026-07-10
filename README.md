@@ -1,10 +1,20 @@
 <div align="center">
-  <img src="images/filenameMaker-logo.png" alt="FileNamer Logo" width="128" height="128" />
 
-  <h1>FileNamer</h1>
-  <p><i>A local-first, client-side web application for defining naming templates and batch renaming files.</i></p>
+<div style="max-width: 80%">
 
-  [![Launch App](https://img.shields.io/badge/Launch_FileNamer-3b82f6?style=for-the-badge&logoColor=white)](https://filenamer.ryanmarch.me)
+[![FileNamer Screenshot](images/app-screenshot-with-icon.png)][demo]
+
+</div>
+
+# FileNamer
+<span style="font-size: 20px; font-weight: 600;">A local-first application for defining naming conventions and batch renaming files.</span>
+
+<div style="max-width: 65%">
+
+[![Launch App](images/go-to-filenamer-button.png)][demo]
+
+</div>
+
 </div>
 
 
@@ -29,6 +39,14 @@ It is designed for professionals and teams (e.g., content managers, researchers,
 - **URL-Based Template Sharing**: Serialize template rules into the URL hash so you can bookmark or share naming schemas with teammates without an account or server backend.
 - **PWA / Offline Support**: Service worker caching enables full offline functionality as a Progressive Web App.
 
+<div align="center">
+
+[![FileNamer overview](images/app-overview-macbook.png)][demo]
+*Get started quickly with pre-built templates or create your own.*
+
+</div>
+
+
 ## How to Use FileNamer
 
 ### 1. Choose or Build a Template
@@ -36,6 +54,13 @@ Use the **Template Picker** sidebar to choose a preset or click the **Plus (+)**
 - Add fields: **Text**, **Dropdown**, **Date**, **Index** (automatic padding), or **Extension**.
 - Customize configurations like characters length restrictions, whitespace blocking, date formats (including custom templates), and case styling (e.g. `lowercase`, `snake_case`, `camelCase`).
 - Use the grab handle icon or the up/down arrows to reorder segments.
+
+<div align="center">
+
+[![FileNamer field builder](images/filenamer-field-builder.png)][demo]
+*Create and edit custom fields using the intuitive field builder.*
+
+</div>
 
 ### 2. Enter Parameters & Preview
 As you add fields, form inputs appear dynamically in the main viewport. Filling out these fields and see real-time updates to the **Output Preview**. Click **Show Structure** to see which visual segment maps to which template variable.
@@ -46,18 +71,34 @@ As you add fields, form inputs appear dynamically in the main viewport. Filling 
 - **Bulk Edit Grid**: Displays an interactive table where you can override individual parameters per file (e.g. setting a unique sequence or project code for row 3).
 - Click **Rename & Download** to start the renaming process and download the files.
 
+<div align="center">
+
+[![FileNamer bulk edit grid](images/filenamer-bulk-edit.png)][demo]
+*Edit files in a spreadsheet grid after applying bulk formatting.*
+
+</div>
+
+
 ### 4. Import/Export Templates
 - Export a template to a `.json` configuration file, or share it using the **Share Link** button to copy a link with the template configuration encoded directly into the URL.
 
 ## User Guide Help Center
 
-For more information about using FileNamer, visit the [User Guide](https://filenamer.ryanmarch.me/docs/).
+For more information about using FileNamer, visit the [User Guide](help). You'll find helps guides for getting started, app feature overviews, and detailed documentation for each template type.
+
+<div align="center">
+
+[![FileNamer help center](images/help-center.png)][help]
+
+</div>
 
 <!-- ## Project Architecture
 
 The application is built using vanilla Web APIs (HTML5/CSS3/ES6 Modules) to maximize performance, keep dependencies low, and ensure longevity.
 
+
 ```
+
 ├── app/
 │   └── index.html      # Main Single Page App viewport
 ├── css/
@@ -79,4 +120,10 @@ The application is built using vanilla Web APIs (HTML5/CSS3/ES6 Modules) to maxi
 │   └── security.test.js        # XSS protection and base64 parsing validations
 ├── sw.js               # Service Worker caching for PWA offline execution
 └── package.json        # Project scripts, esbuild dependencies, and vitest setup
-``` -->
+
+```-->
+
+---
+
+[demo]: https://filenamer.ryanmarch.me/
+[help]: https://filenamer.ryanmarch.me/docs/

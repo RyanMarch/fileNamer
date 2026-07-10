@@ -195,7 +195,8 @@ a:focus {
 }
 
 .header-logo filenamer-logo,
-.sidebar-logo filenamer-logo {
+.sidebar-logo filenamer-logo,
+.cta-card-icon {
     width: 2rem;
     height: 2rem;
     flex-shrink: 0;
@@ -204,21 +205,24 @@ a:focus {
 }
 
 .header-logo filenamer-logo svg,
-.sidebar-logo filenamer-logo svg {
+.sidebar-logo filenamer-logo svg,
+.cta-card-icon svg {
     width: 100%;
     height: 100%;
     display: block;
 }
 
 [data-theme="dark"] .header-logo filenamer-logo,
-[data-theme="dark"] .sidebar-logo filenamer-logo {
+[data-theme="dark"] .sidebar-logo filenamer-logo,
+[data-theme="dark"] .cta-card-icon {
     /* background: #1D2536; */
     background: #051a66;
     border: 1px solid color-mix(in srgb, var(--accent) 80%, transparent);
 }
 
 [data-theme="light"] .header-logo filenamer-logo,
-[data-theme="light"] .sidebar-logo filenamer-logo {
+[data-theme="light"] .sidebar-logo filenamer-logo,
+[data-theme="light"] .cta-card-icon {
     background: #dfe8f9;
     border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
 }

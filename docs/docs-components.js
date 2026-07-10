@@ -669,17 +669,23 @@ class DocsSearch extends HTMLElement {
 
     connectedCallback() {
         this.style.display = 'contents';
-        this.innerHTML = `
+
+        const isMobile = window.matchMedia('(pointer: coarse)').matches;
+        const placeholderText = isMobile ? 'Search guides...' : "Search guides... (press '/' to focus)";
+        // Only show the slash character inside the kbd tag on desktop environments
+        const kbdContent = isMobile ? '' : '/';
+
+        this.innerHTML = /*html*/ `
             <div class="docs-search-wrapper">
-                <div class="search-input-container">
-                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                    <input type="search" class="search-input" placeholder="Search guides... (press '/' to focus)" aria-label="Search guides" autocomplete="off" />
-                    <kbd class="search-kbd">/</kbd>
-                </div>
-                <div class="search-dropdown" style="display: none;"></div>
+            <div class="search-input-container">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="search" class="search-input" placeholder="${placeholderText}" aria-label="Search guides" autocomplete="off" />
+                <kbd class="search-kbd">${kbdContent}</kbd>
+            </div>
+            <div class="search-dropdown" style="display: none;"></div>
             </div>
         `;
 
