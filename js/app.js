@@ -28,7 +28,11 @@ function initApp() {
         const urlParams = new URLSearchParams(window.location.search);
         const queryTemplate = urlParams.get('template');
         if (queryTemplate) {
-            hashVal = queryTemplate;
+            if (store.getTemplates().some(t => t.id === queryTemplate)) {
+                store.setActiveTemplate(queryTemplate);
+            } else {
+                hashVal = queryTemplate;
+            }
         } else if (hash.startsWith('#template=')) {
             hashVal = hash.slice('#template='.length);
         }

@@ -4,7 +4,7 @@
 
 class FilenamerFooter extends HTMLElement {
     connectedCallback() {
-        this.innerHTML = `
+        this.innerHTML = /*html*/ `
             <footer class="page-footer">
                 <div class="footer-container">
                     <p class="footer-copyright">&copy; <span id="copyright-year">${new Date().getFullYear()}</span> FileNamer • <a href="https://ryanmarch.me/">Ryan March</a></p>
@@ -168,11 +168,7 @@ class FilenamerUiButton extends HTMLElement {
 
 class FilenamerLogo extends HTMLElement {
     connectedCallback() {
-        this.style.display = 'inline-flex';
-        this.style.width = this.getAttribute('width') || '1.85rem';
-        this.style.height = this.getAttribute('height') || '1.85rem';
-        this.style.flexShrink = '0';
-        this.innerHTML = `
+        this.innerHTML = /*html*/`
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width: 100%; height: 100%; display: block;">
                 <rect x="1.5" y="2" width="16" height="2.5" rx="1.25" fill="currentColor" opacity="0.4" />
                 <rect x="1.5" y="9.3" width="10" height="2.5" rx="1.25" fill="#3b82f6" />
