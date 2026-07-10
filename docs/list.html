@@ -56,9 +56,9 @@
 
                 <!-- List Content Area -->
                 <div class="list-container">
-                    <a href="index.html" class="list-back-home">
+                    <a href="./" class="list-back-home">
                         <div class="logo-group">
-                            <filenamer-logo style="width: 1.85rem; height: 1.85rem; flex-shrink: 0;"></filenamer-logo>
+                            <filenamer-logo></filenamer-logo>
                             <span class="logo-text">FileNamer</span>
                         </div>
                         <span class="back-link-text">← Help Center</span>
@@ -71,15 +71,19 @@
                         <!-- Search Box & Suggestions -->
                         <div class="list-search-wrapper">
                             <div class="list-search-box">
-                                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
                                     <circle cx="11" cy="11" r="8"></circle>
                                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                                 </svg>
-                                <input type="search" id="list-search-input" placeholder="Search guides..." aria-label="Search guides" autocomplete="off" />
+                                <input type="search" id="list-search-input" placeholder="Search guides..."
+                                    aria-label="Search guides" autocomplete="off" />
                             </div>
                             <div class="suggestion-pills">
                                 <span class="suggestion-pill-label">Suggestions:</span>
-                                <button class="suggestion-pill" data-type="query" data-value="Getting Started">Getting Started</button>
+                                <button class="suggestion-pill" data-type="query" data-value="Getting Started">Getting
+                                    Started</button>
                                 <button class="suggestion-pill" data-type="recent">Recently Updated</button>
                                 <button class="suggestion-pill" data-type="category" data-value="Guides">Guides</button>
                             </div>
@@ -121,7 +125,7 @@
                 })
                 .then(index => {
                     searchIndexData = index;
-                    
+
                     // Initialize search input value
                     if (currentQuery) {
                         searchInput.value = currentQuery;
@@ -139,14 +143,14 @@
                 currentQuery = searchInput.value.trim();
                 currentCategory = '';
                 currentFilter = '';
-                
+
                 // Update URL parameters
                 const newParams = new URLSearchParams();
                 if (currentQuery) {
                     newParams.set('q', currentQuery);
                 }
                 history.replaceState(null, '', `?${newParams.toString()}`);
-                
+
                 updateUI();
             });
 
@@ -161,7 +165,7 @@
                         currentCategory = '';
                         currentFilter = '';
                         searchInput.value = currentQuery;
-                        
+
                         const newParams = new URLSearchParams();
                         newParams.set('q', currentQuery);
                         history.replaceState(null, '', `?${newParams.toString()}`);
@@ -170,7 +174,7 @@
                         currentCategory = val;
                         currentFilter = '';
                         searchInput.value = '';
-                        
+
                         const newParams = new URLSearchParams();
                         newParams.set('category', currentCategory);
                         history.replaceState(null, '', `?${newParams.toString()}`);
@@ -179,7 +183,7 @@
                         currentCategory = '';
                         currentFilter = 'recent';
                         searchInput.value = '';
-                        
+
                         const newParams = new URLSearchParams();
                         newParams.set('filter', 'recent');
                         history.replaceState(null, '', `?${newParams.toString()}`);
@@ -196,7 +200,7 @@
                 suggestionPills.forEach(pill => {
                     const type = pill.getAttribute('data-type');
                     const val = pill.getAttribute('data-value');
-                    
+
                     let isActive = false;
                     if (type === 'query' && currentQuery.toLowerCase() === (val || '').toLowerCase()) {
                         isActive = true;
@@ -240,7 +244,7 @@
                         .map(item => {
                             const titleLower = item.title.toLowerCase();
                             const categoryLower = item.category.toLowerCase();
-                            
+
                             let score = 0;
                             if (titleLower === qLower) {
                                 score += 100;
@@ -249,7 +253,7 @@
                             } else if (titleLower.includes(qLower)) {
                                 score += 50;
                             }
-                            
+
                             if (categoryLower.includes(qLower)) {
                                 score += 20;
                             }
@@ -277,10 +281,10 @@
 
             function escapeHtml(str) {
                 return str.replace(/&/g, '&amp;')
-                          .replace(/</g, '&lt;')
-                          .replace(/>/g, '&gt;')
-                          .replace(/"/g, '&quot;')
-                          .replace(/'/g, '&#039;');
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
             }
 
             function highlightText(text, term) {
@@ -305,7 +309,7 @@
                             <button id="clear-search-btn" class="btn-primary" style="display: inline-block; margin-top: 1rem; border: none; cursor: pointer;">Clear Search</button>
                         </div>
                     `;
-                    
+
                     document.getElementById('clear-search-btn').addEventListener('click', () => {
                         currentQuery = '';
                         currentCategory = '';
@@ -321,12 +325,12 @@
                     const highlightedTitle = highlightText(item.title, term);
                     const highlightedExcerpt = highlightText(item.excerpt, term);
                     const categoryUrl = `list.html?category=${encodeURIComponent(item.category)}`;
-                    
+
                     // Show a badge with the date if it's the "Recently Updated" view
                     const dateBadge = currentFilter === 'recent' && item.lastUpdated
                         ? `<span class="result-item-date">Updated: ${item.lastUpdated}</span>`
                         : '';
-                    
+
                     return `
                         <div class="result-list-item">
                             <div class="result-item-meta">

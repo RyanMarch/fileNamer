@@ -9,7 +9,7 @@ function stemWord(word) {
     else if (stemmed.endsWith('ed')) stemmed = stemmed.slice(0, -2);
     else if (stemmed.endsWith('es')) stemmed = stemmed.slice(0, -2);
     else if (stemmed.endsWith('s') && !stemmed.endsWith('ss')) stemmed = stemmed.slice(0, -1);
-    
+
     if (stemmed.endsWith('e')) stemmed = stemmed.slice(0, -1);
     return stemmed;
 }
@@ -45,7 +45,7 @@ class DocsHeader extends HTMLElement {
     connectedCallback() {
         this.style.display = 'contents';
         const appUrl = this.getAttribute('app-url') || (this.isSubpage() ? '../../app/' : '../app/');
-        const docsUrl = this.getAttribute('docs-url') || (this.isSubpage() ? '../index.html' : 'index.html');
+        const docsUrl = this.getAttribute('docs-url') || (this.isSubpage() ? '../' : './');
         const showLogo = this.getAttribute('show-logo') !== 'false';
 
         this.innerHTML = `
@@ -385,18 +385,18 @@ class DocsSidebar extends HTMLElement {
         const appUrl = this.getAttribute('app-url') || (this.isSubpage() ? '../../app/' : '../app/');
         const prefix = this.isSubpage() ? '../' : './';
 
-        this.innerHTML = `
+        this.innerHTML = /*html*/ `
             <nav class="page-sidebar" aria-label="Documentation sections">
                 <div class="sidebar-logo">
                     <a href="/" class="logo-link"
                         style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--accent); margin-bottom: 1.5rem;">
-                        <filenamer-logo style="width: 1.85rem; height: 1.85rem; flex-shrink: 0;"></filenamer-logo>
+                        <filenamer-logo style="flex-shrink: 0;"></filenamer-logo>
                         <span
                             style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700; color: var(--text-main); letter-spacing: -0.025em;">FileNamer</span>
                     </a>
                 </div>
                 <ul class="sidebar-menu-list">
-                    <li><a href="${prefix}index.html" class="sidebar-link">← Help Center</a></li>
+                    <li><a href="${prefix}" class="sidebar-link">← Help Center</a></li>
                 </ul>
                 <div class="sidebar-footer">
                     <div class="cta-card">
@@ -880,7 +880,7 @@ class DocsGrid extends HTMLElement {
             const response = await fetch(`${basePath}search-index.json`);
             if (!response.ok) throw new Error('Failed to load search-index.json');
             let items = await response.json();
-            
+
             // Filter by specific IDs if attribute is present
             const idsAttr = this.getAttribute('ids');
             if (idsAttr) {
@@ -890,7 +890,7 @@ class DocsGrid extends HTMLElement {
                     return allowedIds.includes(docId.toLowerCase());
                 });
             }
-            
+
             this.innerHTML = `
                 <div class="docs-grid">
                     ${items.map(item => `
