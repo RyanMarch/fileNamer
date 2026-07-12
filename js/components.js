@@ -186,7 +186,6 @@ class FilenamerHeader extends HTMLElement {
         const activePage = this.getAttribute('active-page') || '';
 
         const navLinks = [
-            { href: '/', label: 'Home', key: 'home' },
             { href: '/app/', label: 'App', key: 'app' },
             { href: '/docs/', label: 'Docs', key: 'docs' },
         ];
@@ -204,13 +203,41 @@ class FilenamerHeader extends HTMLElement {
                     <filenamer-logo></filenamer-logo>
                     <span class="header-logo-name">FileNamer</span>
                 </a>
-                <nav class="header-actions" aria-label="Main Navigation">
-                    <div class="header-nav">
+                <div class="header-actions">
+                    <nav class="header-nav" aria-label="Main Navigation">
                         ${navHTML}
-                    </div>
-                </nav>
+                    </nav>
+                    <button id="mobile-nav-toggle" class="mobile-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                        <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                        <svg class="close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
             </header>
         `;
+
+        const toggleBtn = this.querySelector('#mobile-nav-toggle');
+        const headerNav = this.querySelector('.header-nav');
+        if (toggleBtn && headerNav) {
+            toggleBtn.addEventListener('click', () => {
+                const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+                toggleBtn.setAttribute('aria-expanded', !isExpanded);
+                headerNav.classList.toggle('active', !isExpanded);
+                
+                const menuIcon = toggleBtn.querySelector('.menu-icon');
+                const closeIcon = toggleBtn.querySelector('.close-icon');
+                if (menuIcon && closeIcon) {
+                    menuIcon.style.display = isExpanded ? 'block' : 'none';
+                    closeIcon.style.display = isExpanded ? 'none' : 'block';
+                }
+            });
+        }
     }
 }
 

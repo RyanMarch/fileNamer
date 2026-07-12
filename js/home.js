@@ -15,33 +15,33 @@
   const dataProfiles = {
     media: {
       pattern: 'YYYYMMDD_[Project]_[Camera]_[Take]',
-      title: 'Preview Studio — Media Profile',
-      color: '#a855f7',
-      docsUrl: '/docs/media-production'
+      title: 'FileNamer - Template — Media Assets',
+      color: 'var(--profile-media-color)',
+      docsUrl: '/docs/project-files'
     },
     creative: {
       pattern: '[Client]-[Campaign]-[Asset]-[Size]-v[Num]',
-      title: 'Preview Studio — Agency Profile',
-      color: '#3b82f6',
-      docsUrl: '/docs/creative-agencies'
+      title: 'FileNamer - Template — Agency Files',
+      color: 'var(--profile-creative-color)',
+      docsUrl: '/docs/project-files'
     },
     devops: {
       pattern: '[Service]-[Env]-[Branch]-[BuildNum].tar.gz',
-      title: 'Preview Studio — Pipeline Profile',
-      color: '#22c55e',
-      docsUrl: '/docs/software-devops'
+      title: 'FileNamer - Template — Pipeline Artifacts',
+      color: 'var(--profile-devops-color)',
+      docsUrl: '/docs/project-files'
     },
     analytics: {
       pattern: 'YYYY-MM-DD_[Tenant]_[Dataset]_[RunID].csv',
-      title: 'Preview Studio — Analytics Profile',
-      color: '#06b6d4',
-      docsUrl: '/docs/data-analytics'
+      title: 'FileNamer - Template — Analytics Datasets',
+      color: 'var(--profile-analytics-color)',
+      docsUrl: '/docs/project-files'
     },
     marketing: {
-      pattern: '[Campaign]_[Channel]_[AssetID]_[Size]',
-      title: 'Preview Studio — Marketing Profile',
-      color: '#f59e0b',
-      docsUrl: '/docs/marketing-campaigns'
+      pattern: '[Campaign]_[Channel]_[Source]_[Medium]',
+      title: 'FileNamer - Template — Marketing URLs',
+      color: 'var(--profile-marketing-color)',
+      docsUrl: '/docs/utm-builder/'
     }
   };
 
@@ -56,7 +56,7 @@
       t.setAttribute('aria-selected', isActive ? 'true' : 'false');
 
       // MOBILE INJECTION LAYER
-      if (window.innerWidth <= 768) {
+      if (window.innerWidth <= 820) {
         let drawer = t.querySelector('.mobile-pattern-drawer');
         if (!drawer) {
           drawer = document.createElement('div');
@@ -245,7 +245,14 @@
 
   // ── Init ───────────────────────────────────────────────────────────────────
 
-  function init() { initFaqAccordion(); initDemoCard(); }
+  function init() {
+    initFaqAccordion();
+    initDemoCard();
+    const activeTab = document.querySelector('.workflow-tab.active');
+    if (activeTab) {
+      updateActiveStudio(activeTab.dataset.target);
+    }
+  }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {

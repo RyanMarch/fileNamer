@@ -32,8 +32,12 @@
     }
 }
 
-.docs-home-page .mobile-nav-toggle {
-    display: none !important;
+@media (min-width: 1025px) {
+
+    .docs-home-page docs-sidebar,
+    .docs-home-page .page-sidebar {
+        display: none !important;
+    }
 }
 
 @media (min-width: 1025px) {
@@ -45,7 +49,7 @@
 .page-sidebar {
     position: sticky;
     top: 1.5rem;
-    height: calc(100vh - 3rem);
+    height: calc(100vh - 1rem);
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -54,7 +58,7 @@
 }
 
 .sidebar-logo {
-    margin-top: 0.5rem;
+    margin-bottom: -1rem;
 }
 
 .page-content {
@@ -91,7 +95,6 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
 }
 
 .sidebar-link,
@@ -122,6 +125,7 @@
 
 .sidebar-footer {
     margin-top: auto;
+    margin-bottom: 1.5rem;
     padding-top: 2rem;
 }
 
@@ -202,7 +206,7 @@
 }
 
 .page-content p {
-    color: var(--text-muted);
+    color: var(--text-main);
     line-height: 1.6;
     margin-bottom: 1.25rem;
     font-size: 1rem;
@@ -743,7 +747,7 @@
 .sidebar-sublist {
     list-style: none !important;
     padding: 0 0 0 1rem !important;
-    margin: 0.25rem 0 0.5rem 0 !important;
+    /* margin: 0.25rem 0 0.5rem 0 !important; */
     display: flex;
     flex-direction: column;
     gap: 0.25rem;

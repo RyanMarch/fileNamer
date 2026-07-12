@@ -55,7 +55,7 @@
                         locally, privately, and at any scale.
                     </p>
                     <div class="hero-buttons">
-                        <a href="app/" class="btn btn-primary" id="hero-cta-start">Get Started Free</a>
+                        <a href="app/" class="btn btn-primary" id="hero-cta-start">Launch App</a>
                         <a href="docs/" class="btn btn-secondary" id="hero-cta-docs">View Docs</a>
                     </div>
                 </div>
@@ -176,7 +176,7 @@
                                 </li>
                                 <li class="demo-filename-row demo-filename-row--muted"
                                     data-original="database-export daily dump 7-11-26-v2.csv"
-                                    data-target="AcmeCoro_database-backup_20251210.csv">
+                                    data-target="AcmeCorp_database-backup_20251210.csv">
                                     <span class="demo-filename-icon" aria-hidden="true">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -208,6 +208,39 @@
             </div>
         </section>
 
+        <section id="how-it-works" class="how-it-works-section">
+            <h2 class="how-it-works-title">How It Works</h2>
+            <p class="section-desc">A simple, three-step process to transform your file management entirely inside your
+                browser:</p>
+
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Build Your Pattern</h3>
+                        <p>Drag and drop dynamic smart tokens (Dates, Counters, Client IDs) to construct your layout.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>Select Your Files</h3>
+                        <p>Add in files or entire folders and preview every change live.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Rename Instantly</h3>
+                        <p>Apply the updates directly to files in seconds.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="features" class="features-section">
             <h2 class="features-title">Feature Rich</h2>
             <p class="section-desc">Packed with features designed to streamline your workflow and make file
@@ -225,11 +258,10 @@
                                 <path d="M14 14h8v8h-8z" />
                             </svg>
                         </div>
-                        <h3>Smart Token &amp; Pattern Builder</h3>
+                        <h3>Easy Field Builder</h3>
                     </div>
                     <p>Build file names with reusable tokens — dates, counters, client codes, or project IDs. Mix and
-                        match
-                        with easy drag-and-drop blocks to save custom templates for any workflow.</p>
+                        match with easy drag-and-drop blocks to save custom templates for any workflow.</p>
                 </article>
 
                 <article class="feature-detail-card">
@@ -243,8 +275,8 @@
                         </div>
                         <h3>Instant Batch Processing</h3>
                     </div>
-                    <p>Rename thousands of files simultaneously with zero scripting and zero lag. Apply complex patterns
-                        across entire folder structures instantly to keep your data structured from day one.
+                    <p>Rename hundreds of files simultaneously. Apply complex patterns across an entire folder
+                        instantly to keep your data structured from day one.
                     </p>
                 </article>
 
@@ -261,8 +293,8 @@
                         </div>
                         <h3>Apply Team Conventions</h3>
                     </div>
-                    <p>Lock in a shared naming standard that every team member follows automatically. Shared templates
-                        ensure every team member stays aligned, keeping shared drives clean and searchable.</p>
+                    <p>Lock in a shared naming standard and share templates with your team. Ensure every team member
+                        stays aligned, keeping shared drives clean and searchable.</p>
                 </article>
 
                 <article class="feature-detail-card">
@@ -290,27 +322,20 @@
 
             <div class="gallery-grid" role="list">
 
-                <!-- Card 1: The Canvas -->
                 <article class="gallery-card" role="listitem">
-                    <div class="screenshot-placeholder"
-                        aria-label="Screenshot placeholder: The Canvas — visual token builder drag-and-drop interface">
-                        <div class="placeholder-bg" aria-hidden="true">
-                            <span class="placeholder-label">The Canvas</span>
-                            <span class="placeholder-desc">Visual token builder · drag-and-drop interface</span>
-                            <div class="placeholder-tokens" aria-hidden="true">
-                                <span class="token-chip">Date</span>
-                                <span class="token-chip token-separator">—</span>
-                                <span class="token-chip">Project</span>
-                                <span class="token-chip token-separator">_</span>
-                                <span class="token-chip">Version</span>
-                            </div>
-                        </div>
+                    <div class="screenshot" aria-label="Easy Field Builder">
+                        <picture>
+                            <source srcset="/images/filenamer-add-new-field.avif" type="image/avif">
+                            <source srcset="/images/filenamer-add-new-field.png" type="image/png">
+                            <img src="/images/filenamer-add-new-field.png" class="w-full h-auto object-contain"
+                                alt="Screenshot of FileNamer's easy field builder interface.">
+                        </picture>
                     </div>
-                    <div class="gallery-card-info">
-                        <h3>The Canvas</h3>
-                        <p>Drag tokens onto the canvas to assemble your naming pattern visually. Reorder, swap
+                    <div class="gallery-card-info p-4 md:p-6">
+                        <h3>Easy Field Builder</h3>
+                        <p>Add fields into the builder to assemble your naming pattern. Reorder, swap
                             separators, and preview the live output as you build.</p>
-                        <a href="docs/" class="gallery-card-link"
+                        <!-- <a href="docs/" class="gallery-card-link"
                             aria-label="Learn more about the Canvas token builder">
                             Explore the docs
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
@@ -319,30 +344,25 @@
                                 <path d="M5 12h14" />
                                 <path d="m12 5 7 7-7 7" />
                             </svg>
-                        </a>
+                        </a> -->
                     </div>
                 </article>
 
-                <!-- Card 2: Batch Dashboard -->
                 <article class="gallery-card" role="listitem">
-                    <div class="screenshot-placeholder"
-                        aria-label="Screenshot placeholder: Batch Dashboard — file queue processing in real-time">
-                        <div class="placeholder-bg" aria-hidden="true">
-                            <span class="placeholder-label">Batch Dashboard</span>
-                            <span class="placeholder-desc">Queue of 2,500 files · real-time processing</span>
-                            <div class="placeholder-progress" aria-hidden="true">
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 64%"></div>
-                                </div>
-                                <span class="progress-stat">1,612 / 2,500 renamed</span>
-                            </div>
-                        </div>
+                    <div class="screenshot-placeholder">
+                        <picture>
+                            <source srcset="/images/filenamer-preview-structure.avif" type="image/avif">
+                            <source srcset="/images/filenamer-preview-structure.png" type="image/png">
+                            <img src="/images/filenamer-preview-structure.png" class="w-full h-auto object-contain"
+                                alt="Screenshot of FileNamer's preview structure.">
+                        </picture>
                     </div>
-                    <div class="gallery-card-info">
-                        <h3>Batch Dashboard</h3>
-                        <p>Queue thousands of files and watch them process in real-time. Live progress, per-file status,
-                            and a full rename log — all in one glanceable view.</p>
-                        <a href="docs/" class="gallery-card-link" aria-label="Learn more about the Batch Dashboard">
+                    <div class="gallery-card-info p-4 md:p-6">
+                        <h3>Real-Time Preview</h3>
+                        <p>See exactly how your file names will look, so you can adjust your naming structure on the fly
+                            without guesswork.</p>
+                        <!-- <a href="docs/templates" class="gallery-card-link"
+                            aria-label="Learn more about the preview structure">
                             Explore the docs
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -350,30 +370,24 @@
                                 <path d="M5 12h14" />
                                 <path d="m12 5 7 7-7 7" />
                             </svg>
-                        </a>
+                        </a> -->
                     </div>
                 </article>
 
-                <!-- Card 3: Shared Template Library -->
                 <article class="gallery-card" role="listitem">
-                    <div class="screenshot-placeholder"
-                        aria-label="Screenshot placeholder: Shared Template Library — team-wide naming conventions from a central hub">
-                        <div class="placeholder-bg" aria-hidden="true">
-                            <span class="placeholder-label">Shared Template Library</span>
-                            <span class="placeholder-desc">Team conventions · central hub</span>
-                            <div class="placeholder-templates" aria-hidden="true">
-                                <span class="template-row">📁 Brand Assets — locked</span>
-                                <span class="template-row">📁 Campaign Deliverables — shared</span>
-                                <span class="template-row">📁 Dev Exports — shared</span>
-                            </div>
-                        </div>
+                    <div class="screenshot" aria-label="Files Queue">
+                        <picture>
+                            <source srcset="/images/filenamer-files-queue.avif" type="image/avif">
+                            <source srcset="/images/filenamer-files-queue.png" type="image/png">
+                            <img src="/images/filenamer-files-queue.png" class="w-full h-auto object-contain"
+                                alt="Screenshot of FileNamer's files queue.">
+                        </picture>
                     </div>
-                    <div class="gallery-card-info">
-                        <h3>Shared Template Library</h3>
-                        <p>Publish naming templates to a central library your whole team pulls from. Lock conventions
-                            for critical folders, share freely for everything else.</p>
-                        <a href="docs/templates" class="gallery-card-link"
-                            aria-label="Learn more about the Shared Template Library">
+                    <div class="gallery-card-info p-4 md:p-6">
+                        <h3>Files Queue</h3>
+                        <p>Queue up entire folders of files and preview their new names side-by-side. Jump into Bulk
+                            Edit for per-file control.</p>
+                        <!-- <a href="docs/" class="gallery-card-link" aria-label="Learn more about the Files Queue">
                             Explore the docs
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -381,7 +395,7 @@
                                 <path d="M5 12h14" />
                                 <path d="m12 5 7 7-7 7" />
                             </svg>
-                        </a>
+                        </a> -->
                     </div>
                 </article>
 
@@ -483,15 +497,15 @@
                         </div>
                         <div class="window-body">
                             <div class="layer-base-folder">
-                                <code class="active-display-pattern">[Client]-[Campaign]-[Asset]-[Size]-v[Num]</code>
+                                <code class="active-display-pattern">[Client]_[Campaign]_[Asset]_[Size]_v[Num]</code>
                             </div>
                             <div class="layer-glow-overlay"></div>
                         </div>
                     </div>
 
-                    <div style="margin-top: 1.5rem; text-align: center;">
+                    <div style="margin-top: 3.5rem; text-align: center;">
                         <a id="desktop-workflow-docs-link" href="/docs/media-production" class="gallery-card-link"
-                            style="display: inline-flex; align-items: center; gap: 0.35rem; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.3s ease;">
+                            style="display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 500; font-size: 1.2rem; transition: color 0.3s ease;">
                             Explore the docs
                             <svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -572,7 +586,7 @@
                 at any scale.</p>
             <div class="cta-buttons">
                 <a href="app/" class="btn btn-primary">Get Started Free</a>
-                <a href="mailto:hello@filenameMaker.app" class="btn btn-secondary">Talk to Team</a>
+                <a href="docs/" class="btn btn-secondary">View Docs</a>
             </div>
         </section>
     </main>

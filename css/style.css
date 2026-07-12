@@ -155,10 +155,25 @@ a {
     color: var(--accent);
 }
 
-a:hover,
-a:focus {
+a:hover:not(.btn),
+a:focus:not(.btn) {
     color: var(--accent-hover);
     text-decoration: underline;
+}
+
+.btn,
+.button,
+[class*="btn-"] {
+    text-decoration: none;
+}
+
+.btn:hover,
+.button:hover,
+[class*="btn-"]:hover,
+.btn:focus,
+.button:focus,
+[class*="btn-"]:focus {
+    text-decoration: none;
 }
 
 /* App Container Layout */
@@ -900,7 +915,7 @@ a:focus {
     background-color: var(--bg-color);
     border: 2px solid var(--panel-border);
     border-radius: var(--radius-lg);
-    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.20);
     overflow: hidden;
     transition: background-color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
@@ -1089,7 +1104,7 @@ a:focus {
 }
 
 .add-field-actions {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.05);
     padding: 0.875rem 1.25rem;
     border-radius: var(--radius-md);
     border: 1px dashed var(--panel-border);
@@ -1284,16 +1299,79 @@ a:focus {
 
 .store-actions {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.75rem;
     flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
 }
 
-.store-actions .btn {
+.store-actions-group {
+    display: flex;
+    gap: 0.5rem;
+    flex: 1 1 auto;
+    min-width: 240px;
+}
+
+.store-actions-group .btn {
     flex: 1;
+    min-width: 110px;
+    white-space: nowrap;
 }
 
 #reset-defaults-btn {
-    flex: none;
+    background: transparent;
+    border: 1px dashed transparent;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    margin-left: auto;
+    flex: 0 0 auto;
+}
+
+#reset-defaults-btn:hover {
+    color: var(--error);
+    border-color: rgba(239, 68, 68, 0.2);
+    background: rgba(239, 68, 68, 0.05);
+}
+
+#reset-defaults-btn.confirming {
+    background: var(--error) !important;
+    border-color: var(--error) !important;
+    color: var(--text-inverse) !important;
+    font-weight: 600;
+    animation: pulse-border 1.5s infinite alternate;
+}
+
+@keyframes pulse-border {
+    0% {
+        box-shadow: 0 0 0 0px rgba(239, 68, 68, 0.4);
+    }
+
+    100% {
+        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+    }
+}
+
+@media (max-width: 480px) {
+    .store-actions {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.5rem;
+    }
+
+    .store-actions-group {
+        min-width: 100%;
+        flex: none;
+    }
+
+    #reset-defaults-btn {
+        margin-left: 0;
+        align-self: flex-end;
+    }
 }
 
 /* ==========================================================================
@@ -1779,18 +1857,63 @@ a:focus {
     border-bottom-color: var(--accent);
 }
 
+/* Mobile Navigation Toggle */
+.mobile-nav-toggle {
+    display: none;
+    background: var(--control-bg);
+    border: 1px solid var(--panel-border);
+    color: var(--text-main);
+    padding: 0.5rem;
+    border-radius: var(--radius-sm, 6px);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-nav-toggle svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
 @media (max-width: 640px) {
     .app-header {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: center;
-        text-align: center;
+        position: relative;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
         width: 100%;
     }
 
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .mobile-nav-toggle {
+        display: flex;
+    }
+
     .header-nav {
-        width: auto;
-        justify-content: center;
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 1rem;
+        background: var(--panel-bg);
+        border: 1px solid var(--panel-border);
+        border-radius: var(--radius-md, 8px);
+        padding: 0.75rem 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        min-width: 120px;
+    }
+
+    .header-nav.active {
+        display: flex;
     }
 }
 
