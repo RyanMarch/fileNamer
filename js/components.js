@@ -181,8 +181,68 @@ class FilenamerLogo extends HTMLElement {
     }
 }
 
+class FilenamerHeader extends HTMLElement {
+    connectedCallback() {
+        const activePage = this.getAttribute('active-page') || '';
+
+        const navLinks = [
+            { href: '/app/', label: 'App', key: 'app' },
+            { href: '/docs/', label: 'Docs', key: 'docs' },
+        ];
+
+        const navHTML = navLinks
+            .map(({ href, label, key }) => {
+                const isActive = activePage === key ? ' active' : '';
+                return `<a href="${href}" class="nav-link${isActive}">${label}</a>`;
+            })
+            .join('');
+
+        this.innerHTML = /*html*/ `
+            <header class="app-header">
+                <a href="/" class="header-logo" style="text-decoration: none;">
+                    <filenamer-logo></filenamer-logo>
+                    <span class="header-logo-name">FileNamer</span>
+                </a>
+                <div class="header-actions">
+                    <nav class="header-nav" aria-label="Main Navigation">
+                        ${navHTML}
+                    </nav>
+                    <button id="mobile-nav-toggle" class="mobile-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                        <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                        <svg class="close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+        `;
+
+        const toggleBtn = this.querySelector('#mobile-nav-toggle');
+        const headerNav = this.querySelector('.header-nav');
+        if (toggleBtn && headerNav) {
+            toggleBtn.addEventListener('click', () => {
+                const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+                toggleBtn.setAttribute('aria-expanded', !isExpanded);
+                headerNav.classList.toggle('active', !isExpanded);
+                
+                const menuIcon = toggleBtn.querySelector('.menu-icon');
+                const closeIcon = toggleBtn.querySelector('.close-icon');
+                if (menuIcon && closeIcon) {
+                    menuIcon.style.display = isExpanded ? 'block' : 'none';
+                    closeIcon.style.display = isExpanded ? 'none' : 'block';
+                }
+            });
+        }
+    }
+}
+
 customElements.define('filenamer-footer', FilenamerFooter);
+customElements.define('filenamer-header', FilenamerHeader);
 customElements.define('design-tip', DesignTip);
 customElements.define('filenamer-ui-button', FilenamerUiButton);
 customElements.define('filenamer-logo', FilenamerLogo);
-
