@@ -12,45 +12,93 @@
   const display = document.querySelector('.active-display-pattern');
   const title = document.querySelector('.window-title');
 
-  // Comprehensive mapping of your profile data properties
   const dataProfiles = {
-    creative: {
-      pattern: '[Client]-[Campaign]-[Asset]-[Size]-v[Num]',
-      title: 'FileNamer - Template — Agency Profile'
-    },
     media: {
       pattern: 'YYYYMMDD_[Project]_[Camera]_[Take]',
-      title: 'FileNamer - Template — Media Profile'
+      title: 'Preview Studio — Media Profile',
+      color: '#a855f7',
+      docsUrl: '/docs/media-production'
+    },
+    creative: {
+      pattern: '[Client]-[Campaign]-[Asset]-[Size]-v[Num]',
+      title: 'Preview Studio — Agency Profile',
+      color: '#3b82f6',
+      docsUrl: '/docs/creative-agencies'
     },
     devops: {
       pattern: '[Service]-[Env]-[Branch]-[BuildNum].tar.gz',
-      title: 'FileNamer - Template — Pipeline Profile'
+      title: 'Preview Studio — Pipeline Profile',
+      color: '#22c55e',
+      docsUrl: '/docs/software-devops'
     },
     analytics: {
       pattern: 'YYYY-MM-DD_[Tenant]_[Dataset]_[RunID].csv',
-      title: 'FileNamer - Template — Analytics Profile'
+      title: 'Preview Studio — Analytics Profile',
+      color: '#06b6d4',
+      docsUrl: '/docs/data-analytics'
     },
     marketing: {
-      pattern: 'example.com/?utm_source=[Source]&utm_medium=[Medium]',
-      title: 'FileNamer - Template — UTM Parameters'
+      pattern: '[Campaign]_[Channel]_[AssetID]_[Size]',
+      title: 'Preview Studio — Marketing Profile',
+      color: '#f59e0b',
+      docsUrl: '/docs/marketing-campaigns'
     }
   };
 
-  // 1. Centralized UI Updates Function
   function updateActiveStudio(targetId) {
     const profile = dataProfiles[targetId];
     if (!profile) return;
 
-    // Update active visual navigation cues
+    // Toggle Nav States
     tabs.forEach(t => {
       const isActive = t.dataset.target === targetId;
       t.classList.toggle('active', isActive);
       t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+
+      // MOBILE INJECTION LAYER
+      if (window.innerWidth <= 768) {
+        let drawer = t.querySelector('.mobile-pattern-drawer');
+        if (!drawer) {
+          drawer = document.createElement('div');
+          drawer.className = 'mobile-pattern-drawer';
+          t.appendChild(drawer);
+        }
+
+        if (isActive) {
+          drawer.innerHTML = /*html*/ `
+            <div class="mobile-capsule-container" style="width: 100%; box-sizing: border-box; overflow: hidden; text-align: center;">
+              <div class="active-display-pattern" style="display: inline-block; white-space: nowrap; max-width: 100%; box-sizing: border-box; width: auto;">
+                ${profile.pattern}
+              </div>
+            </div>
+            <a href="${profile.docsUrl}" class="gallery-card-link" style="display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; margin-top: 1rem; text-decoration: none; font-size: 0.85rem; color: var(--dynamic-accent); width: 100%; box-sizing: border-box;">
+              Explore the docs
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6h10M7 2l4 4-4 4"/></svg>
+            </a>
+          `;
+
+          const patternElement = drawer.querySelector('.active-display-pattern');
+          if (patternElement) {
+            const calculatedSize = Math.min(14, Math.max(8, 400 / profile.pattern.length));
+            patternElement.style.fontSize = `${calculatedSize}px`;
+          }
+        } else {
+          drawer.innerHTML = '';
+        }
+      }
     });
 
-    // Animate and update active target contents
-    display.textContent = profile.pattern;
-    title.textContent = profile.title;
+    // DESKTOP INJECTION LAYER
+    if (display) display.textContent = profile.pattern;
+    if (title) title.textContent = profile.title;
+
+    let desktopDocsLink = document.getElementById('desktop-workflow-docs-link');
+    if (desktopDocsLink) {
+      desktopDocsLink.setAttribute('href', profile.docsUrl);
+      desktopDocsLink.style.color = profile.color;
+    }
+
+    document.documentElement.style.setProperty('--dynamic-accent', profile.color);
   }
 
   // 2. Click Intercept Layer
@@ -60,23 +108,37 @@
     });
   });
 
-  // 3. Modern Scroll Tracker Layer (Intersection Observer)
-  const observerOptions = {
-    root: null,
-    rootMargin: '-30% 0px -50% 0px', // Triggers when element crosses the center-screen viewport area
-    threshold: 0
-  };
+  // 3. Pixel-Perfect Midpoint Scroll Tracker
+  let scrollTimeout;
 
-  const scrollObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        updateActiveStudio(entry.target.dataset.target);
+  window.addEventListener('scroll', () => {
+    // Debounce slightly to ensure smooth performance during heavy scrolling
+    cancelAnimationFrame(scrollTimeout);
+
+    scrollTimeout = requestAnimationFrame(() => {
+      const viewportCenter = window.innerHeight / 2;
+      let closestTab = null;
+      let minDistance = Infinity;
+
+      tabs.forEach(tab => {
+        const rect = tab.getBoundingClientRect();
+        // Calculate the exact center point of the current tab element
+        const tabCenter = rect.top + (rect.height / 2);
+        const distanceToCenter = Math.abs(viewportCenter - tabCenter);
+
+        // Track which tab is closest to the physical center of the screen
+        if (distanceToCenter < minDistance) {
+          minDistance = distanceToCenter;
+          closestTab = tab;
+        }
+      });
+
+      // Trigger the update cleanly only when a new closest element claims the center
+      if (closestTab && !closestTab.classList.contains('active')) {
+        updateActiveStudio(closestTab.dataset.target);
       }
     });
-  }, observerOptions);
-
-  // Attach observer to the tabs so they register window context position shifts
-  tabs.forEach(tab => scrollObserver.observe(tab));
+  });
 
 
   // ── FAQ Accordion ──────────────────────────────────────────────────────────
