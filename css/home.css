@@ -1,0 +1,1054 @@
+/* ============================================================
+   FileNamer — Home Page Layout
+   Structural rules only: display, flex/grid, spacing, max-widths,
+   and responsive breakpoints. Colors and typography are inherited
+   from css/style.css global tokens.
+   ============================================================ */
+
+
+/* ── Page body ── */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    height: auto;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* ── Header inner layout constraint ──────────────────────── */
+/* Aligns the logo and nav to the same 1200px column as page content. */
+.app-header {
+    max-width: 1200px;
+    margin: 1rem auto 0 auto;
+    padding: 0 0.5rem;
+}
+
+
+/* ── Header logo name ─────────────────────────────────────── */
+/* Matches the <h1> styling used on the App page inside .header-logo */
+.header-logo-name {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.025em;
+}
+
+
+/* ── .hero-buttons ────────────────────────────────────────── */
+.hero-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+
+/* ── .about-container ─────────────────────────────────────── */
+/* Primary page wrapper; centers content and provides gutters. */
+.about-container {
+    flex: 1;
+    max-width: 1200px;
+    margin: 0 auto 0 auto;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* ── .hero-section ────────────────────────────────────────── */
+.hero-section {
+    margin-bottom: 3rem;
+    margin-top: 1.5rem;
+    padding: 2rem 2.5rem;
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    box-sizing: border-box;
+}
+
+
+/* ── .about-hero-showcase ─────────────────────────────────── */
+/* 2-column grid: left copy col (wider) + right demo card col  */
+.about-hero-showcase {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+
+/* ── Left hero column ─────────────────────────────────────── */
+.hero-col--left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.hero-col--left .lead {
+    margin: 0;
+    line-height: 1.8;
+    max-width: 520px;
+    color: var(--text-main);
+}
+
+
+/* ── .pill-tag ────────────────────────────────────────────── */
+/* Soft rounded badge above the headline */
+.pill-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.3rem 0.875rem;
+    background: var(--accent-light);
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+
+/* ── .hero-subheadline ────────────────────────────────────── */
+.filenamer-tagline,
+.filenamer-tagline h1 {
+    font-size: 2.1rem;
+    margin: 1.2rem 0;
+    line-height: 1.1;
+}
+
+.lead {
+    font-size: 1.05rem;
+
+}
+
+/* ── Right hero column ────────────────────────────────────── */
+.hero-col--right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* ── .filename-demo-card ──────────────────────────────────── */
+/* Floating code-block card showing sample renamed filenames    */
+.filename-demo-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--control-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    font-family: var(--font-mono);
+}
+
+.demo-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    background: var(--panel-bg-subtle);
+    border-bottom: 1px solid var(--panel-border);
+}
+
+.demo-brand-label {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+}
+
+.demo-path-label {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.demo-card-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.demo-card-dot--red {
+    background: #ff5f57;
+}
+
+.demo-card-dot--yellow {
+    background: #febc2e;
+}
+
+.demo-card-dot--green {
+    background: #28c840;
+}
+
+.demo-card-label {
+    margin-left: auto;
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* Filename list */
+.demo-filename-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0;
+}
+
+.demo-filename-row {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--panel-border);
+    transition: background-color var(--transition-fast), opacity var(--transition-fast), border-left-color var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.demo-filename-row:last-child {
+    border-bottom: none;
+}
+
+.demo-filename-row--muted {
+    opacity: 0.95;
+}
+
+.demo-filename-row:hover {
+    background: var(--control-bg-hover);
+    opacity: 1;
+}
+
+.demo-filename-row.active {
+    background: var(--accent-light);
+    opacity: 1;
+    border-left: 2px solid var(--accent);
+    padding-left: calc(1rem - 2px);
+}
+
+.demo-filename-icon {
+    flex-shrink: 0;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+}
+
+.demo-filename-text {
+    flex: 1;
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+    background: none;
+    padding: 0;
+    border: none;
+    opacity: 0.35;
+    /* Keeps inactive rows clean and subtle */
+}
+
+/* Apply the horizontal wipe when the row is activated */
+.demo-filename-row.active .demo-filename-text {
+    opacity: 1;
+    animation: wipeLeftToRight 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes wipeLeftToRight {
+    0% {
+        clip-path: inset(0 100% 0 0);
+        /* Completely hidden on the right side */
+    }
+
+    100% {
+        clip-path: inset(0 0 0 0);
+        /* Smoothly unmasks all the way to the right */
+    }
+}
+
+/* Status badges */
+.demo-filename-badge {
+    flex-shrink: 0;
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    line-height: 1.5;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+}
+
+.demo-filename-badge--done {
+    background: color-mix(in srgb, var(--success) 15%, transparent);
+    color: var(--success);
+    border: 1px solid color-mix(in srgb, var(--success) 30%, transparent);
+}
+
+.demo-filename-badge--draft {
+    background: color-mix(in srgb, var(--text-muted) 12%, transparent);
+    color: var(--text-muted);
+    border: 1px solid color-mix(in srgb, var(--text-muted) 20%, transparent);
+}
+
+.demo-filename-badge[style*="opacity: 1"] {
+    transition-delay: 0.3s;
+}
+
+/* Footer stat bar */
+.demo-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.625rem 1rem;
+    background: var(--panel-bg);
+    border-top: 1px solid var(--panel-border);
+}
+
+.demo-card-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.demo-card-stat--accent {
+    color: var(--success);
+    font-weight: 600;
+}
+
+/* Container overlay context */
+.demo-card-success-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: color-mix(in srgb, var(--bg-main) 40%, transparent);
+    /* backdrop-filter: blur(1px); */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Toggle state class */
+.demo-card-success-overlay.visible {
+    opacity: 1;
+}
+
+/* The Green Circle Checkmark Graphics Box */
+.success-checkmark-circle {
+    background: var(--success);
+    color: #ffffff;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 12px 32px color-mix(in srgb, var(--success) 40%, transparent);
+
+    /* Pop-in animation scale bounce */
+    transform: scale(0.6);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.demo-card-success-overlay.visible .success-checkmark-circle {
+    transform: scale(1);
+}
+
+/* ── .features-grid ───────────────────────────────────────── */
+/* Section wrapper */
+.features-section {
+    margin-bottom: 8rem;
+}
+
+.features-section h2 {
+    text-align: center;
+    margin-bottom: 0.25rem;
+}
+
+.features-section .section-desc {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+.feature-detail-card {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-sizing: border-box;
+}
+
+.feature-detail-card .card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.feature-detail-card .icon-circle {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Custom color definitions for your feature circles */
+.icon-circle--purple {
+    color: #a855f7;
+    /* Adjust to match your theme palette */
+    background: color-mix(in srgb, #a855f7 12%, transparent);
+    border: 1px solid color-mix(in srgb, #a855f7 25%, transparent);
+}
+
+.icon-circle--blue {
+    color: #3b82f6;
+    background: color-mix(in srgb, #3b82f6 12%, transparent);
+    border: 1px solid color-mix(in srgb, #3b82f6 25%, transparent);
+}
+
+.icon-circle--green {
+    color: var(--success);
+    background: color-mix(in srgb, var(--success) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--success) 25%, transparent);
+}
+
+.icon-circle--amber {
+    color: #f59e0b;
+    background: color-mix(in srgb, #f59e0b 12%, transparent);
+    border: 1px solid color-mix(in srgb, #f59e0b 25%, transparent);
+}
+
+
+/* ── .screenshots ─────────────────────────────────────────── */
+/* Section wrapper (mirrors .gallery-section in QRMaker) */
+.screenshots {
+    margin-bottom: 8rem;
+}
+
+.screenshots h2 {
+    text-align: center;
+    margin-bottom: 0.25rem;
+}
+
+.screenshots .section-desc {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+/* Three-column gallery grid */
+.screenshots .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+/* Individual gallery card */
+.screenshots .gallery-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.screenshots .gallery-card:hover {
+    transform: translateY(-2px);
+}
+
+/* Image / placeholder area — preserves 16:10 aspect ratio */
+.screenshots .screenshot-placeholder {
+    aspect-ratio: 16 / 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid color-mix(in srgb, var(--text-main) 10%, transparent);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.screenshots .screenshot-placeholder picture,
+.screenshots .screenshot-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Card body */
+.screenshots .gallery-card-info {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+/* "Open" link sits at the bottom of the card */
+.screenshots .gallery-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+    text-decoration: none;
+}
+
+.screenshots .gallery-card-link svg {
+    transition: transform 0.15s ease;
+}
+
+.screenshots .gallery-card-link:hover svg {
+    transform: translateX(3px);
+}
+
+
+/* ── .use-cases ───────────────────────────────────────────── */
+.workflow-dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 4rem;
+    max-width: 1200px;
+    margin: 4rem auto;
+    align-items: flex-start;
+}
+
+/* Left Interactive Track */
+.workflow-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.workflow-tab {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.workflow-tab:hover {
+    background: color-mix(in srgb, var(--text-main) 2%, transparent);
+}
+
+/* Bright Active State Highlighter */
+.workflow-tab.active {
+    background: color-mix(in srgb, var(--text-main) 4%, transparent);
+    border-color: color-mix(in srgb, var(--text-main) 8%, transparent);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.tab-text h3 {
+    margin: 0 0 0.35rem 0;
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+}
+
+.workflow-tab.active .tab-text h3 {
+    color: var(--text-main);
+}
+
+.tab-text p {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    color: var(--text-muted);
+}
+
+/* Right Side Layered Glass Panel Viewport */
+.workflow-viewport {
+    position: sticky;
+    top: 10%;
+}
+
+.viewport-window {
+    background: #0d1117;
+    border: 1px solid color-mix(in srgb, var(--text-main) 12%, transparent);
+    border-radius: 12px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+}
+
+.window-header {
+    background: color-mix(in srgb, var(--text-main) 3%, transparent);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid color-mix(in srgb, var(--text-main) 8%, transparent);
+}
+
+.window-dots {
+    display: flex;
+    gap: 0.35rem;
+}
+
+.window-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--text-main) 15%, transparent);
+}
+
+.window-title {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    margin-left: 1.5rem;
+}
+
+.window-body {
+    position: relative;
+    padding: 3.5rem 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 220px;
+}
+
+/* Rich Accent Color Glow Layers */
+.layer-glow-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent) 15%, transparent), transparent 65%);
+    pointer-events: none;
+}
+
+.active-display-pattern {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--accent);
+    background: rgba(0, 0, 0, 0.4);
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+/* ── .faq-accordion ───────────────────────────────────────── */
+/* Section wrapper */
+.faq-section {
+    margin-bottom: 5rem;
+}
+
+.faq-section h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+/* Centred, max-width column of accordion items */
+.faq-accordion {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Individual FAQ item (<details> element) */
+.faq-item {
+    border-bottom: 1px solid var(--panel-border);
+    overflow: hidden;
+}
+
+/* Question row (<summary>) */
+.faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1.5rem 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    color: var(--text-main);
+    font-size: 1.15rem;
+    font-weight: 600;
+    text-align: left;
+}
+
+.faq-question::-webkit-details-marker {
+    display: none;
+}
+
+.faq-arrow {
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+.faq-question.is-open .faq-arrow {
+    transform: rotate(180deg);
+}
+
+/* Answer body */
+.faq-answer {
+    padding: 1rem 1.5rem 1.25rem 1.5rem;
+}
+
+.faq-answer p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+
+/* ── .cta-banner ──────────────────────────────────────────── */
+/* Section wrapper */
+.cta-section {
+    margin-bottom: 4rem;
+}
+
+/* Banner card */
+.cta-banner {
+    padding: 3rem 2rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    box-sizing: border-box;
+}
+
+/* Button row inside the banner */
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+
+/* ============================================================
+   Screenshot Placeholder Dashboard Components
+   Styles for the rich placeholder UIs inside .screenshot-placeholder
+   cards (Canvas, Batch Dashboard, Shared Template Library).
+   ============================================================ */
+
+/* ── .placeholder-bg ──────────────────────────────────────── */
+/* Slightly-elevated panel sitting inside the screenshot card  */
+.placeholder-bg {
+    background-color: var(--panel-bg);
+    /* #1a1b20 — one step up from canvas */
+    border: 1px solid var(--panel-border);
+    /* #2c2e35 */
+    border-radius: var(--radius-md);
+    /* 8px */
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Use a slightly darker tint for nested / secondary panels */
+.placeholder-bg.placeholder-bg--secondary {
+    background-color: var(--control-bg);
+    /* #212328 */
+    border-color: var(--control-border);
+    /* #3b3f4d */
+}
+
+
+/* ── Token Chips ──────────────────────────────────────────── */
+/* Wrapping row of token pills ("Date — Project _ Version")   */
+.placeholder-tokens {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    justify-content: center;
+}
+
+/* Individual pill */
+.token {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.625rem;
+    background-color: var(--control-bg);
+    /* #212328 */
+    border: 1px solid var(--control-border);
+    /* #3b3f4d */
+    border-radius: 999px;
+    /* fully rounded pill */
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    line-height: 1;
+    color: var(--text-main);
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+}
+
+/* Accent-tinted variant for the active / selected token */
+.token.token--active {
+    background-color: var(--accent-light);
+    /* rgba(59,130,246,0.10) */
+    border-color: var(--accent);
+    /* #3b82f6 */
+    color: var(--accent);
+}
+
+/* Separator glyphs between tokens ("—", "_") */
+.token-sep {
+    color: var(--text-muted);
+    font-size: 0.65rem;
+    line-height: 1;
+    user-select: none;
+}
+
+
+/* ── Progress Bar ─────────────────────────────────────────── */
+/* Track */
+.progress-container {
+    width: 100%;
+    height: 4px;
+    background-color: var(--control-border);
+    /* #3b3f4d */
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+/* Fill — hardcoded at 64% via inline style or this default */
+.progress-bar {
+    height: 100%;
+    width: 64%;
+    background-color: var(--accent);
+    /* #3b82f6 */
+    border-radius: 999px;
+    /* Subtle shimmer to signal activity */
+    background-image: linear-gradient(90deg,
+            var(--accent) 0%,
+            color-mix(in srgb, var(--accent) 70%, #fff) 50%,
+            var(--accent) 100%);
+    background-size: 200% 100%;
+    animation: progress-shimmer 2.4s linear infinite;
+}
+
+@keyframes progress-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Label row above or below the bar */
+.progress-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.375rem;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.progress-label .progress-value {
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+
+/* ── Template Rows ────────────────────────────────────────── */
+/* Container list */
+.template-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Individual row */
+.template-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 0.75rem;
+    border-bottom: 1px solid var(--panel-border);
+    /* #2c2e35 */
+    transition: background-color var(--transition-fast);
+}
+
+.template-row:last-child {
+    border-bottom: none;
+}
+
+.template-row:hover {
+    background-color: var(--control-bg-hover);
+    /* #2b2e34 */
+    border-radius: var(--radius-sm);
+    /* 4px */
+}
+
+/* Row icon slot */
+.template-row-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Row label */
+.template-row-label {
+    flex: 1;
+    font-size: 0.75rem;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Optional trailing badge / meta text */
+.template-row-meta {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   Responsive Breakpoints
+   ============================================================ */
+
+/* Tablet — ≤ 1024px */
+@media (max-width: 1024px) {
+    .screenshots .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .use-cases {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Hero showcase collapses at 900px */
+@media (max-width: 900px) {
+    .about-hero-showcase {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .hero-col--left {
+        align-items: center;
+        text-align: center;
+    }
+
+    .hero-col--left .lead {
+        max-width: 100%;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+    }
+
+    .hero-col--right {
+        width: 100%;
+    }
+
+    .filename-demo-card {
+        max-width: 100%;
+    }
+}
+
+/* Mobile — ≤ 768px */
+@media (max-width: 768px) {
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .screenshots .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .use-cases {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+}
+
+/* Small mobile — ≤ 640px */
+@media (max-width: 640px) {
+    .about-container {
+        padding: 1.5rem 1rem;
+    }
+
+    .cta-banner {
+        padding: 2rem 1rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.75rem;
+    }
+
+    .cta-buttons .btn {
+        width: 100%;
+        padding: 1rem 1.5rem;
+    }
+}

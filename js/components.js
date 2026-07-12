@@ -181,8 +181,41 @@ class FilenamerLogo extends HTMLElement {
     }
 }
 
+class FilenamerHeader extends HTMLElement {
+    connectedCallback() {
+        const activePage = this.getAttribute('active-page') || '';
+
+        const navLinks = [
+            { href: '/', label: 'Home', key: 'home' },
+            { href: '/app/', label: 'App', key: 'app' },
+            { href: '/docs/', label: 'Docs', key: 'docs' },
+        ];
+
+        const navHTML = navLinks
+            .map(({ href, label, key }) => {
+                const isActive = activePage === key ? ' active' : '';
+                return `<a href="${href}" class="nav-link${isActive}">${label}</a>`;
+            })
+            .join('');
+
+        this.innerHTML = /*html*/ `
+            <header class="app-header">
+                <a href="/" class="header-logo" style="text-decoration: none;">
+                    <filenamer-logo></filenamer-logo>
+                    <span class="header-logo-name">FileNamer</span>
+                </a>
+                <nav class="header-actions" aria-label="Main Navigation">
+                    <div class="header-nav">
+                        ${navHTML}
+                    </div>
+                </nav>
+            </header>
+        `;
+    }
+}
+
 customElements.define('filenamer-footer', FilenamerFooter);
+customElements.define('filenamer-header', FilenamerHeader);
 customElements.define('design-tip', DesignTip);
 customElements.define('filenamer-ui-button', FilenamerUiButton);
 customElements.define('filenamer-logo', FilenamerLogo);
-
