@@ -72,7 +72,7 @@
               </div>
             </div>
             <a href="${profile.docsUrl}" class="gallery-card-link" style="display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; margin-top: 1rem; text-decoration: none; font-size: 0.85rem; color: var(--dynamic-accent); width: 100%; box-sizing: border-box;">
-              Explore the docs
+              Explore the guides
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6h10M7 2l4 4-4 4"/></svg>
             </a>
           `;
