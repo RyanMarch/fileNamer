@@ -10,7 +10,7 @@ class FilenamerFooter extends HTMLElement {
                     <p class="footer-copyright">&copy; <span id="copyright-year">${new Date().getFullYear()}</span> FileNamer • <a href="https://ryanmarch.me/">Ryan March</a></p>
                     <div class="footer-links">
                         <a href="/app/" class="footer-link">App</a>
-                        <a href="/docs/" class="footer-link">Docs</a>
+                        <a href="/docs/" class="footer-link">Guide</a>
                         <a href="/terms/" class="footer-link footer-terms">Terms</a>
                         <a href="/terms/#privacy-policy" class="footer-link">Privacy</a>
                     </div>
@@ -187,7 +187,7 @@ class FilenamerHeader extends HTMLElement {
 
         const navLinks = [
             { href: '/app/', label: 'App', key: 'app' },
-            { href: '/docs/', label: 'Docs', key: 'docs' },
+            { href: '/docs/', label: 'Guides', key: 'docs' },
         ];
 
         const navHTML = navLinks
@@ -229,7 +229,7 @@ class FilenamerHeader extends HTMLElement {
                 const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
                 toggleBtn.setAttribute('aria-expanded', !isExpanded);
                 headerNav.classList.toggle('active', !isExpanded);
-                
+
                 const menuIcon = toggleBtn.querySelector('.menu-icon');
                 const closeIcon = toggleBtn.querySelector('.close-icon');
                 if (menuIcon && closeIcon) {
