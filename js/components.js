@@ -187,7 +187,7 @@ class FilenamerHeader extends HTMLElement {
 
         const navLinks = [
             { href: '/app/', label: 'App', key: 'app' },
-            { href: '/docs/', label: 'Docs', key: 'docs' },
+            { href: '/docs/', label: 'Guides', key: 'docs' },
         ];
 
         const navHTML = navLinks
