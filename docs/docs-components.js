@@ -60,7 +60,7 @@ class DocsHeader extends HTMLElement {
                 <div class="header-actions">
                     <div class="header-nav" aria-label="Main Navigation">
                         <a href="${appUrl}" class="nav-link">App</a>
-                        <a href="${docsUrl}" class="nav-link active">Docs</a>
+                        <a href="${docsUrl}" class="nav-link active">Guide</a>
                     </div>
                     
                     <div class="header-search-container">
