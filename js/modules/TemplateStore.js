@@ -69,7 +69,20 @@ export const DEFAULT_TEMPLATES = [
             { id: 'f-media-group', type: 'text', label: 'Release Group', placeholder: 'RARBG' },
             { id: 'f-ext', type: 'extension', label: 'Extension', extensionMode: 'keep', customExtension: '', includeExtInPreview: true }
         ]
-    }
+    },
+    {
+        id: 'tpl-system-icons',
+        name: 'System Icons',
+        separator: '-',
+        case: 'lower',
+        fields: [
+            { id: 'f-icon-prefix', type: 'select', label: 'Prefix Type', options: ['icon', 'logo', 'badge'] },
+            { id: 'f-icon-name', type: 'text', label: 'Icon Name', placeholder: 'user-profile' },
+            { id: 'f-icon-size', type: 'select', label: 'Size', options: ['16px', '24px', '32px', '48px', '64px', '128px', '512px'] },
+            { id: 'f-icon-theme', type: 'select', label: 'Theme / State', options: ['light', 'dark', 'active', 'inactive', 'default'] },
+            { id: 'f-ext', type: 'extension', label: 'Extension', extensionMode: 'keep', customExtension: '', includeExtInPreview: true }
+        ]
+    },
 ];
 
 export class TemplateStore {

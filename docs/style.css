@@ -214,7 +214,6 @@
 
 .page-content a {
     color: var(--accent);
-    text-decoration: underline;
     text-underline-offset: 3px;
     text-decoration-thickness: 1px;
     transition: color var(--transition-fast), text-decoration-color var(--transition-fast);
@@ -1365,10 +1364,6 @@ a.doc-page-category:hover {
     color: var(--accent);
     text-decoration: none;
     letter-spacing: 0.05em;
-}
-
-.docs-list-page .result-item-category:hover {
-    text-decoration: underline;
 }
 
 .docs-list-page .result-item-title {
