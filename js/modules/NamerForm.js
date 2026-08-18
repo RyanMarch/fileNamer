@@ -120,7 +120,8 @@ export class NamerForm {
             }
 
             if (e.target.id === 'start-index-input') {
-                this.startIndexVal = parseInt(e.target.value) || 1;
+                const parsedIndex = parseInt(e.target.value);
+                this.startIndexVal = isNaN(parsedIndex) ? 1 : parsedIndex;
                 this.updatePreview();
                 if (this.onFormChange) this.onFormChange();
             }
@@ -414,7 +415,9 @@ export class NamerForm {
                     if (field.truncateLength) {
                         const len = parseInt(field.truncateLength);
                         if (!isNaN(len) && len > 0) {
-                            nameVal = nameVal.substring(0, len);
+                            // Array.from splits on code points, not UTF-16 code units,
+                            // so this won't cut a surrogate pair (e.g. an emoji) in half.
+                            nameVal = Array.from(nameVal).slice(0, len).join('');
                         }
                     }
                     val = nameVal;
@@ -477,7 +480,9 @@ export class NamerForm {
                 if (field.truncateLength) {
                     const len = parseInt(field.truncateLength);
                     if (!isNaN(len) && len > 0) {
-                        nameVal = nameVal.substring(0, len);
+                        // Array.from splits on code points, not UTF-16 code units,
+                        // so this won't cut a surrogate pair (e.g. an emoji) in half.
+                        nameVal = Array.from(nameVal).slice(0, len).join('');
                     }
                 }
                 val = nameVal;

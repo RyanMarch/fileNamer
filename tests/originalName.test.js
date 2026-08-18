@@ -132,4 +132,29 @@ describe('Original Name Segment Evaluation', () => {
         const result = form.generateFilename(0, null, false, 'VeryLongFilenameHere.pdf');
         expect(result).toBe('VeryLo');
     });
+
+    it('should truncate on whole characters, not raw UTF-16 units, so emoji are not split into broken surrogate halves', () => {
+        const store = new TemplateStore();
+        const activeTpl = {
+            name: 'Emoji Truncation Test',
+            separator: '_',
+            case: 'none',
+            fields: [
+                { id: 'f-orig', type: 'original-name', label: 'Original Name', origNameMode: 'keep', replaceSpaces: false, truncateLength: 3 }
+            ]
+        };
+        const added = store.addTemplate(activeTpl);
+        store.setActiveTemplate(added.id);
+
+        const form = new NamerForm('preview-editor-root', store);
+
+        // Each 🎉 is a surrogate pair (2 UTF-16 code units). A naive
+        // substring(0, 3) would cut the 2nd emoji in half, leaving a lone
+        // unpaired surrogate in the resulting filename.
+        const result = form.generateFilename(0, null, false, '🎉🎉🎉party.png');
+        expect(result).toBe('🎉🎉🎉');
+        expect([...result]).toHaveLength(3);
+        // No unpaired (lone) surrogate code units should remain in the output.
+        expect(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/.test(result)).toBe(false);
+    });
 });
