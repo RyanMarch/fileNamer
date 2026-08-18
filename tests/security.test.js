@@ -4,9 +4,11 @@
  * data without mapping through the allowed fields.
  */
 
-import { vi, describe, it, expect } from 'vitest';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { escapeHtml } from '../js/modules/utils.js';
 import { TemplateStore } from '../js/modules/TemplateStore.js';
+import { NamerForm } from '../js/modules/NamerForm.js';
+import { FileRenamer } from '../js/modules/FileRenamer.js';
 
 // ---------------------------------------------------------------------------
 // escapeHtml
@@ -160,5 +162,43 @@ describe('TemplateStore.deserializeTemplate', () => {
         expect(result.fields[0].description).toBe('This is a test description');
         expect(result.fields[1].label).toBe('Department');
         expect(result.fields[1].sortAlphabetically).toBe(true);
+    });
+});
+
+// ---------------------------------------------------------------------------
+// FileRenamer.convertToCSV — CSV/formula injection (CWE-1236)
+// ---------------------------------------------------------------------------
+
+describe('FileRenamer.convertToCSV', () => {
+    beforeEach(() => {
+        document.body.innerHTML = '<div id="dropzone-root"></div>';
+    });
+
+    // A leading =, +, -, or @ is interpreted as a formula by Excel/Google Sheets
+    // when the CSV is opened, even though the value is a perfectly normal quoted
+    // CSV field. Historically this has been used for RCE via Excel DDE payloads.
+    const dangerousPrefixes = ['=SUM(1+1)', '+1+1', '-1+1', '@SUM(1+1)', '=cmd|"/c calc"!A1'];
+
+    it.each(dangerousPrefixes)('neutralizes a formula-injection payload: %s', (payload) => {
+        const renamer = new FileRenamer('dropzone-root', {});
+        const csv = renamer.convertToCSV(['Target Filename'], [[payload]]);
+        const dataLine = csv.split('\n')[1];
+
+        // The dangerous leading character must not be the first character written
+        expect(/^[=+\-@]/.test(dataLine)).toBe(false);
+        // It should instead be neutralized with a leading apostrophe (forces text mode)
+        expect(dataLine.startsWith("'") || dataLine.startsWith('"\'')).toBe(true);
+    });
+
+    it('leaves ordinary filenames with an internal hyphen untouched', () => {
+        const renamer = new FileRenamer('dropzone-root', {});
+        const csv = renamer.convertToCSV(['Target Filename'], [['normal-file_2026.txt']]);
+        expect(csv).toBe('Target Filename\nnormal-file_2026.txt');
+    });
+
+    it('still prefixes a filename that legitimately starts with a hyphen (accepted usability tradeoff)', () => {
+        const renamer = new FileRenamer('dropzone-root', {});
+        const csv = renamer.convertToCSV(['Target Filename'], [['-backup-2026.txt']]);
+        expect(csv).toBe("Target Filename\n'-backup-2026.txt");
     });
 });
