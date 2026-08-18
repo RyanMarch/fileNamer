@@ -63,7 +63,7 @@ Use the **Template Picker** sidebar to choose a preset or click the **Plus (+)**
 </div>
 
 ### 2. Enter Parameters & Preview
-As you add fields, form inputs appear dynamically in the main viewport. Filling out these fields and see real-time updates to the **Output Preview**. Click **Show Structure** to see which visual segment maps to which template variable.
+As you add fields, form inputs appear dynamically in the main viewport. Fill out these fields to see real-time updates to the **Output Preview**. Click **Show Structure** to see which visual segment maps to which template variable.
 
 ### 3. Load & Process Files
 - Drag files into the dropzone or click **Browse Files**.
@@ -84,7 +84,7 @@ As you add fields, form inputs appear dynamically in the main viewport. Filling 
 
 ## User Guide Help Center
 
-For more information about using FileNamer, visit the [User Guide](help). You'll find helps guides for getting started, app feature overviews, and detailed documentation for each template type.
+For more information about using FileNamer, visit the [User Guide](help). You'll find help guides for getting started, app feature overviews, and detailed documentation for each template type.
 
 <div align="center">
 

@@ -351,11 +351,9 @@ export class FileRenamer {
 
         const headers = ['Original Filename', 'Target Filename', 'Size (Bytes)'];
         const activeTpl = this.namerForm.store.getActiveTemplate();
+        const resolvedTargets = this.computeTargetNames(activeTpl);
         const rows = this.files.map((file, idx) => {
-            const ext = this.getAppliedExtension(file.name, activeTpl);
-            const csvRow = this.csvData && this.csvData[idx] ? this.csvData[idx] : null;
-            const baseName = this.namerForm.generateFilename(idx, csvRow, false, file.name);
-            const targetName = baseName ? `${baseName}${ext}` : file.name;
+            const targetName = resolvedTargets[idx].resolvedName || file.name;
             return [file.name, targetName, String(file.size)];
         });
 
@@ -404,6 +402,12 @@ export class FileRenamer {
     convertToCSV(headers, rows) {
         const escapeVal = val => {
             let str = String(val);
+            // Neutralize CSV/formula injection: a leading =, +, -, @ (or tab/CR) is
+            // interpreted as a formula by Excel/Sheets when the file is opened, even
+            // inside a quoted field. Prefixing with an apostrophe forces text mode.
+            if (/^[=+\-@\t\r]/.test(str)) {
+                str = `'${str}`;
+            }
             if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
                 str = `"${str.replace(/"/g, '""')}"`;
             }
@@ -434,6 +438,33 @@ export class FileRenamer {
         this.updateFilesList();
     }
 
+    /**
+     * Computes the output filename for each queued file, and appends a " (n)"
+     * disambiguator to any generated names that collide with an earlier file's
+     * name so renamed files never silently overwrite one another (e.g. in the
+     * downloaded ZIP, where identical entry names simply clobber each other).
+     */
+    computeTargetNames(activeTpl) {
+        const seen = new Map();
+        return this.files.map((file, idx) => {
+            const ext = this.getAppliedExtension(file.name, activeTpl);
+            const csvRow = this.csvData && this.csvData[idx] ? this.csvData[idx] : null;
+            const baseName = this.namerForm.generateFilename(idx, csvRow, false, file.name);
+
+            if (!baseName) {
+                return { baseName, ext, resolvedName: null };
+            }
+
+            let candidateName = `${baseName}${ext}`;
+            const count = seen.get(candidateName) || 0;
+            seen.set(candidateName, count + 1);
+            if (count > 0) {
+                candidateName = `${baseName} (${count})${ext}`;
+            }
+            return { baseName, ext, resolvedName: candidateName };
+        });
+    }
+
     updateFilesList() {
         if (this.files.length === 0) {
             this.filesListContainer.style.display = 'none';
@@ -450,17 +481,15 @@ export class FileRenamer {
         if (this.viewMode === 'list') {
             this.filesList.classList.remove('grid-view');
             this.filesListHeader.style.display = 'grid';
+            const resolvedTargets = this.computeTargetNames(activeTpl);
             this.filesList.innerHTML = this.files.map((file, idx) => {
-                const ext = this.getAppliedExtension(file.name, activeTpl);
-                const csvRow = this.csvData && this.csvData[idx] ? this.csvData[idx] : null;
-                const baseName = this.namerForm.generateFilename(idx, csvRow, false, file.name);
-
                 let sizeStr = '';
                 if (file.size < 1024) sizeStr = `${file.size} B`;
                 else if (file.size < 1024 * 1024) sizeStr = `${(file.size / 1024).toFixed(1)} KB`;
                 else sizeStr = `${(file.size / (1024 * 1024)).toFixed(1)} MB`;
 
-                const targetName = baseName ? `${baseName}${ext}` : `[incomplete]${ext}`;
+                const { ext, resolvedName } = resolvedTargets[idx];
+                const targetName = resolvedName || `[incomplete]${ext}`;
 
                 return `
                     <div class="file-row">
@@ -505,17 +534,15 @@ export class FileRenamer {
                 <th></th>
             `;
 
+            const resolvedTargets = this.computeTargetNames(activeTpl);
             const rowsHtml = this.files.map((file, idx) => {
-                const ext = this.getAppliedExtension(file.name, activeTpl);
-                const csvRow = this.csvData && this.csvData[idx] ? this.csvData[idx] : null;
-                const baseName = this.namerForm.generateFilename(idx, csvRow, false, file.name);
-
                 let sizeStr = '';
                 if (file.size < 1024) sizeStr = `${file.size} B`;
                 else if (file.size < 1024 * 1024) sizeStr = `${(file.size / 1024).toFixed(1)} KB`;
                 else sizeStr = `${(file.size / (1024 * 1024)).toFixed(1)} MB`;
 
-                const targetName = baseName ? `${baseName}${ext}` : `[incomplete]${ext}`;
+                const { ext, resolvedName } = resolvedTargets[idx];
+                const targetName = resolvedName || `[incomplete]${ext}`;
 
                 const cellsHtml = fieldsToMap.map(field => {
                     const overrideVal = (this.csvData[idx] && this.csvData[idx][field.id]) ? this.csvData[idx][field.id] : '';
@@ -663,15 +690,11 @@ export class FileRenamer {
         if (this.files.length === 0) return;
 
         const activeTpl = this.namerForm.store.getActiveTemplate();
-        const renames = this.files.map((file, idx) => {
-            const ext = this.getAppliedExtension(file.name, activeTpl);
-            const csvRow = this.csvData && this.csvData[idx] ? this.csvData[idx] : null;
-            const baseName = this.namerForm.generateFilename(idx, csvRow, false, file.name);
-            return {
-                file: file,
-                targetName: baseName ? `${baseName}${ext}` : file.name
-            };
-        });
+        const resolvedTargets = this.computeTargetNames(activeTpl);
+        const renames = this.files.map((file, idx) => ({
+            file: file,
+            targetName: resolvedTargets[idx].resolvedName || file.name
+        }));
 
         // Check if JSZip is loaded to choose method
         if (window.JSZip) {

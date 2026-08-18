@@ -211,3 +211,64 @@ describe('FileRenamer CSV Handling & Target Matching', () => {
         expect(renamer.csvData[1]).toEqual({ f1: 'Beta', f2: '123' });
     });
 });
+
+describe('Duplicate Target Filename Disambiguation', () => {
+    it('should append (n) suffixes so colliding output names never overwrite each other', () => {
+        const store = new TemplateStore();
+        const activeTpl = {
+            name: 'No Index Template',
+            separator: '_',
+            case: 'none',
+            fields: [
+                { id: 'f1', type: 'text', label: 'Project', behavior: 'default', placeholder: 'Launch' },
+                { id: 'f-ext', type: 'extension', label: 'Extension', extensionMode: 'keep' }
+            ]
+        };
+        const added = store.addTemplate(activeTpl);
+        store.setActiveTemplate(added.id);
+
+        const form = new NamerForm('preview-editor-root', store);
+        const renamer = new FileRenamer('dropzone-root', form);
+
+        renamer.files = [
+            { name: 'IMG_0001.jpg', size: 100 },
+            { name: 'IMG_0002.jpg', size: 200 },
+            { name: 'IMG_0003.jpg', size: 300 }
+        ];
+        renamer.csvData = [{}, {}, {}];
+
+        const resolved = renamer.computeTargetNames(store.getActiveTemplate());
+        const names = resolved.map(r => r.resolvedName);
+
+        expect(names).toEqual(['Launch.jpg', 'Launch (1).jpg', 'Launch (2).jpg']);
+        // Uniqueness is the actual invariant that prevents zip/download clobbering.
+        expect(new Set(names).size).toBe(names.length);
+    });
+});
+
+describe('Index Field Start Value', () => {
+    it('should allow a start index of 0 instead of coercing it to 1', () => {
+        const store = new TemplateStore();
+        const activeTpl = {
+            id: 'tpl-idx',
+            name: 'Index Template',
+            separator: '_',
+            case: 'none',
+            fields: [
+                { id: 'f1', type: 'text', label: 'Name', behavior: 'default', placeholder: 'File' },
+                { id: 'f-index', type: 'index', label: 'Index', digits: 2 }
+            ]
+        };
+        store.addTemplate(activeTpl);
+        store.setActiveTemplate(store.templates.find(t => t.name === 'Index Template').id);
+
+        const form = new NamerForm('preview-editor-root', store, null);
+
+        const startIndexInput = document.getElementById('start-index-input');
+        startIndexInput.value = '0';
+        startIndexInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+        expect(form.getStartIndex()).toBe(0);
+        expect(form.generateFilename(0)).toBe('File_00');
+    });
+});
