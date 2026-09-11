@@ -6,6 +6,7 @@ import { TemplateStore } from './modules/TemplateStore.js';
 import { TemplateBuilder } from './modules/TemplateBuilder.js';
 import { NamerForm } from './modules/NamerForm.js';
 import { FileRenamer } from './modules/FileRenamer.js';
+import { parseShareHash } from './modules/utils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initApp();
@@ -15,26 +16,19 @@ document.addEventListener('DOMContentLoaded', () => {
 function initApp() {
     const store = new TemplateStore();
 
-    // Check if shared via URL — three formats supported:
-    //   1. #t:VALUE      (primary, no = sign, iMessage-safe)
-    //   2. ?template=VALUE  (legacy query param)
-    //   3. #template=VALUE  (legacy hash)
-    let hashVal = null;
-    const hash = window.location.hash;
+    // Check if a template was shared via the URL hash (#t=..., or a legacy
+    // format — see parseShareHash), falling back to the older ?template=
+    // query param, which has its own "is this an existing preset id?" check.
+    let hashVal = parseShareHash(window.location.hash);
 
-    if (hash.startsWith('#t:')) {
-        hashVal = hash.slice(3);
-    } else {
-        const urlParams = new URLSearchParams(window.location.search);
-        const queryTemplate = urlParams.get('template');
+    if (hashVal === null) {
+        const queryTemplate = new URLSearchParams(window.location.search).get('template');
         if (queryTemplate) {
             if (store.getTemplates().some(t => t.id === queryTemplate)) {
                 store.setActiveTemplate(queryTemplate);
             } else {
                 hashVal = queryTemplate;
             }
-        } else if (hash.startsWith('#template=')) {
-            hashVal = hash.slice('#template='.length);
         }
     }
 

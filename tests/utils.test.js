@@ -1,5 +1,46 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { validateKeyConstraint, sanitizePasteConstraint } from '../js/modules/utils.js';
+import { validateKeyConstraint, sanitizePasteConstraint, parseShareHash } from '../js/modules/utils.js';
+
+// Regression coverage for the share-link URL format. This exists because the
+// original "#t:" delimiter looked reasonable in code review but broke in
+// iMessage (a bare colon reads as a URI scheme to its link detector, which
+// truncates the link there) — a failure mode no unit test could have caught
+// on its own, but the *format contract itself* — which delimiter is current,
+// which legacy ones must keep working — can and should be pinned here so a
+// future edit can't silently reintroduce it.
+describe('parseShareHash', () => {
+    it('parses the current "#t=" format', () => {
+        expect(parseShareHash('#t=eyJuIjoiVGVzdCJ9')).toBe('eyJuIjoiVGVzdCJ9');
+    });
+
+    it('still parses the legacy "#t:" format for previously-shared links', () => {
+        expect(parseShareHash('#t:eyJuIjoiVGVzdCJ9')).toBe('eyJuIjoiVGVzdCJ9');
+    });
+
+    it('still parses the older legacy "#template=" format', () => {
+        expect(parseShareHash('#template=eyJuIjoiVGVzdCJ9')).toBe('eyJuIjoiVGVzdCJ9');
+    });
+
+    it('prefers "#t=" over "#t:" when (implausibly) both prefixes could match', () => {
+        // "#t=" is checked first, so a value that happens to start with "="
+        // right after "#t" is never misread as the legacy colon format.
+        expect(parseShareHash('#t=:leadingColonInPayload')).toBe(':leadingColonInPayload');
+    });
+
+    it('returns null for a plain hash-less URL', () => {
+        expect(parseShareHash('')).toBeNull();
+    });
+
+    it('returns null for an unrelated hash', () => {
+        expect(parseShareHash('#some-other-section')).toBeNull();
+    });
+
+    it('returns an empty string (not null) for "#t=" with no payload', () => {
+        // Distinct from "no share link at all" — callers treat this as falsy
+        // via `if (hashVal)`, but the parser itself shouldn't conflate the two.
+        expect(parseShareHash('#t=')).toBe('');
+    });
+});
 
 describe('validateKeyConstraint', () => {
     it('does nothing if e.target.dataset.fieldId is missing', () => {

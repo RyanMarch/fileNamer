@@ -476,8 +476,10 @@ export class TemplateBuilder {
         if (shareTplBtn) {
             shareTplBtn.addEventListener('click', () => {
                 const hash = this.store.serializeTemplate(activeTpl);
-                // Always link directly to /app/ — the root redirects and strips hash fragments
-                const shareUrl = `${window.location.origin}/app/#t:${hash}`;
+                // Always link directly to /app/ — the root redirects and strips hash fragments.
+                // Use "=" not ":" here — messaging apps' link detectors (e.g. iMessage) treat
+                // a bare colon as the start of a new URI scheme and truncate the link there.
+                const shareUrl = `${window.location.origin}/app/#t=${hash}`;
 
                 navigator.clipboard.writeText(shareUrl).then(() => {
                     alert('Shareable template link copied to clipboard!');
