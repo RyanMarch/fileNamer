@@ -20,6 +20,40 @@ export function escapeHtml(str) {
 }
 
 /**
+ * Extracts the encoded template payload (if any) from a shared FileNamer URL's
+ * hash fragment. Pulled out of app.js's boot sequence so the URL-format
+ * contract — which delimiter is used, which legacy formats still work — is
+ * covered by tests instead of only being verifiable by pasting a real link
+ * into iMessage.
+ *
+ * Does NOT handle the legacy `?template=` query param: that format has extra
+ * "is this an existing preset id?" branching that needs live store access,
+ * so it stays as a separate check in app.js alongside this.
+ *
+ * Formats supported, in priority order:
+ *   1. #t=VALUE          (current — a colon here reads as a URI scheme to
+ *                         some link detectors, e.g. iMessage, and truncates
+ *                         the link, so this must stay "=" not ":")
+ *   2. #t:VALUE           (legacy, for links shared before the "=" fix)
+ *   3. #template=VALUE    (older legacy hash)
+ *
+ * @param {string} hash - window.location.hash
+ * @returns {string|null} The encoded payload, or null if none is present.
+ */
+export function parseShareHash(hash) {
+    if (hash.startsWith('#t=')) {
+        return hash.slice(3);
+    }
+    if (hash.startsWith('#t:')) {
+        return hash.slice(3);
+    }
+    if (hash.startsWith('#template=')) {
+        return hash.slice('#template='.length);
+    }
+    return null;
+}
+
+/**
  * Validates a keydown event against field constraints (no spaces, no underscores, charType).
  * @param {KeyboardEvent} e - The keydown event.
  */

@@ -17,6 +17,7 @@ export class TemplateBuilder {
         this.container = document.getElementById(containerId);
         this.store = store;
         this.onTemplateChange = onTemplateChange;
+        this.collapsedFieldIds = new Set();
 
         this.init();
     }
@@ -29,6 +30,11 @@ export class TemplateBuilder {
     render() {
         const templates = this.store.getTemplates();
         const activeTpl = this.store.getActiveTemplate();
+
+        // Preserve scroll position across re-renders so reordering (arrows or drag)
+        // doesn't yank the fields list back to the top.
+        const existingFieldsList = document.getElementById('fields-list');
+        const savedScrollTop = existingFieldsList ? existingFieldsList.scrollTop : 0;
 
         if (!activeTpl) {
             this.container.innerHTML = `<div class="error-msg">No templates found. Please reset.</div>`;
@@ -77,8 +83,12 @@ export class TemplateBuilder {
                 <div class="divider"></div>
 
                 <h3>Field Builder</h3>
-                <p>Add and configure fields for your filenames below. You can drag and drop fields to reorder them.</p>
+                <p>Add and configure fields for your filenames below. Grab the <strong>⠿</strong> handle to drag and drop, or use the arrows to reorder.</p>
                 <!-- Field Builder List -->
+                <div class="fields-list-toolbar">
+                    <span class="fields-count-label">${activeTpl.fields.length} field${activeTpl.fields.length === 1 ? '' : 's'}</span>
+                    <button id="toggle-collapse-all-btn" class="btn-text-action" type="button">${activeTpl.fields.length > 0 && this.collapsedFieldIds.size === activeTpl.fields.length ? 'Expand All' : 'Collapse All'}</button>
+                </div>
                 <div class="fields-list-container">
                     <div id="fields-list" class="fields-list">
                         ${activeTpl.fields.map((f, idx) => this.renderFieldItem(f, idx, activeTpl.fields.length)).join('')}
@@ -152,6 +162,11 @@ export class TemplateBuilder {
             
             <input type="file" id="import-file-input" style="display: none;" accept=".json">
         `;
+
+        const newFieldsList = document.getElementById('fields-list');
+        if (newFieldsList) {
+            newFieldsList.scrollTop = savedScrollTop;
+        }
 
         this.setupLocalEvents();
     }
@@ -351,24 +366,36 @@ export class TemplateBuilder {
             </details>
         `;
 
+        const isCollapsed = this.collapsedFieldIds.has(field.id);
+        const previewText = this.getFieldPreviewText(field);
+
         return  /*html*/`
-            <div class="field-item field-item-${field.type}" data-index="${index}">
+            <div class="field-item field-item-${field.type}${isCollapsed ? ' collapsed' : ''}" data-index="${index}" data-field-id="${escapeHtml(field.id)}">
                 <div class="field-item-top">
-                    <div class="field-drag-handle" title="Drag/Reorder (use arrows on right)">
+                    <div class="field-drag-handle" title="Drag to reorder">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/>
                             <circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/>
                         </svg>
                     </div>
+                    <span class="field-order-badge" title="Position ${index + 1} of ${totalFields}">${index + 1}</span>
                     ${typeBadge}
-                    <input type="text" class="form-input field-label" data-index="${index}" value="${escapeHtml(field.label)}" placeholder="Segment Label..." title="Segment Label">
+                    ${isCollapsed
+                        ? `<button type="button" class="field-summary-line field-collapse-toggle" data-index="${index}" title="Click to expand">${escapeHtml(field.label)}${previewText ? `<span class="field-preview-text"> — ${escapeHtml(previewText)}</span>` : ''}</button>`
+                        : `<input type="text" class="form-input field-label" data-index="${index}" value="${escapeHtml(field.label)}" placeholder="Segment Label..." title="Segment Label">`
+                    }
                     <div class="field-actions">
+                        ${!isCollapsed ? `
+                        <button class="btn-field-action field-collapse-toggle" data-index="${index}" title="Collapse" aria-label="Collapse field">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
                         <button class="btn-field-action move-up-btn" data-index="${index}" ${index === 0 ? 'disabled' : ''} title="Move Up">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
                         </button>
                         <button class="btn-field-action move-down-btn" data-index="${index}" ${index === totalFields - 1 ? 'disabled' : ''} title="Move Down">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         </button>
+                        ` : ''}
                         <button class="btn-field-action remove-btn" data-index="${index}" title="Remove Segment">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                         </button>
@@ -383,11 +410,32 @@ export class TemplateBuilder {
         `;
     }
 
+    // Short one-line summary shown in place of the full config when a field is collapsed.
+    getFieldPreviewText(field) {
+        switch (field.type) {
+            case 'text':
+                return field.placeholder ? `"${field.placeholder}"` : 'No default text';
+            case 'select':
+                return (field.options || []).join(', ') || 'No options';
+            case 'date':
+                return field.format === 'custom' ? (field.customFormat || 'Custom format') : (field.format || 'YYYYMMDD');
+            case 'index':
+                return `${field.digits || 0} digit${field.digits === 1 ? '' : 's'}`;
+            case 'original-name':
+                return field.origNameMode === 'lowercase' ? 'lowercase' : field.origNameMode === 'uppercase' ? 'UPPERCASE' : 'Keep original case';
+            case 'extension':
+                return field.extensionMode === 'custom' ? (field.customExtension || 'Custom extension') : (field.extensionMode || 'keep');
+            default:
+                return '';
+        }
+    }
+
     setupGlobalEvents() {
         // Dropdown selection change
         this.container.addEventListener('change', (e) => {
             if (e.target.id === 'template-select') {
                 this.store.setActiveTemplate(e.target.value);
+                this.collapsedFieldIds.clear();
                 this.render();
                 this.onTemplateChange();
             }
@@ -428,8 +476,10 @@ export class TemplateBuilder {
         if (shareTplBtn) {
             shareTplBtn.addEventListener('click', () => {
                 const hash = this.store.serializeTemplate(activeTpl);
-                // Always link directly to /app/ — the root redirects and strips hash fragments
-                const shareUrl = `${window.location.origin}/app/#t:${hash}`;
+                // Always link directly to /app/ — the root redirects and strips hash fragments.
+                // Use "=" not ":" here — messaging apps' link detectors (e.g. iMessage) treat
+                // a bare colon as the start of a new URI scheme and truncate the link there.
+                const shareUrl = `${window.location.origin}/app/#t=${hash}`;
 
                 navigator.clipboard.writeText(shareUrl).then(() => {
                     alert('Shareable template link copied to clipboard!');
@@ -450,6 +500,19 @@ export class TemplateBuilder {
                     this.render();
                     this.onTemplateChange();
                 }
+            });
+        }
+
+        // Collapse All / Expand All
+        const toggleCollapseAllBtn = document.getElementById('toggle-collapse-all-btn');
+        if (toggleCollapseAllBtn) {
+            toggleCollapseAllBtn.addEventListener('click', () => {
+                if (this.collapsedFieldIds.size === activeTpl.fields.length) {
+                    this.collapsedFieldIds.clear();
+                } else {
+                    activeTpl.fields.forEach(f => this.collapsedFieldIds.add(f.id));
+                }
+                this.render();
             });
         }
 
@@ -512,6 +575,20 @@ export class TemplateBuilder {
             fieldsList.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 if (!draggedItem) return;
+
+                // Auto-scroll the list when dragging near its top/bottom edge,
+                // since native HTML5 drag-and-drop won't do this for scrollable
+                // containers on its own.
+                const containerRect = fieldsList.getBoundingClientRect();
+                const scrollZone = 60;
+                const maxScrollSpeed = 18;
+                if (e.clientY < containerRect.top + scrollZone) {
+                    const intensity = (containerRect.top + scrollZone - e.clientY) / scrollZone;
+                    fieldsList.scrollTop -= Math.ceil(maxScrollSpeed * Math.min(intensity, 1));
+                } else if (e.clientY > containerRect.bottom - scrollZone) {
+                    const intensity = (e.clientY - (containerRect.bottom - scrollZone)) / scrollZone;
+                    fieldsList.scrollTop += Math.ceil(maxScrollSpeed * Math.min(intensity, 1));
+                }
 
                 const targetItem = e.target.closest('.field-item');
                 if (!targetItem || targetItem === draggedItem) return;
@@ -778,13 +855,21 @@ export class TemplateBuilder {
 
             // Field Button Actions (Move Up, Move Down, Remove)
             fieldsList.addEventListener('click', (e) => {
-                const btn = e.target.closest('.btn-field-action');
+                const btn = e.target.closest('.btn-field-action, .field-collapse-toggle');
                 if (!btn) return;
 
                 const idx = parseInt(btn.dataset.index);
                 const fields = [...activeTpl.fields];
 
-                if (btn.classList.contains('move-up-btn') && idx > 0) {
+                if (btn.classList.contains('field-collapse-toggle')) {
+                    const fieldId = fields[idx].id;
+                    if (this.collapsedFieldIds.has(fieldId)) {
+                        this.collapsedFieldIds.delete(fieldId);
+                    } else {
+                        this.collapsedFieldIds.add(fieldId);
+                    }
+                    this.render();
+                } else if (btn.classList.contains('move-up-btn') && idx > 0) {
                     const temp = fields[idx];
                     fields[idx] = fields[idx - 1];
                     fields[idx - 1] = temp;
