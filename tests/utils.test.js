@@ -1,5 +1,5 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { validateKeyConstraint, sanitizePasteConstraint, parseShareHash } from '../js/modules/utils.js';
+import { validateKeyConstraint, sanitizePasteConstraint, parseShareHash, getLocalDateString } from '../js/modules/utils.js';
 
 // Regression coverage for the share-link URL format. This exists because the
 // original "#t:" delimiter looked reasonable in code review but broke in
@@ -220,5 +220,23 @@ describe('sanitizePasteConstraint', () => {
         sanitizePasteConstraint(event);
         expect(event.preventDefault).toHaveBeenCalled();
         expect(el.value).toBe('abcdefgh');
+    });
+});
+
+describe('getLocalDateString', () => {
+    it('formats a provided date object in local calendar units', () => {
+        const d = new Date(2026, 8, 17, 20, 30, 0); // Sept 17, 2026 8:30 PM local
+        expect(getLocalDateString(d)).toBe('2026-09-17');
+    });
+
+    it('pads single-digit months and days with leading zeroes', () => {
+        const d = new Date(2026, 0, 5, 10, 0, 0); // Jan 5, 2026 local
+        expect(getLocalDateString(d)).toBe('2026-01-05');
+    });
+
+    it('defaults to current local date when called without arguments', () => {
+        const now = new Date();
+        const expected = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        expect(getLocalDateString()).toBe(expected);
     });
 });
