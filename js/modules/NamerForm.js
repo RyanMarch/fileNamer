@@ -2,7 +2,7 @@
  * NamerForm - Dynamically renders parameter input fields and generates real-time previews.
  */
 
-import { escapeHtml, validateKeyConstraint, sanitizePasteConstraint } from './utils.js';
+import { escapeHtml, validateKeyConstraint, sanitizePasteConstraint, getLocalDateString } from './utils.js';
 
 export class NamerForm {
     constructor(containerId, store, onFormChange) {
@@ -245,7 +245,7 @@ export class NamerForm {
                     break;
                 case 'date':
                     // Default to today if no cached value
-                    const defaultDate = cachedVal || new Date().toISOString().split('T')[0];
+                    const defaultDate = cachedVal || getLocalDateString();
                     if (!this.valuesCache[field.id]) {
                         this.valuesCache[field.id] = defaultDate;
                     }

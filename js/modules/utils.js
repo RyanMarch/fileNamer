@@ -20,6 +20,20 @@ export function escapeHtml(str) {
 }
 
 /**
+ * Returns today's date formatted as YYYY-MM-DD in the user's local timezone.
+ * Avoids UTC rollover issues caused by Date#toISOString().
+ *
+ * @param {Date} [date=new Date()] - Date instance to format.
+ * @returns {string} - YYYY-MM-DD date string in local time.
+ */
+export function getLocalDateString(date = new Date()) {
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+}
+
+/**
  * Extracts the encoded template payload (if any) from a shared FileNamer URL's
  * hash fragment. Pulled out of app.js's boot sequence so the URL-format
  * contract — which delimiter is used, which legacy formats still work — is
